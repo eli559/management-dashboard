@@ -1,23 +1,32 @@
 /**
  * Analytics Tracking — Private Self-Hosted System
  * Zero dependencies. Non-blocking. Error-isolated.
- * Auto-sends a single page_view on load.
  *
- * SETUP: Change the two values below, then import this file in main.jsx.
- * PRODUCTION: Replace endpoint with your production analytics URL.
+ * Capabilities:
+ *  - Auto page_view on load
+ *  - trackClick(elementId) — button/link clicks
+ *  - trackFormSubmit(formId) — form submissions
+ *  - trackEvent(name, metadata) — custom events
+ *  - setUser(id) — identify user after login
+ *  - resetTracking() — clear session on logout
+ *
+ * PRODUCTION: Change CONFIG values below.
  */
 
 // ══════════════════════════════════════════════════
-//  CONFIG — Change these values
+//  CONFIG
 // ══════════════════════════════════════════════════
 
-const TRACKING_API_KEY = "pk_bc74353dad5fde01bf0bf07f41fd4d6f8f3b35ae89c9ea9b";
-const TRACKING_ENDPOINT = "http://localhost:3001/api/events/ingest";
-const DEBUG = true; // set to false in production
+const TRACKING_API_KEY = "pk_REPLACE_WITH_YOUR_API_KEY";
+const TRACKING_ENDPOINT = "http://localhost:8090/api/events/ingest";
+const DEBUG = false;
 
 // ══════════════════════════════════════════════════
-//  Internal — do not modify below this line
+//  Internal
 // ══════════════════════════════════════════════════
+
+let _userIdentifier = null;
+let _sessionId = null;
 
 const SENSITIVE_PARAMS = new Set([
   "token", "access_token", "refresh_token", "id_token", "auth", "auth_token",
@@ -48,36 +57,44 @@ function sanitizePage(raw) {
   }
 }
 
+function noop() {}
+
 function getSessionId() {
+  if (_sessionId) return _sessionId;
   try {
     const existing = sessionStorage.getItem("_t_sid");
-    if (existing) return existing;
+    if (existing) { _sessionId = existing; return existing; }
   } catch {}
 
   let id;
-  try {
-    id = "sess_" + crypto.randomUUID();
-  } catch {
+  try { id = "sess_" + crypto.randomUUID(); }
+  catch {
     id = "sess_" + "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
       const r = (Math.random() * 16) | 0;
       return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
     });
   }
 
+  _sessionId = id;
   try { sessionStorage.setItem("_t_sid", id); } catch {}
   return id;
 }
 
-async function sendEvent(eventName, page) {
+function getCurrentPage() {
+  return sanitizePage(window.location.pathname + window.location.search);
+}
+
+async function send(eventName, options) {
   try {
+    const page = options?.page ? sanitizePage(options.page) : getCurrentPage();
     const payload = {
       apiKey: TRACKING_API_KEY,
       eventName,
       sessionId: getSessionId(),
-      userIdentifier: null,
+      userIdentifier: _userIdentifier,
       page,
-      value: null,
-      metadata: {},
+      value: options?.value ?? null,
+      metadata: options?.metadata ?? {},
     };
 
     await fetch(TRACKING_ENDPOINT, {
@@ -94,13 +111,46 @@ async function sendEvent(eventName, page) {
 }
 
 // ══════════════════════════════════════════════════
-//  Auto page_view — runs once on import
+//  Public API
+// ══════════════════════════════════════════════════
+
+/** Track a custom event */
+export function trackEvent(name, metadata) {
+  void send(name, { metadata }).catch(noop);
+}
+
+/** Track a button/element click */
+export function trackClick(elementId, metadata) {
+  void send("button_click", { metadata: { element_id: elementId, ...metadata } }).catch(noop);
+}
+
+/** Track a form submission (do NOT send field values) */
+export function trackFormSubmit(formId, metadata) {
+  void send("form_submit", { metadata: { form_id: formId, ...metadata } }).catch(noop);
+}
+
+/** Track a page view */
+export function trackPageView(page) {
+  void send("page_view", { page: page ?? getCurrentPage() }).catch(noop);
+}
+
+/** Identify user after login */
+export function setUser(userId) {
+  _userIdentifier = userId;
+}
+
+/** Clear session + user on logout */
+export function resetTracking() {
+  _sessionId = null;
+  _userIdentifier = null;
+  try { sessionStorage.removeItem("_t_sid"); } catch {}
+}
+
+// ══════════════════════════════════════════════════
+//  Auto page_view on load
 // ══════════════════════════════════════════════════
 
 try {
-  const page = sanitizePage(window.location.pathname + window.location.search);
   if (DEBUG) console.log("[tracking] Initialized", { endpoint: TRACKING_ENDPOINT, sessionId: getSessionId() });
-  void sendEvent("page_view", page);
-} catch {
-  // Tracking must never break the host app
-}
+  trackPageView();
+} catch {}
