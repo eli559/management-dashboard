@@ -17,7 +17,6 @@ export function ComparisonChart({ comparison, days, className }: ComparisonChart
 
   return (
     <div className={cn("surface rounded-2xl p-6 overflow-hidden relative", className)}>
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-white/[0.08] to-transparent" />
       <h3 className="text-[15px] font-bold text-zinc-200 mb-0.5">השוואת תקופות</h3>
       <p className="text-[12px] text-zinc-600 mb-5">{days} ימים אחרונים מול {days} ימים לפני</p>
 

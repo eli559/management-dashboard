@@ -70,7 +70,6 @@ export function KpiCard({
       />
 
       {/* Top highlight */}
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-white/[0.08] to-transparent" />
 
       <div className="relative z-10">
         <div className="flex items-start justify-between mb-5">

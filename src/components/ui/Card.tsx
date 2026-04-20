@@ -9,7 +9,6 @@ interface CardProps {
 export function Card({ children, className, padding = true }: CardProps) {
   return (
     <div className={cn("relative glass rounded-2xl overflow-hidden", padding && "p-6", className)}>
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-white/[0.08] to-transparent" />
       {children}
     </div>
   );

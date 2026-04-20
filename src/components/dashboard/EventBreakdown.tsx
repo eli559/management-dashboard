@@ -12,7 +12,6 @@ export function EventBreakdown({ data, totalEvents }: EventBreakdownProps) {
 
   return (
     <div className="relative glass rounded-2xl p-6 animate-slide-up stagger-5 overflow-hidden">
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-white/[0.08] to-transparent" />
 
       <h3 className="text-[15px] font-bold text-zinc-200 mb-1">חלוקה לפי סוג אירוע</h3>
       <p className="text-[13px] text-zinc-600 mb-5">כל סוגי האירועים שנקלטו</p>

@@ -11,7 +11,6 @@ export function ActivityChart({ data }: ActivityChartProps) {
 
   return (
     <div className="relative surface rounded-2xl p-6 h-full animate-slide-up stagger-5 overflow-hidden">
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-white/[0.08] to-transparent" />
       <div className="absolute top-0 start-1/3 w-60 h-40 bg-blue-500/[0.03] rounded-full blur-3xl" />
 
       {/* כותרת */}

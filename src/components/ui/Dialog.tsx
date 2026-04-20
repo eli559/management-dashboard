@@ -48,7 +48,6 @@ export function Dialog({ open, onClose, title, description, children, className 
           className
         )}
       >
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-white/[0.1] to-transparent rounded-t-2xl" />
         <div className="flex items-start justify-between p-6 pb-0">
           <div>
             <h2 id="dialog-title" className="text-lg font-bold text-zinc-100">{title}</h2>

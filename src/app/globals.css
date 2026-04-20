@@ -62,60 +62,72 @@ body {
 .animate-page { animation: slide-up 0.45s cubic-bezier(0.16,1,0.3,1) both; }
 
 /* ══════════════════════════════════════════
-   Premium Surface System
-   Semi-transparent so animated background shows through
+   Premium Surface System — Framed Cards
    ══════════════════════════════════════════ */
 
 .surface {
   position: relative;
-  background: linear-gradient(160deg, rgba(14,14,20,0.72), rgba(8,8,12,0.78));
-  border: 1px solid rgba(255,255,255,0.05);
-  border-top-color: rgba(255,255,255,0.09);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: linear-gradient(160deg, rgba(14,14,20,0.88), rgba(8,8,12,0.92));
+  border: 1px solid transparent;
+  border-radius: 16px;
+  background-clip: padding-box;
   box-shadow:
-    0 0 0 1px rgba(0,0,0,0.3),
-    0 2px 12px -3px rgba(0,0,0,0.5);
+    0 0 0 1px rgba(255,255,255,0.08),
+    0 0 0 2px rgba(255,255,255,0.03),
+    inset 0 1px 0 0 rgba(255,255,255,0.07),
+    0 4px 20px -4px rgba(0,0,0,0.6);
   transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
 }
 
 .surface:hover {
-  background: linear-gradient(160deg, rgba(16,16,22,0.78), rgba(10,10,14,0.82));
-  border-top-color: rgba(255,255,255,0.13);
   box-shadow:
-    0 0 0 1px rgba(0,0,0,0.3),
-    0 8px 40px -8px rgba(0,0,0,0.6);
+    0 0 0 1px rgba(255,255,255,0.12),
+    0 0 0 2px rgba(255,255,255,0.04),
+    inset 0 1px 0 0 rgba(255,255,255,0.1),
+    0 8px 40px -8px rgba(0,0,0,0.7),
+    0 0 30px -10px rgba(99,102,241,0.06);
   transform: translateY(-1px);
 }
 
 .surface-sm {
   position: relative;
-  background: linear-gradient(160deg, rgba(16,16,24,0.68), rgba(10,10,14,0.74));
-  border: 1px solid rgba(255,255,255,0.05);
-  border-top-color: rgba(255,255,255,0.08);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.2), 0 1px 6px -2px rgba(0,0,0,0.4);
+  background: linear-gradient(160deg, rgba(16,16,24,0.85), rgba(10,10,14,0.9));
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background-clip: padding-box;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.07),
+    inset 0 1px 0 0 rgba(255,255,255,0.06),
+    0 2px 10px -3px rgba(0,0,0,0.5);
   transition: all 0.25s cubic-bezier(0.16,1,0.3,1);
 }
 
 .surface-sm:hover {
-  background: linear-gradient(160deg, rgba(18,18,26,0.74), rgba(12,12,16,0.78));
-  border-top-color: rgba(255,255,255,0.11);
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.2), 0 4px 20px -4px rgba(0,0,0,0.5);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.1),
+    inset 0 1px 0 0 rgba(255,255,255,0.08),
+    0 4px 24px -4px rgba(0,0,0,0.6);
 }
 
-/* Glass — dialogs, tooltips (stays more opaque for readability) */
+/* Glass — dialogs, tooltips */
 .glass {
-  background: rgba(12,12,16,0.85);
+  background: rgba(12,12,16,0.88);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.06),
+    inset 0 1px 0 0 rgba(255,255,255,0.06),
+    0 4px 20px -4px rgba(0,0,0,0.5);
 }
 
 .glass-strong {
   background: rgba(12,12,16,0.92);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.08),
+    inset 0 1px 0 0 rgba(255,255,255,0.08),
+    0 8px 32px -8px rgba(0,0,0,0.6);
 }

@@ -30,7 +30,6 @@ export function StatCard({ title, value, subtitle, icon: Icon, trend, glow = "bl
 
   return (
     <div className={cn("relative surface rounded-2xl p-5 overflow-hidden", glowMap[glow])}>
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-white/[0.08] to-transparent" />
       <div className="flex items-start justify-between mb-3">
         <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center", iconBgMap[glow])}>
           <Icon className="w-5 h-5" />

@@ -28,7 +28,6 @@ export function LineChart({ title, subtitle, data, color = "blue", className, sh
   if (!hasData) {
     return (
       <div className={cn("surface rounded-2xl p-6 overflow-hidden relative", className)}>
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-white/[0.08] to-transparent" />
         <h3 className="text-[15px] font-bold text-zinc-200 mb-4">{title}</h3>
         <div className="flex items-center justify-center h-40 text-[13px] text-zinc-600">אין נתונים</div>
       </div>
@@ -51,7 +50,6 @@ export function LineChart({ title, subtitle, data, color = "blue", className, sh
 
   return (
     <div className={cn("surface rounded-2xl p-6 overflow-hidden relative", className)}>
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-white/[0.08] to-transparent" />
       <h3 className="text-[15px] font-bold text-zinc-200 mb-0.5">{title}</h3>
       {subtitle && <p className="text-[12px] text-zinc-600 mb-4">{subtitle}</p>}
       {!subtitle && <div className="mb-4" />}

@@ -57,7 +57,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
       {/* כותרת */}
       <div className="surface rounded-2xl p-8 relative overflow-hidden">
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-white/[0.08] to-transparent" />
         <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 relative z-10">
           <div className="space-y-4">
             <div className="flex items-center gap-3 flex-wrap">
