@@ -35,7 +35,7 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed inset-y-0 start-0 z-40 w-[272px] bg-[#08080a]/90 backdrop-blur-xl flex flex-col border-e border-white/[0.04]">
+    <aside className="fixed inset-y-0 start-0 z-40 w-[272px] bg-[#08080a]/70 backdrop-blur-md flex flex-col border-e border-white/[0.05]">
       {/* ── לוגו ── */}
       <div className="h-[64px] flex items-center px-6 border-b border-white/[0.04]">
         <div className="flex items-center gap-3">

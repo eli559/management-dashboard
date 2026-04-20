@@ -2,7 +2,7 @@ import { Bell, Search, ChevronDown } from "lucide-react";
 
 export function Topbar() {
   return (
-    <header className="h-[64px] bg-[#0a0a0c]/60 backdrop-blur-xl border-b border-white/[0.04] flex items-center justify-between px-8 sticky top-0 z-30">
+    <header className="h-[64px] bg-[#06060a]/50 backdrop-blur-md border-b border-white/[0.05] flex items-center justify-between px-8 sticky top-0 z-30">
       {/* ── חיפוש ── */}
       <div className="flex items-center gap-4">
         <div className="relative">
