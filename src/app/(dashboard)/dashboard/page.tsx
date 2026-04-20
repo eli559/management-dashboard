@@ -9,24 +9,24 @@ export default async function DashboardPage() {
   const stats = await getDashboardStats();
 
   return (
-    <div className="space-y-8">
-      {/* ── Page Header ── */}
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900">דשבורד</h1>
-        <p className="text-slate-500 mt-1 text-[15px]">
+    <div className="space-y-6">
+      {/* ── כותרת ── */}
+      <div className="animate-slide-up stagger-1">
+        <h1 className="text-[22px] font-bold text-zinc-900">דשבורד</h1>
+        <p className="text-zinc-400 mt-0.5 text-[14px]">
           ברוך הבא! הנה סקירת המערכת שלך
         </p>
       </div>
 
-      {/* ── KPI Cards ── */}
+      {/* ── KPI ── */}
       <DashboardKpiGrid
         totalProjects={stats.totalProjects}
         totalEvents={stats.totalEvents}
         todayEvents={stats.todayEvents}
       />
 
-      {/* ── Charts & Activity ── */}
-      <div className="grid grid-cols-1 xl:grid-cols-5 gap-6">
+      {/* ── גרף + פעילות ── */}
+      <div className="grid grid-cols-1 xl:grid-cols-5 gap-5">
         <div className="xl:col-span-3">
           <ChartPlaceholder />
         </div>

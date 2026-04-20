@@ -8,6 +8,7 @@ interface KpiCardProps {
   change: number;
   changeLabel: string;
   icon: LucideIcon;
+  stagger?: number;
 }
 
 export function KpiCard({
@@ -16,23 +17,35 @@ export function KpiCard({
   change,
   changeLabel,
   icon: Icon,
+  stagger = 1,
 }: KpiCardProps) {
   const isPositive = change >= 0;
   const showTrend = change !== 0;
 
   return (
-    <div className="bg-white rounded-2xl p-6 border border-zinc-100 shadow-sm hover:shadow-md transition-all duration-300 group">
-      <div className="flex items-start justify-between mb-4">
-        <div className="w-11 h-11 rounded-xl bg-zinc-100 flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
-          <Icon className="w-5 h-5 text-zinc-600" />
+    <div
+      className={cn(
+        "relative bg-white rounded-2xl p-6 border border-zinc-100/80 shadow-[0_1px_3px_rgba(0,0,0,0.04)] group",
+        "hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:border-zinc-200/80 hover:-translate-y-0.5",
+        "transition-all duration-300 ease-out",
+        "animate-slide-up",
+        `stagger-${stagger}`
+      )}
+    >
+      {/* Subtle top accent line */}
+      <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-l from-transparent via-zinc-200/60 to-transparent rounded-t-2xl" />
+
+      <div className="flex items-start justify-between mb-5">
+        <div className="w-12 h-12 rounded-xl bg-zinc-50 border border-zinc-100/60 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+          <Icon className="w-[22px] h-[22px] text-zinc-500" />
         </div>
         {showTrend && (
           <div
             className={cn(
-              "flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full",
+              "flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full",
               isPositive
-                ? "text-emerald-800 bg-emerald-50/80"
-                : "text-red-800 bg-red-50/80"
+                ? "text-emerald-700 bg-emerald-50/60"
+                : "text-red-700 bg-red-50/60"
             )}
           >
             {isPositive ? (
@@ -44,11 +57,12 @@ export function KpiCard({
           </div>
         )}
       </div>
-      <h3 className="text-[28px] font-extrabold text-zinc-900 mb-0.5 tracking-tight">
+
+      <h3 className="text-[32px] font-extrabold text-zinc-900 mb-1 tracking-tight leading-none">
         {value}
       </h3>
-      <p className="text-sm text-zinc-500 font-medium">{title}</p>
-      <p className="text-xs text-zinc-400 mt-1">{changeLabel}</p>
+      <p className="text-[13px] text-zinc-500 font-medium">{title}</p>
+      <p className="text-[11px] text-zinc-400 mt-1.5">{changeLabel}</p>
     </div>
   );
 }

@@ -14,13 +14,14 @@ export function DashboardKpiGrid({
   todayEvents,
 }: DashboardKpiGridProps) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
       <KpiCard
         title="פרויקטים פעילים"
         value={formatNumber(totalProjects)}
         change={0}
         changeLabel="סה״כ פרויקטים במערכת"
         icon={FolderKanban}
+        stagger={1}
       />
       <KpiCard
         title="סה״כ אירועים"
@@ -28,6 +29,7 @@ export function DashboardKpiGrid({
         change={0}
         changeLabel="אירועים שנקלטו"
         icon={Activity}
+        stagger={2}
       />
       <KpiCard
         title="אירועי היום"
@@ -35,6 +37,7 @@ export function DashboardKpiGrid({
         change={0}
         changeLabel="אירועים שנקלטו היום"
         icon={Calendar}
+        stagger={3}
       />
       <KpiCard
         title="משתמשים"
@@ -42,6 +45,7 @@ export function DashboardKpiGrid({
         change={0}
         changeLabel="בקרוב"
         icon={Users}
+        stagger={4}
       />
     </div>
   );

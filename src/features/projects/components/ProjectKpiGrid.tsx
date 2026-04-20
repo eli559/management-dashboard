@@ -16,13 +16,14 @@ export function ProjectKpiGrid({
   uniqueSessions,
 }: ProjectKpiGridProps) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
       <KpiCard
         title="סה״כ אירועים"
         value={formatNumber(totalEvents)}
         change={0}
         changeLabel="מתחילת הפרויקט"
         icon={BarChart3}
+        stagger={1}
       />
       <KpiCard
         title="אירועי היום"
@@ -30,6 +31,7 @@ export function ProjectKpiGrid({
         change={0}
         changeLabel="אירועים שהתקבלו היום"
         icon={Calendar}
+        stagger={2}
       />
       <KpiCard
         title="משתמשים ייחודיים"
@@ -37,6 +39,7 @@ export function ProjectKpiGrid({
         change={0}
         changeLabel="משתמשים שונים שזוהו"
         icon={Users}
+        stagger={3}
       />
       <KpiCard
         title="סשנים"
@@ -44,6 +47,7 @@ export function ProjectKpiGrid({
         change={0}
         changeLabel="סשנים שונים שזוהו"
         icon={Radio}
+        stagger={4}
       />
     </div>
   );
