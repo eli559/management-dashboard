@@ -3,12 +3,12 @@ import { prisma } from "@/lib/prisma";
 // ── Types ──
 
 export interface DailyCount {
-  date: string; // "21/04"
+  date: string;
   count: number;
 }
 
 export interface HourlyCount {
-  hour: number; // 0-23
+  hour: number;
   count: number;
 }
 
@@ -52,7 +52,7 @@ function daysAgo(n: number): Date {
   return startOfDay(d);
 }
 
-// ── Queries ──
+// ── Main Query ──
 
 export async function getReportsData(filters?: {
   projectId?: string;
@@ -62,177 +62,105 @@ export async function getReportsData(filters?: {
   const days = filters?.days ?? 30;
   const since = daysAgo(days);
   const previousStart = daysAgo(days * 2);
+  const today = startOfDay(new Date());
+  const weekAgo = daysAgo(7);
+  const monthStart = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
 
-  const where: Record<string, unknown> = { createdAt: { gte: since } };
-  const wherePrev: Record<string, unknown> = {
-    createdAt: { gte: previousStart, lt: since },
-  };
+  // Base where clause
+  const base: Record<string, unknown> = {};
+  if (filters?.projectId) base.projectId = filters.projectId;
+  if (filters?.eventName) base.eventName = filters.eventName;
 
-  if (filters?.projectId) {
-    where.projectId = filters.projectId;
-    wherePrev.projectId = filters.projectId;
-  }
-  if (filters?.eventName) {
-    where.eventName = filters.eventName;
-    wherePrev.eventName = filters.eventName;
-  }
-
+  // All counts via DB queries (no allEvents in memory)
   const [
     totalEvents,
     previousEvents,
     todayEvents,
     thisWeekEvents,
-    allEvents,
-    allProjects,
+    thisMonthEvents,
     uniqueSessionsResult,
     uniqueUsersResult,
     latestEvent,
+    allProjects,
   ] = await Promise.all([
-    prisma.event.count({ where }),
-    prisma.event.count({ where: wherePrev }),
-    prisma.event.count({
-      where: { ...where, createdAt: { gte: startOfDay(new Date()) } },
-    }),
-    prisma.event.count({ where: { ...where, createdAt: { gte: daysAgo(7) } } }),
+    prisma.event.count({ where: { ...base, createdAt: { gte: since } } }),
+    prisma.event.count({ where: { ...base, createdAt: { gte: previousStart, lt: since } } }),
+    prisma.event.count({ where: { ...base, createdAt: { gte: today } } }),
+    prisma.event.count({ where: { ...base, createdAt: { gte: weekAgo } } }),
+    prisma.event.count({ where: { ...base, createdAt: { gte: monthStart } } }),
     prisma.event.findMany({
-      where,
-      select: {
-        eventName: true,
-        page: true,
-        sessionId: true,
-        userIdentifier: true,
-        createdAt: true,
-        projectId: true,
-      },
-      orderBy: { createdAt: "desc" },
-    }),
-    prisma.project.findMany({
-      select: { id: true, name: true, slug: true },
-    }),
-    prisma.event.findMany({
-      where: { ...where, sessionId: { not: null } },
+      where: { ...base, createdAt: { gte: since }, sessionId: { not: null } },
       distinct: ["sessionId"],
       select: { sessionId: true },
     }),
     prisma.event.findMany({
-      where: { ...where, userIdentifier: { not: null } },
+      where: { ...base, createdAt: { gte: since }, userIdentifier: { not: null } },
       distinct: ["userIdentifier"],
       select: { userIdentifier: true },
     }),
     prisma.event.findFirst({
-      where,
+      where: { ...base, createdAt: { gte: since } },
       orderBy: { createdAt: "desc" },
       select: { createdAt: true },
     }),
+    prisma.project.findMany({
+      select: { id: true, name: true, slug: true },
+    }),
   ]);
 
-  // ── Compute aggregations from allEvents ──
+  // Daily counts — one query per day
+  const dailyCounts = await getDailyCounts(base, days);
 
-  const projectMap = new Map(allProjects.map((p) => [p.id, p]));
+  // Sparkline — last 7 days
+  const sparkline = dailyCounts.slice(-7).map((d) => d.count);
 
-  // Daily counts (last N days)
-  const dailyCounts: DailyCount[] = [];
-  for (let i = days - 1; i >= 0; i--) {
-    const d = daysAgo(i);
-    const next = daysAgo(i - 1);
-    const count = allEvents.filter(
-      (e) => e.createdAt >= d && e.createdAt < next
-    ).length;
-    dailyCounts.push({
-      date: `${d.getDate().toString().padStart(2, "0")}/${(d.getMonth() + 1).toString().padStart(2, "0")}`,
-      count,
-    });
-  }
+  // Hourly — fetch only createdAt, compute hours
+  const eventsForDistribution = await prisma.event.findMany({
+    where: { ...base, createdAt: { gte: since } },
+    select: { createdAt: true, eventName: true, page: true, projectId: true },
+  });
 
   // Hourly distribution
   const hourlyMap = new Array(24).fill(0);
-  for (const e of allEvents) {
-    hourlyMap[e.createdAt.getHours()]++;
-  }
-  const hourlyCounts: HourlyCount[] = hourlyMap.map((count, hour) => ({
-    hour,
-    count,
-  }));
-
-  // Event type breakdown
+  const WEEKDAYS = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
+  const weekdayMap = new Array(7).fill(0);
   const eventTypeCounts: Record<string, number> = {};
-  for (const e of allEvents) {
+  const pageCounts: Record<string, number> = {};
+  const projectCounts: Record<string, number> = {};
+
+  for (const e of eventsForDistribution) {
+    hourlyMap[e.createdAt.getHours()]++;
+    weekdayMap[e.createdAt.getDay()]++;
     eventTypeCounts[e.eventName] = (eventTypeCounts[e.eventName] ?? 0) + 1;
+    if (e.page) pageCounts[e.page] = (pageCounts[e.page] ?? 0) + 1;
+    projectCounts[e.projectId] = (projectCounts[e.projectId] ?? 0) + 1;
   }
+
+  const hourlyCounts: HourlyCount[] = hourlyMap.map((count, hour) => ({ hour, count }));
+  const weekdayCounts: WeekdayCount[] = weekdayMap.map((count, idx) => ({ day: WEEKDAYS[idx], count }));
+
   const eventTypes: EventTypeCount[] = Object.entries(eventTypeCounts)
     .map(([eventName, count]) => ({ eventName, count }))
     .sort((a, b) => b.count - a.count);
 
-  // Top pages
-  const pageCounts: Record<string, number> = {};
-  for (const e of allEvents) {
-    if (e.page) pageCounts[e.page] = (pageCounts[e.page] ?? 0) + 1;
-  }
   const topPages: PageCount[] = Object.entries(pageCounts)
     .map(([page, count]) => ({ page, count }))
     .sort((a, b) => b.count - a.count)
     .slice(0, 10);
 
-  // Per-project counts
-  const projectCounts: Record<string, number> = {};
-  for (const e of allEvents) {
-    projectCounts[e.projectId] = (projectCounts[e.projectId] ?? 0) + 1;
-  }
+  const projectMap = new Map(allProjects.map((p) => [p.id, p]));
   const projectEventCounts: ProjectEventCount[] = Object.entries(projectCounts)
     .map(([projectId, count]) => {
       const p = projectMap.get(projectId);
-      return {
-        projectId,
-        projectName: p?.name ?? "לא ידוע",
-        projectSlug: p?.slug ?? "",
-        count,
-      };
+      return { projectId, projectName: p?.name ?? "לא ידוע", projectSlug: p?.slug ?? "", count };
     })
     .sort((a, b) => b.count - a.count);
 
-  // Weekday distribution
-  const WEEKDAYS = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
-  const weekdayMap = new Array(7).fill(0);
-  for (const e of allEvents) {
-    weekdayMap[e.createdAt.getDay()]++;
-  }
-  const weekdayCounts: WeekdayCount[] = weekdayMap.map((count, idx) => ({
-    day: WEEKDAYS[idx],
-    count,
-  }));
-
-  // Period comparison
+  // Comparison
   const changePercent =
     previousEvents > 0
       ? Math.round(((totalEvents - previousEvents) / previousEvents) * 100)
-      : totalEvents > 0
-        ? 100
-        : 0;
-
-  const comparison: PeriodComparison = {
-    current: totalEvents,
-    previous: previousEvents,
-    changePercent,
-  };
-
-  // Top event name
-  const topEventType = eventTypes.length > 0 ? eventTypes[0].eventName : null;
-
-  // Top project
-  const topProject =
-    projectEventCounts.length > 0 ? projectEventCounts[0] : null;
-
-  // This month
-  const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-  const thisMonthEvents = allEvents.filter((e) => e.createdAt >= startOfMonth).length;
-
-  // Sparkline: last 7 days daily counts
-  const sparkline: number[] = [];
-  for (let i = 6; i >= 0; i--) {
-    const d = daysAgo(i);
-    const next = daysAgo(i - 1);
-    sparkline.push(allEvents.filter((e) => e.createdAt >= d && e.createdAt < next).length);
-  }
+      : totalEvents > 0 ? 100 : 0;
 
   return {
     totalEvents,
@@ -242,9 +170,9 @@ export async function getReportsData(filters?: {
     uniqueSessions: uniqueSessionsResult.length,
     uniqueUsers: uniqueUsersResult.length,
     latestEventTime: latestEvent?.createdAt ?? null,
-    comparison,
-    topEventType,
-    topProject,
+    comparison: { current: totalEvents, previous: previousEvents, changePercent } as PeriodComparison,
+    topEventType: eventTypes.length > 0 ? eventTypes[0].eventName : null,
+    topProject: projectEventCounts.length > 0 ? projectEventCounts[0] : null,
     dailyCounts,
     hourlyCounts,
     eventTypes,
@@ -256,4 +184,23 @@ export async function getReportsData(filters?: {
     days,
     sparkline,
   };
+}
+
+async function getDailyCounts(
+  base: Record<string, unknown>,
+  days: number
+): Promise<DailyCount[]> {
+  const promises = [];
+  for (let i = days - 1; i >= 0; i--) {
+    const d = daysAgo(i);
+    const next = daysAgo(i - 1);
+    promises.push(
+      prisma.event.count({ where: { ...base, createdAt: { gte: d, lt: next } } })
+        .then((count) => ({
+          date: `${d.getDate().toString().padStart(2, "0")}/${(d.getMonth() + 1).toString().padStart(2, "0")}`,
+          count,
+        }))
+    );
+  }
+  return Promise.all(promises);
 }
