@@ -2,12 +2,23 @@ import { prisma } from "@/lib/prisma";
 import type { CreateProjectInput } from "@/lib/validations/project";
 
 export async function getProjects() {
-  return prisma.project.findMany({
+  const projects = await prisma.project.findMany({
     orderBy: { createdAt: "desc" },
     include: {
       _count: { select: { events: true } },
+      events: {
+        orderBy: { createdAt: "desc" },
+        take: 1,
+        select: { createdAt: true },
+      },
     },
   });
+
+  return projects.map((p) => ({
+    ...p,
+    lastEventAt: p.events[0]?.createdAt ?? null,
+    events: undefined,
+  }));
 }
 
 export async function getProjectBySlug(slug: string) {

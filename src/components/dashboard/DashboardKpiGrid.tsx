@@ -1,17 +1,19 @@
-import { FolderKanban, Activity, Calendar, Users } from "lucide-react";
+import { FolderKanban, Activity, Calendar, Clock } from "lucide-react";
 import { KpiCard } from "./KpiCard";
-import { formatNumber } from "@/utils/formatters";
+import { formatNumber, formatRelativeTime } from "@/utils/formatters";
 
 interface DashboardKpiGridProps {
   totalProjects: number;
   totalEvents: number;
   todayEvents: number;
+  latestEventTime: Date | null;
 }
 
 export function DashboardKpiGrid({
   totalProjects,
   totalEvents,
   todayEvents,
+  latestEventTime,
 }: DashboardKpiGridProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
@@ -43,11 +45,11 @@ export function DashboardKpiGrid({
         stagger={3}
       />
       <KpiCard
-        title="משתמשים"
-        value="—"
+        title="אירוע אחרון"
+        value={latestEventTime ? formatRelativeTime(latestEventTime) : "—"}
         change={0}
-        changeLabel="בקרוב"
-        icon={Users}
+        changeLabel={latestEventTime ? "זמן האירוע האחרון שנקלט" : "אין אירועים עדיין"}
+        icon={Clock}
         glow="amber"
         stagger={4}
       />

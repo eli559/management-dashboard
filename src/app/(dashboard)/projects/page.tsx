@@ -11,10 +11,8 @@ export default async function ProjectsPage() {
 
   return (
     <div className="space-y-8">
-      {/* Header (Client for dialog toggle) */}
       <ProjectsPageHeader />
 
-      {/* Projects Grid */}
       {projects.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {projects.map((project) => (
@@ -27,6 +25,7 @@ export default async function ProjectsPage() {
               description={project.description}
               createdAt={project.createdAt}
               eventCount={project._count.events}
+              lastEventAt={project.lastEventAt}
             />
           ))}
         </div>
@@ -34,7 +33,7 @@ export default async function ProjectsPage() {
         <EmptyState
           icon={FolderKanban}
           title="אין פרויקטים עדיין"
-          description='צור את הפרויקט הראשון שלך כדי להתחיל לעקוב אחר אירועים ולנתח נתונים'
+          description="צור את הפרויקט הראשון שלך כדי להתחיל לעקוב אחר אירועים"
         />
       )}
     </div>

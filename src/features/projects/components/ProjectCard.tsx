@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { Calendar, Activity, ArrowLeft } from "lucide-react";
+import { Calendar, Activity, ArrowLeft, Clock, Zap } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { PROJECT_TYPE_LABELS, PROJECT_STATUS_LABELS, PROJECT_TYPE_COLORS, PROJECT_STATUS_COLORS } from "@/features/projects/types";
-import { formatDate } from "@/utils/formatters";
+import { formatDate, formatRelativeTime } from "@/utils/formatters";
 
 interface ProjectCardProps {
   name: string;
@@ -12,9 +12,13 @@ interface ProjectCardProps {
   description: string | null;
   createdAt: Date;
   eventCount: number;
+  lastEventAt: Date | null;
 }
 
-export function ProjectCard({ name, slug, type, status, description, createdAt, eventCount }: ProjectCardProps) {
+export function ProjectCard({
+  name, slug, type, status, description,
+  createdAt, eventCount, lastEventAt,
+}: ProjectCardProps) {
   return (
     <Link href={`/projects/${slug}`} className="group block">
       <div className="glass rounded-2xl p-6 h-full flex flex-col hover:bg-white/[0.05] hover:-translate-y-0.5 transition-all duration-300 overflow-hidden relative">
@@ -38,16 +42,26 @@ export function ProjectCard({ name, slug, type, status, description, createdAt, 
 
         <div className="flex-1" />
 
-        <div className="flex items-center justify-between pt-4 mt-4 border-t border-white/[0.05]">
-          <div className="flex items-center gap-4">
+        {/* Stats */}
+        <div className="flex items-center gap-4 mb-3">
+          <div className="flex items-center gap-1.5 text-zinc-500">
+            <Activity className="w-3.5 h-3.5" />
+            <span className="text-[12px] font-semibold">{eventCount.toLocaleString("he-IL")}</span>
+            <span className="text-[11px] text-zinc-600">אירועים</span>
+          </div>
+          {lastEventAt && (
             <div className="flex items-center gap-1.5 text-zinc-600">
-              <Calendar className="w-3.5 h-3.5" />
-              <span className="text-[11px] font-medium">{formatDate(createdAt)}</span>
+              <Zap className="w-3 h-3" />
+              <span className="text-[11px]">{formatRelativeTime(lastEventAt)}</span>
             </div>
-            <div className="flex items-center gap-1.5 text-zinc-600">
-              <Activity className="w-3.5 h-3.5" />
-              <span className="text-[11px] font-medium">{eventCount.toLocaleString("he-IL")} אירועים</span>
-            </div>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div className="flex items-center justify-between pt-3 border-t border-white/[0.05]">
+          <div className="flex items-center gap-1.5 text-zinc-600">
+            <Calendar className="w-3.5 h-3.5" />
+            <span className="text-[11px] font-medium">{formatDate(createdAt)}</span>
           </div>
           <ArrowLeft className="w-4 h-4 text-zinc-700 group-hover:text-zinc-400 transition-colors" />
         </div>
