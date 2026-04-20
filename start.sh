@@ -2,10 +2,10 @@
 set -e
 
 echo "→ Running database migrations..."
-npx prisma migrate deploy 2>/dev/null || echo "→ Migrations skipped"
+npx prisma migrate deploy || echo "⚠ Migration failed, continuing..."
 
 echo "→ Seeding demo data..."
-node prisma/seed.mjs 2>/dev/null || echo "→ Seed skipped"
+node prisma/seed.mjs || echo "⚠ Seed failed, continuing..."
 
 echo "→ Starting server on port ${PORT:-8080}..."
-npx next start -p ${PORT:-8080}
+exec npx next start -p ${PORT:-8080}
