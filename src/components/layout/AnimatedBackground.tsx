@@ -22,26 +22,19 @@ const SNIPPETS = [
   "Promise.all([",
   "async function send(",
   "const result = await db",
-  "border: 1px solid",
   "metadata: { browser }",
   "apiKey: 'pk_...',",
-  "<KpiCard value={v} />",
-  "grid-cols-4 gap-5",
-  "transition: all 300ms",
-  "font-bold text-white",
-  "className='surface'",
   "onClick={() => track(",
   "useEffect(() => {",
   "router.push('/dashboard')",
 ];
 
-// Symbols layer — floating glyphs
 const GLYPHS = [
-  "{ }", "( )", "=>", "//", "/* */", "< />", "::", "...", "&&", "||",
-  "!=", "===", "++", "[]", "/**", "*/", "#!", ">>", "<<", ">>=",
+  "{ }", "( )", "=>", "//", "< />", "::", "&&", "||",
+  "===", "++", "[]", "/**", "*/", ">>", "<<",
 ];
 
-interface CodeParticle {
+interface Particle {
   x: number;
   y: number;
   vx: number;
@@ -49,17 +42,8 @@ interface CodeParticle {
   text: string;
   opacity: number;
   size: number;
-  depth: number;
-}
-
-interface GlyphParticle {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  glyph: string;
-  opacity: number;
-  size: number;
+  blur: number;
+  color: string;
 }
 
 export function AnimatedBackground() {
@@ -88,84 +72,73 @@ export function AnimatedBackground() {
     resize();
     window.addEventListener("resize", resize);
 
-    // ── Layer 1: Code snippets (far to near) ──
-    const codeCount = Math.min(Math.floor((w * h) / 28000), 40);
-    const codeParticles: CodeParticle[] = Array.from({ length: codeCount }, () => {
-      const depth = Math.random();
-      return {
-        x: Math.random() * w,
-        y: Math.random() * h,
-        vx: (Math.random() - 0.5) * (0.03 + depth * 0.14),
-        vy: 0.01 + depth * 0.08,
-        text: SNIPPETS[Math.floor(Math.random() * SNIPPETS.length)],
-        opacity: 0.06 + depth * 0.16, // 0.06 → 0.22
-        size: 9 + depth * 5,          // 9px → 14px
-        depth,
-      };
-    });
+    const particles: Particle[] = [];
 
-    // ── Layer 2: Glyphs / symbols (mid-layer) ──
-    const glyphCount = Math.min(Math.floor((w * h) / 60000), 18);
-    const glyphParticles: GlyphParticle[] = Array.from({ length: glyphCount }, () => ({
-      x: Math.random() * w,
-      y: Math.random() * h,
-      vx: (Math.random() - 0.5) * 0.2,
-      vy: (Math.random() - 0.5) * 0.15,
-      glyph: GLYPHS[Math.floor(Math.random() * GLYPHS.length)],
-      opacity: 0.08 + Math.random() * 0.1,
-      size: 14 + Math.random() * 6,
-    }));
+    // Layer 1: Large code snippets — very visible
+    for (let i = 0; i < 30; i++) {
+      particles.push({
+        x: Math.random() * 2000,
+        y: Math.random() * 2000,
+        vx: (Math.random() - 0.5) * 0.15,
+        vy: 0.03 + Math.random() * 0.08,
+        text: SNIPPETS[Math.floor(Math.random() * SNIPPETS.length)],
+        opacity: 0.25 + Math.random() * 0.2,  // 0.25 - 0.45 — VERY visible
+        size: 13 + Math.random() * 5,          // 13-18px
+        blur: 0,
+        color: `rgba(130, 140, 180, 1)`,       // bright blue-gray
+      });
+    }
+
+    // Layer 2: Blurred far code — depth
+    for (let i = 0; i < 15; i++) {
+      particles.push({
+        x: Math.random() * 2000,
+        y: Math.random() * 2000,
+        vx: (Math.random() - 0.5) * 0.06,
+        vy: 0.01 + Math.random() * 0.04,
+        text: SNIPPETS[Math.floor(Math.random() * SNIPPETS.length)],
+        opacity: 0.12 + Math.random() * 0.1,
+        size: 10 + Math.random() * 3,
+        blur: 2,
+        color: `rgba(100, 110, 150, 1)`,
+      });
+    }
+
+    // Layer 3: Glyphs — floating symbols
+    for (let i = 0; i < 20; i++) {
+      particles.push({
+        x: Math.random() * 2000,
+        y: Math.random() * 2000,
+        vx: (Math.random() - 0.5) * 0.2,
+        vy: (Math.random() - 0.5) * 0.15,
+        text: GLYPHS[Math.floor(Math.random() * GLYPHS.length)],
+        opacity: 0.2 + Math.random() * 0.15,
+        size: 16 + Math.random() * 8,          // 16-24px — big
+        blur: 0,
+        color: `rgba(120, 130, 220, 1)`,        // indigo
+      });
+    }
 
     function draw() {
       ctx!.clearRect(0, 0, w, h);
 
-      // ── Draw code snippets ──
-      for (const p of codeParticles) {
+      for (const p of particles) {
         p.x += p.vx;
         p.y += p.vy;
 
-        if (p.y > h + 40) {
-          p.y = -30;
-          p.x = Math.random() * w;
-          p.text = SNIPPETS[Math.floor(Math.random() * SNIPPETS.length)];
-        }
-        if (p.x < -350) p.x = w + 50;
-        if (p.x > w + 350) p.x = -50;
+        if (p.y > h + 50) { p.y = -40; p.x = Math.random() * w; }
+        if (p.y < -50) { p.y = h + 40; p.x = Math.random() * w; }
+        if (p.x < -400) p.x = w + 100;
+        if (p.x > w + 400) p.x = -100;
 
         ctx!.save();
         ctx!.globalAlpha = p.opacity;
         ctx!.font = `${p.size}px 'Courier New', monospace`;
-
-        // Depth color: far = dim gray-blue, near = brighter indigo
-        const brightness = 50 + Math.floor(p.depth * 50);
-        ctx!.fillStyle = `rgb(${brightness}, ${brightness + 5}, ${brightness + 25})`;
-
-        // Blur far particles
-        if (p.depth < 0.3) {
-          ctx!.filter = "blur(2px)";
-        } else if (p.depth < 0.55) {
-          ctx!.filter = "blur(0.8px)";
+        ctx!.fillStyle = p.color;
+        if (p.blur > 0) {
+          ctx!.filter = `blur(${p.blur}px)`;
         }
-
         ctx!.fillText(p.text, p.x, p.y);
-        ctx!.restore();
-      }
-
-      // ── Draw glyphs ──
-      for (const g of glyphParticles) {
-        g.x += g.vx;
-        g.y += g.vy;
-
-        if (g.x < -40) g.x = w + 20;
-        if (g.x > w + 40) g.x = -20;
-        if (g.y < -40) g.y = h + 20;
-        if (g.y > h + 40) g.y = -20;
-
-        ctx!.save();
-        ctx!.globalAlpha = g.opacity;
-        ctx!.font = `${g.size}px 'Courier New', monospace`;
-        ctx!.fillStyle = "rgba(99, 102, 241, 0.5)"; // indigo tint
-        ctx!.fillText(g.glyph, g.x, g.y);
         ctx!.restore();
       }
 
