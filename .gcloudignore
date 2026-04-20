@@ -1,0 +1,7 @@
+node_modules/
+.next/
+.git/
+integration-package/
+integration-package-vite/
+prisma/dev.db
+prisma/dev.db-journal
