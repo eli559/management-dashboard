@@ -79,8 +79,8 @@ export function AnimatedBackground() {
         x: Math.random() * 2000, y: Math.random() * 2000,
         vx: (Math.random() - 0.5) * 0.12, vy: 0.02 + Math.random() * 0.06,
         text: SNIPPETS[Math.floor(Math.random() * SNIPPETS.length)],
-        opacity: 0.35 + Math.random() * 0.25, size: 13 + Math.random() * 4,
-        blur: 0, color: "rgba(160, 170, 210, 1)",
+        opacity: 0.4 + Math.random() * 0.3, size: 13 + Math.random() * 4,
+        blur: 0, color: "rgba(212, 175, 55, 1)",
       });
     }
 
@@ -89,8 +89,8 @@ export function AnimatedBackground() {
         x: Math.random() * 2000, y: Math.random() * 2000,
         vx: (Math.random() - 0.5) * 0.05, vy: 0.01 + Math.random() * 0.03,
         text: SNIPPETS[Math.floor(Math.random() * SNIPPETS.length)],
-        opacity: 0.15 + Math.random() * 0.1, size: 10 + Math.random() * 3,
-        blur: 2, color: "rgba(130, 140, 180, 1)",
+        opacity: 0.2 + Math.random() * 0.15, size: 10 + Math.random() * 3,
+        blur: 2, color: "rgba(180, 150, 50, 1)",
       });
     }
 
@@ -99,8 +99,8 @@ export function AnimatedBackground() {
         x: Math.random() * 2000, y: Math.random() * 2000,
         vx: (Math.random() - 0.5) * 0.18, vy: (Math.random() - 0.5) * 0.12,
         text: GLYPHS[Math.floor(Math.random() * GLYPHS.length)],
-        opacity: 0.3 + Math.random() * 0.2, size: 16 + Math.random() * 8,
-        blur: 0, color: "rgba(140, 150, 240, 1)",
+        opacity: 0.35 + Math.random() * 0.25, size: 16 + Math.random() * 8,
+        blur: 0, color: "rgba(235, 195, 65, 1)",
       });
     }
 
@@ -131,7 +131,7 @@ export function AnimatedBackground() {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: 50, mixBlendMode: "screen", opacity: 0.25 }}
+      style={{ zIndex: 50, mixBlendMode: "screen", opacity: 0.45 }}
       aria-hidden="true"
     />
   );
