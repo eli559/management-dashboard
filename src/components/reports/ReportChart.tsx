@@ -36,7 +36,7 @@ export function ReportChart({
   const c = colorMap[color];
 
   return (
-    <div className={cn("relative glass rounded-2xl p-6 overflow-hidden", className)}>
+    <div className={cn("relative surface rounded-2xl p-6 overflow-hidden", className)}>
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-white/[0.08] to-transparent" />
 
       <h3 className="text-[15px] font-bold text-zinc-200 mb-0.5">{title}</h3>

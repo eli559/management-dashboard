@@ -11,7 +11,7 @@ export function ProjectEventBreakdown({ data, totalEvents }: Props) {
   if (data.length === 0) return null;
 
   return (
-    <div className="glass rounded-2xl p-6 overflow-hidden relative">
+    <div className="surface rounded-2xl p-6 overflow-hidden relative">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-white/[0.08] to-transparent" />
       <h3 className="text-[15px] font-bold text-zinc-200 mb-1">חלוקה לפי אירוע</h3>
       <p className="text-[13px] text-zinc-600 mb-5">סוגי אירועים שנקלטו בפרויקט</p>

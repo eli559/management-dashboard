@@ -21,7 +21,7 @@ export function DashboardRecentActivity({
   events,
 }: DashboardRecentActivityProps) {
   return (
-    <div className="relative glass rounded-2xl p-6 h-full animate-slide-up stagger-6 overflow-hidden">
+    <div className="relative surface rounded-2xl p-6 h-full animate-slide-up stagger-6 overflow-hidden">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-white/[0.08] to-transparent" />
 
       {/* כותרת */}

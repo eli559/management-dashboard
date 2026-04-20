@@ -19,14 +19,14 @@ interface EventsTableProps {
 export function EventsTable({ events }: EventsTableProps) {
   if (events.length === 0) {
     return (
-      <div className="glass rounded-2xl p-12 text-center">
+      <div className="surface rounded-2xl p-12 text-center">
         <p className="text-sm text-zinc-500">אין אירועים עדיין</p>
       </div>
     );
   }
 
   return (
-    <div className="glass rounded-2xl overflow-hidden">
+    <div className="surface rounded-2xl overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>

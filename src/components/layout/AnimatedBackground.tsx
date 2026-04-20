@@ -2,31 +2,31 @@
 
 import { useEffect, useRef } from "react";
 
-const CODE_LINES = [
+const SNIPPETS = [
   "const data = await fetch(url);",
   "if (status === 'ACTIVE') {",
   "return events.filter(e =>",
-  "export async function get",
-  "prisma.event.count({ where",
-  "<KpiCard title={title}",
-  "const [state, setState] =",
-  "await prisma.project.find",
-  "metadata: { browser: 'Ch'",
+  "export async function get(",
+  "prisma.event.count({",
+  "<KpiCard value={v}",
+  "const [s, setS] = useState",
+  "await prisma.project.find(",
   "sessionId: generateId()",
   "trackPageView(page);",
-  "apiKey: 'pk_...',",
   "eventName: 'page_view'",
   "} catch (err) {",
-  "export default function",
-  ".then(res => res.json())",
-  "border-radius: 16px;",
-  "transition: all 300ms",
+  ".then(r => r.json())",
   "grid-cols-4 gap-5",
-  "font-bold text-white",
-  "function sanitizePage(r) {",
-  "SELECT COUNT(*) FROM ev",
-  "import { prisma } from",
-  "const token = generateId",
+  "SELECT COUNT(*) FROM",
+  "import { prisma }",
+  "function sanitize(raw) {",
+  "className='surface'",
+  "export default function",
+  "Promise.all([",
+  "async function send(",
+  "const result = await",
+  "border: 1px solid",
+  "metadata: {}",
 ];
 
 interface Particle {
@@ -36,76 +36,85 @@ interface Particle {
   vy: number;
   text: string;
   opacity: number;
-  targetOpacity: number;
   size: number;
-  blur: number;
+  depth: number; // 0-1: far=0 near=1
 }
 
 export function AnimatedBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const frameRef = useRef<number>(0);
+  const frameRef = useRef(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-    let width = 0;
-    let height = 0;
+    let w = 0, h = 0;
 
     function resize() {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      canvas!.width = width * dpr;
-      canvas!.height = height * dpr;
-      canvas!.style.width = `${width}px`;
-      canvas!.style.height = `${height}px`;
+      w = window.innerWidth;
+      h = window.innerHeight;
+      canvas!.width = w * dpr;
+      canvas!.height = h * dpr;
+      canvas!.style.width = `${w}px`;
+      canvas!.style.height = `${h}px`;
       ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
     resize();
     window.addEventListener("resize", resize);
 
-    const count = Math.min(Math.floor((width * height) / 60000), 22);
-    const particles: Particle[] = Array.from({ length: count }, () => ({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.12,
-      vy: (Math.random() - 0.5) * 0.08 + 0.02,
-      text: CODE_LINES[Math.floor(Math.random() * CODE_LINES.length)],
-      opacity: 0,
-      targetOpacity: 0.06 + Math.random() * 0.06,
-      size: 11 + Math.random() * 3,
-      blur: Math.random() > 0.6 ? 1 : 0,
-    }));
+    // Layer 1: deep, blurry, slow (far)
+    // Layer 2: mid
+    // Layer 3: near, sharper, slightly faster
+    const count = Math.min(Math.floor((w * h) / 35000), 32);
+    const particles: Particle[] = Array.from({ length: count }, () => {
+      const depth = Math.random();
+      return {
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * (0.04 + depth * 0.12),
+        vy: 0.015 + depth * 0.07,
+        text: SNIPPETS[Math.floor(Math.random() * SNIPPETS.length)],
+        opacity: 0.04 + depth * 0.1, // far: ~0.04, near: ~0.14
+        size: 8 + depth * 5, // far: 8px, near: 13px
+        depth,
+      };
+    });
 
     function draw() {
-      ctx!.clearRect(0, 0, width, height);
+      ctx!.clearRect(0, 0, w, h);
 
       for (const p of particles) {
-        p.opacity += (p.targetOpacity - p.opacity) * 0.003;
         p.x += p.vx;
         p.y += p.vy;
 
-        if (p.x < -300) p.x = width + 100;
-        if (p.x > width + 300) p.x = -100;
-        if (p.y > height + 40) {
+        if (p.y > h + 40) {
           p.y = -30;
-          p.x = Math.random() * width;
-          p.text = CODE_LINES[Math.floor(Math.random() * CODE_LINES.length)];
+          p.x = Math.random() * w;
+          p.text = SNIPPETS[Math.floor(Math.random() * SNIPPETS.length)];
         }
+        if (p.x < -300) p.x = w + 50;
+        if (p.x > w + 300) p.x = -50;
 
         ctx!.save();
         ctx!.globalAlpha = p.opacity;
-        if (p.blur > 0) {
-          ctx!.filter = `blur(${p.blur}px)`;
-        }
         ctx!.font = `${p.size}px 'Courier New', monospace`;
-        ctx!.fillStyle = "#71717a";
+
+        // Color by depth: far = muted indigo, near = brighter blue-ish
+        const r = 50 + Math.floor(p.depth * 30);
+        const g = 50 + Math.floor(p.depth * 35);
+        const b = 65 + Math.floor(p.depth * 50);
+        ctx!.fillStyle = `rgb(${r},${g},${b})`;
+
+        if (p.depth < 0.35) {
+          ctx!.filter = "blur(1.5px)";
+        } else if (p.depth < 0.6) {
+          ctx!.filter = "blur(0.5px)";
+        }
+
         ctx!.fillText(p.text, p.x, p.y);
         ctx!.restore();
       }
@@ -114,7 +123,6 @@ export function AnimatedBackground() {
     }
 
     draw();
-
     return () => {
       window.removeEventListener("resize", resize);
       cancelAnimationFrame(frameRef.current);

@@ -53,8 +53,8 @@ export function KpiCard({
   return (
     <div
       className={cn(
-        "relative glass rounded-2xl p-6 group overflow-hidden",
-        "hover:bg-white/[0.05] hover:-translate-y-0.5",
+        "relative surface rounded-2xl p-6 group overflow-hidden",
+        "hover:-translate-y-0.5",
         "transition-all duration-300 ease-out",
         g.ring,
         "animate-slide-up",

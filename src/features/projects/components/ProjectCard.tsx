@@ -21,7 +21,7 @@ export function ProjectCard({
 }: ProjectCardProps) {
   return (
     <Link href={`/projects/${slug}`} className="group block">
-      <div className="glass rounded-2xl p-6 h-full flex flex-col hover:bg-white/[0.05] hover:-translate-y-0.5 transition-all duration-300 overflow-hidden relative">
+      <div className="surface rounded-2xl p-6 h-full flex flex-col hover:bg-white/[0.05] hover:-translate-y-0.5 transition-all duration-300 overflow-hidden relative">
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-white/[0.08] to-transparent" />
 
         <div className="flex items-center gap-2 mb-4">
