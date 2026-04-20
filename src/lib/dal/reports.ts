@@ -222,10 +222,23 @@ export async function getReportsData(filters?: {
   const topProject =
     projectEventCounts.length > 0 ? projectEventCounts[0] : null;
 
+  // This month
+  const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+  const thisMonthEvents = allEvents.filter((e) => e.createdAt >= startOfMonth).length;
+
+  // Sparkline: last 7 days daily counts
+  const sparkline: number[] = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = daysAgo(i);
+    const next = daysAgo(i - 1);
+    sparkline.push(allEvents.filter((e) => e.createdAt >= d && e.createdAt < next).length);
+  }
+
   return {
     totalEvents,
     todayEvents,
     thisWeekEvents,
+    thisMonthEvents,
     uniqueSessions: uniqueSessionsResult.length,
     uniqueUsers: uniqueUsersResult.length,
     latestEventTime: latestEvent?.createdAt ?? null,
@@ -241,5 +254,6 @@ export async function getReportsData(filters?: {
     allProjects,
     eventNames: Object.keys(eventTypeCounts),
     days,
+    sparkline,
   };
 }
