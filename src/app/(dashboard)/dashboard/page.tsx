@@ -1,6 +1,6 @@
 import { getDashboardStats } from "@/lib/dal/dashboard";
 import { DashboardKpiGrid } from "@/components/dashboard/DashboardKpiGrid";
-import { ChartPlaceholder } from "@/components/dashboard/ChartPlaceholder";
+import { ActivityChart } from "@/components/dashboard/ActivityChart";
 import { DashboardRecentActivity } from "@/components/dashboard/DashboardRecentActivity";
 
 export const dynamic = "force-dynamic";
@@ -25,7 +25,7 @@ export default async function DashboardPage() {
 
       <div className="grid grid-cols-1 xl:grid-cols-5 gap-5">
         <div className="xl:col-span-3">
-          <ChartPlaceholder />
+          <ActivityChart data={stats.monthlyData} />
         </div>
         <div className="xl:col-span-2">
           <DashboardRecentActivity events={stats.recentEvents} />
