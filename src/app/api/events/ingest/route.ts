@@ -3,6 +3,16 @@ import { ingestEventSchema } from "@/lib/validations/event";
 import { getProjectByApiKey } from "@/lib/dal/projects";
 import { createEvent } from "@/lib/dal/events";
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+};
+
+export async function OPTIONS() {
+  return new NextResponse(null, { status: 204, headers: corsHeaders });
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json().catch(() => null);
@@ -10,7 +20,7 @@ export async function POST(request: NextRequest) {
     if (!body) {
       return NextResponse.json(
         { error: "Invalid JSON body" },
-        { status: 400 }
+        { status: 400, headers: corsHeaders }
       );
     }
 
@@ -21,7 +31,7 @@ export async function POST(request: NextRequest) {
           error: "Invalid payload",
           details: parsed.error.flatten().fieldErrors,
         },
-        { status: 400 }
+        { status: 400, headers: corsHeaders }
       );
     }
 
@@ -31,14 +41,14 @@ export async function POST(request: NextRequest) {
     if (!project) {
       return NextResponse.json(
         { error: "Invalid API key" },
-        { status: 401 }
+        { status: 401, headers: corsHeaders }
       );
     }
 
     if (project.status !== "ACTIVE") {
       return NextResponse.json(
         { error: "Project is not active" },
-        { status: 403 }
+        { status: 403, headers: corsHeaders }
       );
     }
 
@@ -54,12 +64,12 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       { success: true, eventId: event.id },
-      { status: 201 }
+      { status: 201, headers: corsHeaders }
     );
   } catch {
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500, headers: corsHeaders }
     );
   }
 }
