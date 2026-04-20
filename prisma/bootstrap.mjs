@@ -1,21 +1,18 @@
 /**
  * Bootstrap: ensures required projects exist on startup.
- * Does NOT create fake events — only the project records
- * so that tracking clients can send events to a valid apiKey.
- *
+ * Uses better-sqlite3 directly to avoid Prisma ESM issues in production.
  * Idempotent: skips if project already exists.
  */
 
-import { PrismaClient } from "../src/generated/prisma/client.js";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import Database from "better-sqlite3";
+import { randomBytes } from "crypto";
 
-const url = process.env.DATABASE_URL ?? "file:./prisma/dev.db";
-const adapter = new PrismaBetterSqlite3({ url });
-const prisma = new PrismaClient({ adapter });
+const dbPath = (process.env.DATABASE_URL ?? "file:./prisma/dev.db").replace("file:", "");
+const db = new Database(dbPath);
 
-// Fixed API keys — must match what tracking clients use
 const PROJECTS = [
   {
+    id: "proj_trainer_app",
     name: "אפליקציית אימונים",
     slug: "trainer-app",
     type: "WEBSITE",
@@ -24,34 +21,20 @@ const PROJECTS = [
   },
 ];
 
-async function main() {
-  for (const p of PROJECTS) {
-    const existing = await prisma.project.findUnique({
-      where: { apiKey: p.apiKey },
-    });
+const insert = db.prepare(`
+  INSERT OR IGNORE INTO projects (id, name, slug, type, description, status, apiKey, createdAt, updatedAt)
+  VALUES (?, ?, ?, ?, ?, 'ACTIVE', ?, datetime('now'), datetime('now'))
+`);
 
-    if (existing) {
-      console.log(`✓ Project "${p.name}" already exists`);
-      continue;
-    }
-
-    await prisma.project.create({
-      data: {
-        name: p.name,
-        slug: p.slug,
-        type: p.type,
-        description: p.description,
-        status: "ACTIVE",
-        apiKey: p.apiKey,
-      },
-    });
+for (const p of PROJECTS) {
+  const result = insert.run(p.id, p.name, p.slug, p.type, p.description, p.apiKey);
+  if (result.changes > 0) {
     console.log(`✓ Created project "${p.name}"`);
+  } else {
+    console.log(`✓ Project "${p.name}" already exists`);
   }
 }
 
-main()
-  .catch((e) => {
-    console.error("Bootstrap failed:", e);
-    process.exit(1);
-  })
-  .finally(() => prisma.$disconnect());
+const count = db.prepare("SELECT COUNT(*) as c FROM projects").get();
+console.log(`✓ Total projects: ${count.c}`);
+db.close();
