@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #f5f5f6;
-  --color-foreground: #18181b;
+  --color-background: #0a0a0c;
+  --color-foreground: #e4e4e7;
   --font-sans: var(--font-heebo), system-ui, -apple-system, sans-serif;
 }
 
@@ -17,17 +17,17 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d4d4d8;
+  background: #27272a;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a1a1aa;
+  background: #3f3f46;
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: #d4d4d8 transparent;
+  scrollbar-color: #27272a transparent;
 }
 
 /* ── Base ── */
@@ -41,13 +41,13 @@ body {
 }
 
 ::selection {
-  background-color: #d4a54a33;
-  color: #18181b;
+  background-color: rgba(212, 165, 74, 0.2);
+  color: #fafafa;
 }
 
 /* ── Focus Ring ── */
 :focus-visible {
-  outline: 2px solid #a1a1aa;
+  outline: 2px solid rgba(161, 161, 170, 0.3);
   outline-offset: 2px;
 }
 
@@ -72,7 +72,7 @@ body {
 @keyframes slide-up {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(14px);
   }
   to {
     opacity: 1;
@@ -89,6 +89,11 @@ body {
   }
 }
 
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.7; }
+}
+
 /* ── Stagger classes ── */
 .animate-slide-up {
   animation: slide-up 0.5s ease-out both;
@@ -101,13 +106,26 @@ body {
 .stagger-5 { animation-delay: 320ms; }
 .stagger-6 { animation-delay: 400ms; }
 
-/* ── Bar rise ── */
 .animate-bar-rise {
   animation: bar-rise 0.7s ease-out both;
   transform-origin: bottom;
 }
 
-/* ── Page fade ── */
 .animate-page {
   animation: slide-up 0.4s ease-out both;
+}
+
+/* ── Glass surface ── */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.glass-strong {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }

@@ -13,17 +13,17 @@ export const PROJECT_STATUS_LABELS: Record<string, string> = {
 };
 
 export const PROJECT_TYPE_COLORS: Record<string, string> = {
-  WEBSITE: "bg-zinc-100 text-zinc-700",
-  MOBILE_APP: "bg-zinc-100 text-zinc-700",
-  API: "bg-zinc-100 text-zinc-700",
-  SAAS: "bg-zinc-100 text-zinc-700",
-  OTHER: "bg-zinc-100 text-zinc-600",
+  WEBSITE: "bg-blue-500/10 text-blue-400 border-blue-500/10",
+  MOBILE_APP: "bg-violet-500/10 text-violet-400 border-violet-500/10",
+  API: "bg-amber-500/10 text-amber-400 border-amber-500/10",
+  SAAS: "bg-emerald-500/10 text-emerald-400 border-emerald-500/10",
+  OTHER: "bg-white/[0.06] text-zinc-400 border-white/[0.06]",
 };
 
 export const PROJECT_STATUS_COLORS: Record<string, string> = {
-  ACTIVE: "bg-emerald-600",
-  PAUSED: "bg-amber-500",
-  ARCHIVED: "bg-zinc-400",
+  ACTIVE: "bg-emerald-400",
+  PAUSED: "bg-amber-400",
+  ARCHIVED: "bg-zinc-500",
 };
 
 export const PROJECT_TYPE_OPTIONS = [

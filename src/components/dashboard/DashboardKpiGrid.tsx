@@ -21,6 +21,7 @@ export function DashboardKpiGrid({
         change={0}
         changeLabel="סה״כ פרויקטים במערכת"
         icon={FolderKanban}
+        glow="violet"
         stagger={1}
       />
       <KpiCard
@@ -29,6 +30,7 @@ export function DashboardKpiGrid({
         change={0}
         changeLabel="אירועים שנקלטו"
         icon={Activity}
+        glow="blue"
         stagger={2}
       />
       <KpiCard
@@ -37,6 +39,7 @@ export function DashboardKpiGrid({
         change={0}
         changeLabel="אירועים שנקלטו היום"
         icon={Calendar}
+        glow="emerald"
         stagger={3}
       />
       <KpiCard
@@ -45,6 +48,7 @@ export function DashboardKpiGrid({
         change={0}
         changeLabel="בקרוב"
         icon={Users}
+        glow="amber"
         stagger={4}
       />
     </div>

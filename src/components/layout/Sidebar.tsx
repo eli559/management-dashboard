@@ -35,11 +35,11 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed inset-y-0 start-0 z-40 w-[272px] bg-[#0c0c0e] flex flex-col border-e border-white/[0.05]">
+    <aside className="fixed inset-y-0 start-0 z-40 w-[272px] bg-[#08080a]/90 backdrop-blur-xl flex flex-col border-e border-white/[0.04]">
       {/* ── לוגו ── */}
-      <div className="h-[72px] flex items-center px-6 border-b border-white/[0.05]">
+      <div className="h-[64px] flex items-center px-6 border-b border-white/[0.04]">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg bg-amber-400/10 flex items-center justify-center">
+          <div className="w-9 h-9 rounded-lg bg-amber-400/10 flex items-center justify-center shadow-[0_0_20px_-4px_rgba(245,158,11,0.15)]">
             <LayoutDashboard className="w-[18px] h-[18px] text-amber-400" />
           </div>
           <div>
@@ -72,15 +72,19 @@ export function Sidebar() {
               className={cn(
                 "relative flex items-center gap-3 px-3 py-[9px] rounded-lg text-[13px] font-medium transition-all duration-200",
                 isActive
-                  ? "bg-white/[0.07] text-white"
-                  : "text-zinc-500 hover:bg-white/[0.04] hover:text-zinc-300"
+                  ? "bg-white/[0.06] text-white shadow-[0_0_20px_-4px_rgba(245,158,11,0.08)]"
+                  : "text-zinc-500 hover:bg-white/[0.03] hover:text-zinc-300"
               )}
             >
-              {/* Active glow indicator */}
               {isActive && (
-                <div className="absolute inset-y-1.5 start-0 w-[3px] rounded-full bg-amber-400/70" />
+                <div className="absolute inset-y-1.5 start-0 w-[3px] rounded-full bg-amber-400/70 shadow-[0_0_8px_rgba(245,158,11,0.4)]" />
               )}
-              <Icon className={cn("w-[17px] h-[17px] flex-shrink-0", isActive && "text-amber-400/80")} />
+              <Icon
+                className={cn(
+                  "w-[17px] h-[17px] flex-shrink-0",
+                  isActive ? "text-amber-400/80" : ""
+                )}
+              />
               <span>{item.label}</span>
             </Link>
           );
@@ -88,10 +92,10 @@ export function Sidebar() {
       </nav>
 
       {/* ── תחתית ── */}
-      <div className="px-3 py-4 border-t border-white/[0.05]">
+      <div className="px-3 py-4 border-t border-white/[0.04]">
         <Link
           href={ROUTES.SETTINGS}
-          className="flex items-center gap-3 px-3 py-[9px] rounded-lg text-[13px] font-medium text-zinc-600 hover:bg-white/[0.04] hover:text-zinc-400 transition-all duration-200"
+          className="flex items-center gap-3 px-3 py-[9px] rounded-lg text-[13px] font-medium text-zinc-600 hover:bg-white/[0.03] hover:text-zinc-400 transition-all duration-200"
         >
           <Settings className="w-[17px] h-[17px] flex-shrink-0" />
           <span>הגדרות</span>

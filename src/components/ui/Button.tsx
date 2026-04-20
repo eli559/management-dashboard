@@ -12,12 +12,12 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    "bg-zinc-900 text-white hover:bg-zinc-800 focus:ring-zinc-400/20 shadow-sm",
+    "bg-white text-zinc-900 hover:bg-zinc-100 focus:ring-white/20 shadow-sm",
   secondary:
-    "bg-white text-zinc-700 border border-zinc-200 hover:bg-zinc-50 focus:ring-zinc-400/20",
-  ghost: "text-zinc-600 hover:bg-zinc-100 focus:ring-zinc-400/20",
+    "bg-white/[0.05] text-zinc-300 border border-white/[0.08] hover:bg-white/[0.08] focus:ring-white/10",
+  ghost: "text-zinc-400 hover:bg-white/[0.05] focus:ring-white/10",
   danger:
-    "bg-red-900 text-white hover:bg-red-800 focus:ring-red-400/20 shadow-sm",
+    "bg-red-500/10 text-red-400 border border-red-500/10 hover:bg-red-500/20 focus:ring-red-500/20",
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
@@ -27,25 +27,14 @@ const sizeStyles: Record<ButtonSize, string> = {
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    {
-      className,
-      variant = "primary",
-      size = "md",
-      isLoading,
-      disabled,
-      children,
-      ...props
-    },
-    ref
-  ) => {
+  ({ className, variant = "primary", size = "md", isLoading, disabled, children, ...props }, ref) => {
     return (
       <button
         ref={ref}
         disabled={disabled || isLoading}
         className={cn(
           "inline-flex items-center justify-center font-medium transition-all duration-200",
-          "focus:outline-none focus:ring-2 disabled:opacity-60 disabled:cursor-not-allowed",
+          "focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed",
           variantStyles[variant],
           sizeStyles[size],
           className

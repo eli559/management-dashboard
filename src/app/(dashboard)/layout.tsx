@@ -7,10 +7,16 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen relative">
+      {/* Deep radial ambient light */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="absolute top-0 start-1/3 w-[800px] h-[600px] bg-blue-500/[0.02] rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 end-1/4 w-[600px] h-[500px] bg-amber-500/[0.015] rounded-full blur-[100px]" />
+      </div>
+
       <Sidebar />
       <div
-        className="flex-1 flex flex-col min-h-screen"
+        className="flex-1 flex flex-col min-h-screen relative z-10"
         style={{ marginInlineStart: "272px" }}
       >
         <Topbar />

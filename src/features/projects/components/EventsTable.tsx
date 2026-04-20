@@ -19,33 +19,23 @@ interface EventsTableProps {
 export function EventsTable({ events }: EventsTableProps) {
   if (events.length === 0) {
     return (
-      <div className="bg-white rounded-2xl border border-zinc-100 shadow-sm p-12 text-center">
+      <div className="glass rounded-2xl p-12 text-center">
         <p className="text-sm text-zinc-500">אין אירועים עדיין</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-zinc-100 shadow-sm overflow-hidden">
+    <div className="glass rounded-2xl overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-zinc-100">
-              <th className="text-start text-[11px] font-semibold text-zinc-500 uppercase tracking-wider px-6 py-3.5">
-                אירוע
-              </th>
-              <th className="text-start text-[11px] font-semibold text-zinc-500 uppercase tracking-wider px-6 py-3.5">
-                משתמש
-              </th>
-              <th className="text-start text-[11px] font-semibold text-zinc-500 uppercase tracking-wider px-6 py-3.5">
-                עמוד
-              </th>
-              <th className="text-start text-[11px] font-semibold text-zinc-500 uppercase tracking-wider px-6 py-3.5">
-                ערך
-              </th>
-              <th className="text-start text-[11px] font-semibold text-zinc-500 uppercase tracking-wider px-6 py-3.5">
-                זמן
-              </th>
+            <tr className="border-b border-white/[0.05]">
+              <th className="text-start text-[11px] font-semibold text-zinc-500 uppercase tracking-wider px-6 py-3.5">אירוע</th>
+              <th className="text-start text-[11px] font-semibold text-zinc-500 uppercase tracking-wider px-6 py-3.5">משתמש</th>
+              <th className="text-start text-[11px] font-semibold text-zinc-500 uppercase tracking-wider px-6 py-3.5">עמוד</th>
+              <th className="text-start text-[11px] font-semibold text-zinc-500 uppercase tracking-wider px-6 py-3.5">ערך</th>
+              <th className="text-start text-[11px] font-semibold text-zinc-500 uppercase tracking-wider px-6 py-3.5">זמן</th>
             </tr>
           </thead>
           <tbody>
@@ -53,36 +43,15 @@ export function EventsTable({ events }: EventsTableProps) {
               <tr
                 key={event.id}
                 className={cn(
-                  "hover:bg-zinc-50 transition-colors",
-                  idx < events.length - 1 && "border-b border-zinc-50"
+                  "hover:bg-white/[0.02] transition-colors",
+                  idx < events.length - 1 && "border-b border-white/[0.03]"
                 )}
               >
-                <td className="px-6 py-3.5">
-                  <Badge>{event.eventName}</Badge>
-                </td>
-                <td className="px-6 py-3.5">
-                  <span className="text-sm text-zinc-700 font-mono text-[12px]">
-                    {event.userIdentifier ?? "—"}
-                  </span>
-                </td>
-                <td className="px-6 py-3.5">
-                  <span
-                    className="text-sm text-zinc-500 font-mono text-[12px] truncate max-w-[200px] block"
-                    dir="ltr"
-                  >
-                    {event.page ?? "—"}
-                  </span>
-                </td>
-                <td className="px-6 py-3.5">
-                  <span className="text-sm text-zinc-700 tabular-nums">
-                    {event.value != null ? event.value : "—"}
-                  </span>
-                </td>
-                <td className="px-6 py-3.5">
-                  <span className="text-[12px] text-zinc-400 whitespace-nowrap">
-                    {formatRelativeTime(event.createdAt)}
-                  </span>
-                </td>
+                <td className="px-6 py-3.5"><Badge>{event.eventName}</Badge></td>
+                <td className="px-6 py-3.5"><span className="text-[12px] text-zinc-400 font-mono">{event.userIdentifier ?? "—"}</span></td>
+                <td className="px-6 py-3.5"><span className="text-[12px] text-zinc-500 font-mono truncate max-w-[200px] block" dir="ltr">{event.page ?? "—"}</span></td>
+                <td className="px-6 py-3.5"><span className="text-[12px] text-zinc-400 tabular-nums">{event.value != null ? event.value : "—"}</span></td>
+                <td className="px-6 py-3.5"><span className="text-[11px] text-zinc-600 whitespace-nowrap">{formatRelativeTime(event.createdAt)}</span></td>
               </tr>
             ))}
           </tbody>
