@@ -116,8 +116,14 @@ export function AnimatedBackground() {
         ctx!.globalAlpha = p.opacity;
         ctx!.font = `${p.size}px 'Courier New', monospace`;
         ctx!.fillStyle = p.color;
-        if (p.blur > 0) ctx!.filter = `blur(${p.blur}px)`;
+        if (p.blur > 0) {
+          ctx!.filter = `blur(${p.blur}px)`;
+        }
+        // Glow pass — draw text twice for glow effect
+        ctx!.shadowColor = p.color;
+        ctx!.shadowBlur = 8;
         ctx!.fillText(p.text, p.x, p.y);
+        ctx!.shadowBlur = 0;
         ctx!.restore();
       }
       frameRef.current = requestAnimationFrame(draw);
@@ -131,7 +137,7 @@ export function AnimatedBackground() {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: 50, mixBlendMode: "screen", opacity: 0.45 }}
+      style={{ zIndex: 50, mixBlendMode: "screen", opacity: 0.5 }}
       aria-hidden="true"
     />
   );

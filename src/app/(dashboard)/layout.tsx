@@ -9,11 +9,22 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="flex min-h-screen relative bg-[#06060a]">
-      {/* Multi-zone ambient light */}
+      {/* ── Lighting system ── */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-[-200px] start-[20%] w-[900px] h-[700px] bg-indigo-500/[0.03] rounded-full blur-[150px]" />
-        <div className="absolute bottom-[-100px] end-[10%] w-[700px] h-[500px] bg-violet-500/[0.025] rounded-full blur-[120px]" />
-        <div className="absolute top-[40%] start-[60%] w-[500px] h-[400px] bg-blue-500/[0.02] rounded-full blur-[100px]" />
+        {/* Projector — top-center spotlight */}
+        <div className="absolute top-[-300px] start-[40%] w-[1100px] h-[800px] bg-amber-400/[0.04] rounded-full blur-[180px]" />
+
+        {/* KPI zone — cool blue wash */}
+        <div className="absolute top-[60px] start-[25%] w-[900px] h-[400px] bg-blue-500/[0.035] rounded-full blur-[140px]" />
+
+        {/* Chart zone — violet accent */}
+        <div className="absolute top-[35%] start-[30%] w-[700px] h-[500px] bg-violet-500/[0.03] rounded-full blur-[130px]" />
+
+        {/* Bottom — warm fill */}
+        <div className="absolute bottom-[-150px] end-[15%] w-[800px] h-[600px] bg-amber-500/[0.025] rounded-full blur-[150px]" />
+
+        {/* Side accent — left edge light */}
+        <div className="absolute top-[20%] start-[280px] w-[300px] h-[600px] bg-indigo-400/[0.02] rounded-full blur-[100px]" />
       </div>
 
       {/* Code particles */}
