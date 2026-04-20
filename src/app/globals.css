@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #f8fafc;
-  --color-foreground: #0f172a;
+  --color-background: #f8f8f9;
+  --color-foreground: #18181b;
   --font-sans: var(--font-heebo), system-ui, -apple-system, sans-serif;
 }
 
 /* ── Scrollbar ── */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -17,17 +17,17 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #d4d4d8;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #a1a1aa;
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 transparent;
+  scrollbar-color: #d4d4d8 transparent;
 }
 
 /* ── Base ── */
@@ -41,13 +41,13 @@ body {
 }
 
 ::selection {
-  background-color: #c7d2fe;
-  color: #1e1b4b;
+  background-color: #d4a54a33;
+  color: #18181b;
 }
 
 /* ── Focus Ring ── */
 :focus-visible {
-  outline: 2px solid #6366f1;
+  outline: 2px solid #a1a1aa;
   outline-offset: 2px;
 }
 

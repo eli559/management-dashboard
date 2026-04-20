@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Calendar, Activity, ArrowLeft } from "lucide-react";
 import { cn } from "@/utils/cn";
-import { Badge } from "@/components/ui/Badge";
 import {
   PROJECT_TYPE_LABELS,
   PROJECT_STATUS_LABELS,
@@ -31,8 +30,8 @@ export function ProjectCard({
 }: ProjectCardProps) {
   return (
     <Link href={`/projects/${slug}`} className="group block">
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 h-full flex flex-col hover:shadow-md hover:border-slate-200 transition-all duration-300">
-        {/* Header - Badges */}
+      <div className="bg-white rounded-2xl border border-zinc-100 shadow-sm p-6 h-full flex flex-col hover:shadow-md hover:border-zinc-200 transition-all duration-300">
+        {/* תגיות */}
         <div className="flex items-center gap-2 mb-4">
           <span
             className={cn(
@@ -49,44 +48,43 @@ export function ProjectCard({
                 PROJECT_STATUS_COLORS[status]
               )}
             />
-            <span className="text-[11px] text-slate-500 font-medium">
+            <span className="text-[11px] text-zinc-500 font-medium">
               {PROJECT_STATUS_LABELS[status]}
             </span>
           </div>
         </div>
 
-        {/* Title */}
-        <h3 className="text-[15px] font-bold text-slate-900 mb-1.5 group-hover:text-indigo-600 transition-colors">
+        {/* שם */}
+        <h3 className="text-[15px] font-bold text-zinc-900 mb-1.5 group-hover:text-zinc-700 transition-colors">
           {name}
         </h3>
 
-        {/* Description */}
+        {/* תיאור */}
         {description && (
-          <p className="text-[13px] text-slate-500 leading-relaxed line-clamp-2 mb-4">
+          <p className="text-[13px] text-zinc-500 leading-relaxed line-clamp-2 mb-4">
             {description}
           </p>
         )}
 
-        {/* Spacer */}
         <div className="flex-1" />
 
-        {/* Footer */}
-        <div className="flex items-center justify-between pt-4 mt-4 border-t border-slate-100">
+        {/* תחתית */}
+        <div className="flex items-center justify-between pt-4 mt-4 border-t border-zinc-100">
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1.5 text-slate-400">
+            <div className="flex items-center gap-1.5 text-zinc-400">
               <Calendar className="w-3.5 h-3.5" />
               <span className="text-[11px] font-medium">
                 {formatDate(createdAt)}
               </span>
             </div>
-            <div className="flex items-center gap-1.5 text-slate-400">
+            <div className="flex items-center gap-1.5 text-zinc-400">
               <Activity className="w-3.5 h-3.5" />
               <span className="text-[11px] font-medium">
                 {eventCount.toLocaleString("he-IL")} אירועים
               </span>
             </div>
           </div>
-          <ArrowLeft className="w-4 h-4 text-slate-300 group-hover:text-indigo-500 transition-colors" />
+          <ArrowLeft className="w-4 h-4 text-zinc-300 group-hover:text-zinc-500 transition-colors" />
         </div>
       </div>
     </Link>

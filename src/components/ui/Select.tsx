@@ -21,7 +21,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
         {label && (
           <label
             htmlFor={id}
-            className="block text-sm font-medium text-slate-700 mb-2"
+            className="block text-sm font-medium text-zinc-700 mb-2"
           >
             {label}
           </label>
@@ -31,11 +31,11 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             ref={ref}
             id={id}
             className={cn(
-              "w-full py-3 px-4 bg-white border border-slate-200 rounded-xl text-sm text-slate-900",
-              "focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all",
+              "w-full py-3 px-4 bg-white border border-zinc-200 rounded-xl text-sm text-zinc-900",
+              "focus:outline-none focus:ring-2 focus:ring-zinc-300/40 focus:border-zinc-300 transition-all",
               "appearance-none cursor-pointer pe-10",
               error &&
-                "border-red-300 focus:ring-red-500/20 focus:border-red-500",
+                "border-red-300 focus:ring-red-300/40 focus:border-red-300",
               className
             )}
             {...props}
@@ -51,7 +51,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
               </option>
             ))}
           </select>
-          <ChevronDown className="absolute end-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+          <ChevronDown className="absolute end-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none" />
         </div>
         {error && <p className="mt-1.5 text-xs text-red-600">{error}</p>}
       </div>

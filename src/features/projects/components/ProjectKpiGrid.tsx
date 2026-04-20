@@ -23,8 +23,6 @@ export function ProjectKpiGrid({
         change={0}
         changeLabel="מתחילת הפרויקט"
         icon={BarChart3}
-        iconColor="text-blue-600"
-        iconBg="bg-blue-50"
       />
       <KpiCard
         title="אירועי היום"
@@ -32,26 +30,20 @@ export function ProjectKpiGrid({
         change={0}
         changeLabel="אירועים שהתקבלו היום"
         icon={Calendar}
-        iconColor="text-emerald-600"
-        iconBg="bg-emerald-50"
       />
       <KpiCard
-        title="משת��שים ייחודיים"
+        title="משתמשים ייחודיים"
         value={formatNumber(uniqueUsers)}
         change={0}
         changeLabel="משתמשים שונים שזוהו"
         icon={Users}
-        iconColor="text-amber-600"
-        iconBg="bg-amber-50"
       />
       <KpiCard
-        title="Sessions"
+        title="סשנים"
         value={formatNumber(uniqueSessions)}
         change={0}
-        changeLabel="sessions שונים שזוהו"
+        changeLabel="סשנים שונים שזוהו"
         icon={Radio}
-        iconColor="text-violet-600"
-        iconBg="bg-violet-50"
       />
     </div>
   );
