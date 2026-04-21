@@ -137,7 +137,7 @@ export function AnimatedBackground() {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: 50, mixBlendMode: "screen", opacity: 0.5 }}
+      style={{ zIndex: 5, mixBlendMode: "screen", opacity: 0.5 }}
       aria-hidden="true"
     />
   );
