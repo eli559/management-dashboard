@@ -3,6 +3,7 @@ import { ingestEventSchema } from "@/lib/validations/event";
 import { getProjectByApiKey } from "@/lib/dal/projects";
 import { createEvent } from "@/lib/dal/events";
 import { isRateLimited } from "@/lib/rate-limit";
+import { checkNotificationRules } from "@/lib/notification-rules";
 
 // CORS: allow specific origins or all (configure via env)
 function getCorsHeaders(origin: string | null) {
@@ -110,6 +111,14 @@ export async function POST(request: NextRequest) {
       value: eventData.value ?? null,
       metadata: eventData.metadata ?? {},
     });
+
+    // ── Notifications (async, non-blocking) ──
+    checkNotificationRules({
+      eventName: eventData.eventName,
+      projectId: project.id,
+      sessionId: eventData.sessionId ?? null,
+      page: eventData.page ?? null,
+    }).catch(() => {});
 
     return NextResponse.json(
       { success: true, eventId: event.id },

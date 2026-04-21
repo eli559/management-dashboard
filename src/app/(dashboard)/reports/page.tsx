@@ -11,23 +11,46 @@ import { ComparisonChart } from "@/components/reports/ComparisonChart";
 import { HorizontalBar } from "@/components/reports/HorizontalBar";
 import { HeatmapGrid } from "@/components/reports/HeatmapGrid";
 import { LiveRefresh } from "@/components/LiveRefresh";
+import { ReportsFilter } from "@/components/reports/ReportsFilter";
 import { getEventLabel } from "@/lib/event-labels";
 import { formatNumber, formatRelativeTime } from "@/utils/formatters";
+import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";
 
-export default async function ReportsPage() {
-  const data = await getReportsData({ days: 30 });
+interface PageProps {
+  searchParams: Promise<{ days?: string; project?: string }>;
+}
+
+export default async function ReportsPage({ searchParams }: PageProps) {
+  const params = await searchParams;
+  const days = params.days ? parseInt(params.days) : 30;
+  const projectId = params.project || undefined;
+  const data = await getReportsData({ days, projectId });
+
+  const currentProject = projectId
+    ? data.allProjects.find((p) => p.id === projectId)
+    : null;
 
   return (
     <div className="space-y-5">
       <LiveRefresh interval={15} />
-      {/* ── כותרת ── */}
-      <div className="animate-slide-up stagger-1">
-        <h1 className="text-[22px] font-bold text-white">דוחות</h1>
-        <p className="text-zinc-300 mt-0.5 text-[14px]">
-          ניתוח מעמיק — {data.days} ימים אחרונים
-        </p>
+      {/* ── כותרת + פילטר ── */}
+      <div className="animate-slide-up stagger-1 flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-[22px] font-bold text-white">דוחות</h1>
+          <p className="text-zinc-300 mt-0.5 text-[14px]">
+            ניתוח מעמיק — {data.days} ימים אחרונים
+            {currentProject ? ` · ${currentProject.name}` : ""}
+          </p>
+        </div>
+        <Suspense fallback={null}>
+          <ReportsFilter
+            projects={data.allProjects}
+            currentDays={days}
+            currentProjectId={projectId}
+          />
+        </Suspense>
       </div>
 
       {/* ══════════════════════════════════════════
