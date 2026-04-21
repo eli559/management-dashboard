@@ -14,10 +14,10 @@ interface Notification {
 }
 
 const colorDot: Record<string, string> = {
-  blue: "bg-blue-400 shadow-[0_0_8px_rgba(59,130,246,0.6)]",
-  emerald: "bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.6)]",
-  amber: "bg-amber-400 shadow-[0_0_8px_rgba(245,158,11,0.6)]",
-  violet: "bg-violet-400 shadow-[0_0_8px_rgba(139,92,246,0.6)]",
+  blue: "bg-blue-400 shadow-[0_0_8px_rgba(59,130,246,0.6)] animate-[pulse_2.5s_ease-in-out_infinite]",
+  emerald: "bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.6)] animate-[pulse_2.5s_ease-in-out_infinite]",
+  amber: "bg-amber-400 shadow-[0_0_8px_rgba(245,158,11,0.6)] animate-[pulse_2.5s_ease-in-out_infinite]",
+  violet: "bg-violet-400 shadow-[0_0_8px_rgba(139,92,246,0.6)] animate-[pulse_2.5s_ease-in-out_infinite]",
 };
 
 function timeAgo(dateStr: string): string {
