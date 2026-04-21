@@ -34,7 +34,7 @@ export function HeatmapGrid({ hourly, weekday }: HeatmapGridProps) {
                   }}
                   title={`${h.hour}:00 — ${h.count} אירועים`}
                 >
-                  <div className="absolute -top-7 left-1/2 -translate-x-1/2 glass-strong text-white text-[8px] font-semibold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-20">
+                  <div className="absolute -top-7 left-1/2 -translate-x-1/2 glass-strong text-white text-[10px] font-semibold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-20">
                     {h.hour}:00 — {h.count}
                   </div>
                 </div>
@@ -42,8 +42,8 @@ export function HeatmapGrid({ hourly, weekday }: HeatmapGridProps) {
             })}
           </div>
           <div className="flex justify-between mt-1.5">
-            <span className="text-[8px] text-zinc-700">00:00</span>
-            <span className="text-[8px] text-zinc-700">23:00</span>
+            <span className="text-[10px] text-zinc-400">00:00</span>
+            <span className="text-[10px] text-zinc-400">23:00</span>
           </div>
         </div>
 

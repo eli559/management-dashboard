@@ -74,7 +74,7 @@ export function ReportChart({
                   )}
                 </div>
                 {data.length <= 31 && (
-                  <span className="text-[8px] text-zinc-700 font-medium truncate max-w-full">
+                  <span className="text-[10px] text-zinc-400 font-medium truncate max-w-full">
                     {item.label}
                   </span>
                 )}

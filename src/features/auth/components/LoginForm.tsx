@@ -107,7 +107,7 @@ export function LoginForm() {
         </form>
       </div>
 
-      <p className="text-center text-[13px] text-zinc-700 mt-8">© 2026 מערכת ניהול. כל הזכויות שמורות.</p>
+      <p className="text-center text-[13px] text-zinc-400 mt-8">© 2026 מערכת ניהול. כל הזכויות שמורות.</p>
     </div>
   );
 }

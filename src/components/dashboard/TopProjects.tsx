@@ -31,7 +31,7 @@ export function TopProjects({ projects }: TopProjectsProps) {
             <span className="text-[12px] text-zinc-300 tabular-nums">
               {project.eventCount.toLocaleString("he-IL")}
             </span>
-            <ArrowLeft className="w-3.5 h-3.5 text-zinc-700 group-hover:text-zinc-300 transition-colors" />
+            <ArrowLeft className="w-3.5 h-3.5 text-zinc-400 group-hover:text-zinc-300 transition-colors" />
           </Link>
         ))}
       </div>

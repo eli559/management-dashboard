@@ -62,7 +62,7 @@ export function ProjectCard({
             <Calendar className="w-3.5 h-3.5" />
             <span className="text-[11px] font-medium">{formatDate(createdAt)}</span>
           </div>
-          <ArrowLeft className="w-4 h-4 text-zinc-700 group-hover:text-zinc-300 transition-colors" />
+          <ArrowLeft className="w-4 h-4 text-zinc-400 group-hover:text-zinc-300 transition-colors" />
         </div>
       </div>
     </Link>

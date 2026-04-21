@@ -62,7 +62,7 @@ export function ActivityChart({ data }: ActivityChartProps) {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center h-52 text-center">
-            <BarChart3 className="w-8 h-8 text-zinc-700 mb-3" />
+            <BarChart3 className="w-8 h-8 text-zinc-400 mb-3" />
             <p className="text-[13px] text-zinc-300">אין נתונים עדיין</p>
             <p className="text-[11px] text-zinc-300 mt-1">
               הגרף יתעדכן ברגע שיתקבלו אירועים

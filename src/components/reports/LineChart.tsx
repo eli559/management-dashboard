@@ -72,7 +72,7 @@ export function LineChart({ title, subtitle, data, color = "blue", className, sh
       {/* X-axis labels */}
       <div className="flex justify-between mt-1.5 px-0.5">
         {data.filter((_, i) => i % Math.max(Math.floor(data.length / 6), 1) === 0).map((d, i) => (
-          <span key={i} className="text-[8px] text-zinc-700">{d.label}</span>
+          <span key={i} className="text-[10px] text-zinc-400">{d.label}</span>
         ))}
       </div>
     </div>

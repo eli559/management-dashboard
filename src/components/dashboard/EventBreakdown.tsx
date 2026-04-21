@@ -38,7 +38,7 @@ export function EventBreakdown({ data, totalEvents }: EventBreakdownProps) {
         </div>
       ) : (
         <div className="text-center py-8">
-          <PieChart className="w-7 h-7 text-zinc-700 mx-auto mb-3" />
+          <PieChart className="w-7 h-7 text-zinc-400 mx-auto mb-3" />
           <p className="text-[13px] text-zinc-300">אין נתונים עדיין</p>
         </div>
       )}

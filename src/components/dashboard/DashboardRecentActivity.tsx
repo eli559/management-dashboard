@@ -60,7 +60,7 @@ export function DashboardRecentActivity({
           </div>
         ) : (
           <div className="text-center py-10">
-            <Activity className="w-7 h-7 text-zinc-700 mx-auto mb-3" />
+            <Activity className="w-7 h-7 text-zinc-400 mx-auto mb-3" />
             <p className="text-[13px] text-zinc-300">אין פעילות עדיין</p>
             <p className="text-[11px] text-zinc-300 mt-1">
               אירועים יופיעו כאן ברגע שיישלחו דרך ה-API

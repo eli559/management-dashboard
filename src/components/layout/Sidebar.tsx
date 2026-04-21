@@ -58,7 +58,7 @@ export function Sidebar() {
 
       {/* ── ניווט ── */}
       <nav className="flex-1 px-3 py-5 space-y-0.5 overflow-y-auto">
-        <p className="px-3 mb-3 text-[10px] font-semibold text-zinc-700 uppercase tracking-widest">
+        <p className="px-3 mb-3 text-[10px] font-semibold text-zinc-400 uppercase tracking-widest">
           תפריט ראשי
         </p>
         {navigationItems.map((item) => {
