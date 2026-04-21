@@ -19,6 +19,14 @@ const PROJECTS = [
     description: "אפליקציית ניהול אימונים ותזונה",
     apiKey: "pk_015a62ed52d60d7912e589fb5b9535adad5ab6c9e9abe24e",
   },
+  {
+    id: "proj_landing_page",
+    name: "דף נחיתה",
+    slug: "landing-page",
+    type: "WEBSITE",
+    description: "דף נחיתה שיווקי — מעקב כניסות, קליקים, המרות",
+    apiKey: "pk_landing_7f3a9c2e1b4d6e8a0f5c3b7d9e1a4f6c8b2d0e3a5c7f9b",
+  },
 ];
 
 const insert = db.prepare(`

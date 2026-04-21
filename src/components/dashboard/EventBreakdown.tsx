@@ -1,4 +1,4 @@
-import { Badge } from "@/components/ui/Badge";
+import { EventBadge } from "@/components/ui/EventBadge";
 import { PieChart } from "lucide-react";
 import type { EventBreakdown as EventBreakdownData } from "@/lib/dal/dashboard";
 
@@ -22,7 +22,7 @@ export function EventBreakdown({ data, totalEvents }: EventBreakdownProps) {
             const pct = totalEvents > 0 ? (item.count / totalEvents) * 100 : 0;
             return (
               <div key={item.eventName} className="flex items-center gap-3">
-                <Badge>{item.eventName}</Badge>
+                <EventBadge eventName={item.eventName} />
                 <div className="flex-1 h-2 bg-white/[0.04] rounded-full overflow-hidden">
                   <div
                     className="h-full bg-gradient-to-l from-blue-500/40 to-blue-500/20 rounded-full transition-all duration-500"

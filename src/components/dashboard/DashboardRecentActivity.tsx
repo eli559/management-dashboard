@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Activity, Zap } from "lucide-react";
-import { Badge } from "@/components/ui/Badge";
+import { EventBadge } from "@/components/ui/EventBadge";
 import { formatRelativeTime } from "@/utils/formatters";
 
 interface RecentEvent {
@@ -47,7 +47,7 @@ export function DashboardRecentActivity({
                   <Zap className="w-4 h-4" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <Badge>{event.eventName}</Badge>
+                  <EventBadge eventName={event.eventName} />
                   <p className="text-[12px] text-zinc-600 truncate mt-0.5">
                     {event.project.name}
                   </p>

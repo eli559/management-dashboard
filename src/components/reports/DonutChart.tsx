@@ -1,4 +1,5 @@
 import { cn } from "@/utils/cn";
+import { getEventLabel } from "@/lib/event-labels";
 
 interface DonutSegment {
   label: string;
@@ -97,7 +98,7 @@ export function DonutChart({ title, subtitle, items, className }: DonutChartProp
             return (
               <div key={seg.label} className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: seg.color }} />
-                <span className="text-[11px] text-zinc-400 truncate flex-1">{seg.label}</span>
+                <span className="text-[11px] text-zinc-400 truncate flex-1">{getEventLabel(seg.label)}</span>
                 <span className="text-[10px] text-zinc-500 tabular-nums">{pct}%</span>
               </div>
             );

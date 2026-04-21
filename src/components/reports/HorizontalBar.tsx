@@ -1,5 +1,5 @@
 import { cn } from "@/utils/cn";
-import { Badge } from "@/components/ui/Badge";
+import { EventBadge } from "@/components/ui/EventBadge";
 
 interface HorizontalBarItem {
   label: string;
@@ -57,7 +57,7 @@ export function HorizontalBar({
           return (
             <div key={item.label} className="flex items-center gap-3">
               {useBadge ? (
-                <Badge className="min-w-[80px] justify-center">{item.label}</Badge>
+                <EventBadge eventName={item.label} />
               ) : mono ? (
                 <code className="text-[11px] text-zinc-400 font-mono truncate min-w-[120px] max-w-[160px]" dir="ltr">
                   {item.label}

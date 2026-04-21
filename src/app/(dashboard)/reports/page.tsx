@@ -65,8 +65,8 @@ export default async function ReportsPage() {
             color="blue"
           />
           <MiniKpi
-            label="משתמשים"
-            value={formatNumber(data.uniqueUsers)}
+            label="מבקרים"
+            value={formatNumber(data.uniqueSessions > 0 ? data.uniqueSessions : data.uniqueUsers)}
             icon={Users}
             color="emerald"
           />
