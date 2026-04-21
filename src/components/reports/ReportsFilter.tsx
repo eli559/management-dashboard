@@ -76,7 +76,7 @@ export function ReportsFilter({ projects, currentDays, currentProjectId, current
       </button>
 
       {open && (
-        <div className="absolute top-full end-0 mt-2 w-[300px] glass-strong rounded-xl overflow-hidden animate-[dialog-in_150ms_ease-out] z-50 p-4 space-y-4">
+        <div className="absolute bottom-full end-0 mb-2 w-[300px] max-h-[70vh] overflow-y-auto glass-strong rounded-xl animate-[dialog-in_150ms_ease-out] z-50 p-4 space-y-4">
           {/* תקופה */}
           <div>
             <p className="text-[11px] text-zinc-300 font-semibold mb-2">תקופה אחרונה</p>
