@@ -4,64 +4,50 @@ import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { SlidersHorizontal, X } from "lucide-react";
 import { cn } from "@/utils/cn";
-import { MONTH_NAMES_HE } from "@/utils/formatters";
 
 interface Project { id: string; name: string; slug: string; }
 
-interface ReportsFilterProps {
+interface VisitorsFilterProps {
   projects: Project[];
   currentDays: number;
   currentProjectId?: string;
-  currentMonth?: string;
+  currentDevice?: string;
 }
 
 const TIME_OPTIONS = [
   { value: "7", label: "7 ימים" },
   { value: "14", label: "14 ימים" },
   { value: "30", label: "30 ימים" },
-  { value: "60", label: "60 ימים" },
   { value: "90", label: "90 ימים" },
 ];
 
-function getMonths() {
-  const m = [];
-  const now = new Date();
-  for (let i = 0; i < 12; i++) {
-    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    m.push({ value: `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`, label: `${MONTH_NAMES_HE[d.getMonth()]} ${d.getFullYear()}` });
-  }
-  return m;
-}
+const DEVICE_OPTIONS = [
+  { value: "", label: "כל המכשירים" },
+  { value: "טלפון", label: "טלפון" },
+  { value: "מחשב", label: "מחשב" },
+  { value: "טאבלט", label: "טאבלט" },
+];
 
-export function ReportsFilter({ projects, currentDays, currentProjectId, currentMonth }: ReportsFilterProps) {
+export function VisitorsFilter({ projects, currentDays, currentProjectId, currentDevice }: VisitorsFilterProps) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const btnRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const [style, setStyle] = useState<React.CSSProperties>({});
-  const hasFilter = currentDays !== 30 || currentProjectId || currentMonth;
+  const hasFilter = currentDays !== 30 || currentProjectId || currentDevice;
 
   useEffect(() => {
     if (open && btnRef.current) {
       const r = btnRef.current.getBoundingClientRect();
-      // Position: right-aligned with button, below it
-      setStyle({
-        position: "fixed",
-        top: r.bottom + 8,
-        right: window.innerWidth - r.right,
-        zIndex: 9999,
-      });
+      setStyle({ position: "fixed", top: r.bottom + 8, right: window.innerWidth - r.right, zIndex: 9999 });
     }
   }, [open]);
 
-  // Close on outside click
   useEffect(() => {
     if (!open) return;
     function handleClick(e: MouseEvent) {
       if (panelRef.current && !panelRef.current.contains(e.target as Node) &&
-          btnRef.current && !btnRef.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
+          btnRef.current && !btnRef.current.contains(e.target as Node)) setOpen(false);
     }
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
@@ -71,13 +57,11 @@ export function ReportsFilter({ projects, currentDays, currentProjectId, current
     const p = new URLSearchParams();
     if (params.days && params.days !== "30") p.set("days", params.days);
     if (params.project) p.set("project", params.project);
-    if (params.month) p.set("month", params.month);
+    if (params.device) p.set("device", params.device);
     const q = p.toString();
-    router.push(q ? `/reports?${q}` : "/reports");
+    router.push(q ? `/visitors?${q}` : "/visitors");
     setOpen(false);
   }
-
-  const months = getMonths();
 
   return (
     <>
@@ -92,30 +76,30 @@ export function ReportsFilter({ projects, currentDays, currentProjectId, current
 
       {open && (
         <div ref={panelRef} style={style}
-          className="w-[320px] max-h-[60vh] overflow-y-auto glass-strong rounded-xl animate-[dialog-in_150ms_ease-out] p-4 space-y-4 shadow-2xl shadow-black/60">
+          className="w-[280px] max-h-[50vh] overflow-y-auto glass-strong rounded-xl animate-[dialog-in_150ms_ease-out] p-4 space-y-4 shadow-2xl shadow-black/60">
 
           {/* תקופה */}
           <div>
-            <p className="text-[11px] text-zinc-300 font-semibold mb-2">תקופה אחרונה</p>
+            <p className="text-[11px] text-zinc-300 font-semibold mb-2">תקופה</p>
             <div className="flex flex-wrap gap-1.5">
               {TIME_OPTIONS.map((opt) => (
-                <button key={opt.value} onClick={() => go({ days: opt.value, project: currentProjectId })}
+                <button key={opt.value} onClick={() => go({ days: opt.value, project: currentProjectId, device: currentDevice })}
                   className={cn("px-3 py-1.5 rounded-lg text-[12px] font-medium transition-all",
-                    !currentMonth && String(currentDays) === opt.value ? "bg-white/[0.12] text-white border border-white/[0.15]" : "bg-white/[0.04] text-zinc-300 border border-white/[0.06] hover:bg-white/[0.08]"
+                    String(currentDays) === opt.value ? "bg-white/[0.12] text-white border border-white/[0.15]" : "bg-white/[0.04] text-zinc-300 border border-white/[0.06] hover:bg-white/[0.08]"
                   )}>{opt.label}</button>
               ))}
             </div>
           </div>
 
-          {/* חודש */}
+          {/* מכשיר */}
           <div>
-            <p className="text-[11px] text-zinc-300 font-semibold mb-2">חודש ספציפי</p>
-            <div className="grid grid-cols-2 gap-1.5 max-h-[120px] overflow-y-auto">
-              {months.map((m) => (
-                <button key={m.value} onClick={() => go({ month: m.value, project: currentProjectId })}
-                  className={cn("px-3 py-1.5 rounded-lg text-[12px] font-medium transition-all text-start",
-                    currentMonth === m.value ? "bg-white/[0.12] text-white border border-white/[0.15]" : "bg-white/[0.04] text-zinc-300 border border-white/[0.06] hover:bg-white/[0.08]"
-                  )}>{m.label}</button>
+            <p className="text-[11px] text-zinc-300 font-semibold mb-2">סוג מכשיר</p>
+            <div className="flex flex-wrap gap-1.5">
+              {DEVICE_OPTIONS.map((opt) => (
+                <button key={opt.value} onClick={() => go({ days: String(currentDays), project: currentProjectId, device: opt.value || undefined })}
+                  className={cn("px-3 py-1.5 rounded-lg text-[12px] font-medium transition-all",
+                    (currentDevice ?? "") === opt.value ? "bg-white/[0.12] text-white border border-white/[0.15]" : "bg-white/[0.04] text-zinc-300 border border-white/[0.06] hover:bg-white/[0.08]"
+                  )}>{opt.label}</button>
               ))}
             </div>
           </div>
@@ -124,13 +108,13 @@ export function ReportsFilter({ projects, currentDays, currentProjectId, current
           {projects.length > 1 && (
             <div>
               <p className="text-[11px] text-zinc-300 font-semibold mb-2">פרויקט</p>
-              <div className="space-y-1 max-h-[100px] overflow-y-auto">
-                <button onClick={() => go({ days: currentMonth ? undefined : String(currentDays), month: currentMonth })}
+              <div className="space-y-1">
+                <button onClick={() => go({ days: String(currentDays), device: currentDevice })}
                   className={cn("w-full text-start px-3 py-2 rounded-lg text-[12px] font-medium transition-all",
                     !currentProjectId ? "bg-white/[0.12] text-white border border-white/[0.15]" : "bg-white/[0.04] text-zinc-300 hover:bg-white/[0.08]"
                   )}>כל הפרויקטים</button>
                 {projects.map((p) => (
-                  <button key={p.id} onClick={() => go({ days: currentMonth ? undefined : String(currentDays), month: currentMonth, project: p.id })}
+                  <button key={p.id} onClick={() => go({ days: String(currentDays), device: currentDevice, project: p.id })}
                     className={cn("w-full text-start px-3 py-2 rounded-lg text-[12px] font-medium transition-all",
                       currentProjectId === p.id ? "bg-white/[0.12] text-white border border-white/[0.15]" : "bg-white/[0.04] text-zinc-300 hover:bg-white/[0.08]"
                     )}>{p.name}</button>
@@ -139,9 +123,8 @@ export function ReportsFilter({ projects, currentDays, currentProjectId, current
             </div>
           )}
 
-          {/* ניקוי */}
           {hasFilter && (
-            <button onClick={() => { router.push("/reports"); setOpen(false); }}
+            <button onClick={() => { router.push("/visitors"); setOpen(false); }}
               className="w-full flex items-center justify-center gap-1.5 py-2 rounded-lg text-[12px] text-zinc-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.06] transition-all">
               <X className="w-3.5 h-3.5" /><span>נקה סינון</span>
             </button>

@@ -3,31 +3,58 @@ import {
   Globe, ExternalLink,
 } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
 import { getVisitorStats, getRecentSessions } from "@/lib/dal/visitors";
 import { LiveRefresh } from "@/components/LiveRefresh";
-import { Badge } from "@/components/ui/Badge";
 import { EventBadge } from "@/components/ui/EventBadge";
-import { formatNumber, formatRelativeTime, formatDate } from "@/utils/formatters";
+import { VisitorsFilter } from "@/components/visitors/VisitorsFilter";
+import { formatNumber, formatRelativeTime } from "@/utils/formatters";
 import { cn } from "@/utils/cn";
+import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
-export default async function VisitorsPage() {
-  const [stats, sessions] = await Promise.all([
+interface PageProps {
+  searchParams: Promise<{ days?: string; project?: string; device?: string }>;
+}
+
+export default async function VisitorsPage({ searchParams }: PageProps) {
+  const params = await searchParams;
+  const days = params.days ? parseInt(params.days) : 30;
+  const projectFilter = params.project || undefined;
+  const deviceFilter = params.device || undefined;
+
+  const [stats, sessions, allProjects] = await Promise.all([
     getVisitorStats(),
-    getRecentSessions(40),
+    getRecentSessions(50),
+    prisma.project.findMany({ select: { id: true, name: true, slug: true } }),
   ]);
+
+  // Client-side filter sessions
+  let filtered = sessions;
+  if (projectFilter) filtered = filtered.filter((s) => s.projectSlug === allProjects.find((p) => p.id === projectFilter)?.slug);
+  if (deviceFilter) filtered = filtered.filter((s) => s.deviceType === deviceFilter);
 
   return (
     <div className="space-y-6">
       <LiveRefresh interval={30} />
 
-      {/* ── כותרת ── */}
-      <div className="animate-slide-up stagger-1">
-        <h1 className="text-[22px] font-bold text-white">מבקרים</h1>
-        <p className="text-zinc-300 mt-0.5 text-[14px]">
-          כל מי שנכנס לאתרים שלך — בזמן אמת
-        </p>
+      {/* ── כותרת + פילטר ── */}
+      <div className="animate-slide-up stagger-1 flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-[22px] font-bold text-white">מבקרים</h1>
+          <p className="text-zinc-300 mt-0.5 text-[14px]">
+            כל מי שנכנס לאתרים שלך — בזמן אמת
+          </p>
+        </div>
+        <Suspense fallback={null}>
+          <VisitorsFilter
+            projects={allProjects}
+            currentDays={days}
+            currentProjectId={projectFilter}
+            currentDevice={deviceFilter}
+          />
+        </Suspense>
       </div>
 
       {/* ── KPI ── */}
@@ -107,7 +134,7 @@ export default async function VisitorsPage() {
       <div className="animate-slide-up stagger-4">
         <h2 className="text-[16px] font-bold text-zinc-200 mb-4">מבקרים אחרונים</h2>
 
-        {sessions.length > 0 ? (
+        {filtered.length > 0 ? (
           <div className="surface rounded-2xl overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
@@ -124,12 +151,12 @@ export default async function VisitorsPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {sessions.map((session, idx) => (
+                  {filtered.map((session, idx) => (
                     <tr
                       key={session.sessionId}
                       className={cn(
                         "hover:bg-white/[0.02] transition-colors",
-                        idx < sessions.length - 1 && "border-b border-white/[0.03]"
+                        idx < filtered.length - 1 && "border-b border-white/[0.03]"
                       )}
                     >
                       {/* מזהה */}
