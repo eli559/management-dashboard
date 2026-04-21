@@ -6,7 +6,8 @@ import {
   LayoutDashboard,
   FolderKanban,
   BarChart3,
-  Users,
+  Eye,
+  UserCog,
   Puzzle,
   Settings,
 } from "lucide-react";
@@ -19,7 +20,8 @@ const iconMap: Record<string, LucideIcon> = {
   LayoutDashboard,
   FolderKanban,
   BarChart3,
-  Users,
+  Eye,
+  UserCog,
   Puzzle,
 };
 
@@ -27,7 +29,8 @@ const navigationItems: NavItem[] = [
   { label: "דשבורד", href: ROUTES.DASHBOARD, icon: "LayoutDashboard" },
   { label: "פרויקטים", href: ROUTES.PROJECTS, icon: "FolderKanban" },
   { label: "דוחות", href: ROUTES.REPORTS, icon: "BarChart3" },
-  { label: "משתמשים", href: ROUTES.USERS, icon: "Users" },
+  { label: "מבקרים", href: ROUTES.VISITORS, icon: "Eye" },
+  { label: "צוות", href: ROUTES.TEAM, icon: "UserCog" },
   { label: "אינטגרציות", href: ROUTES.INTEGRATIONS, icon: "Puzzle" },
 ];
 
@@ -95,7 +98,7 @@ export function Sidebar() {
       <div className="px-3 py-4 border-t border-white/[0.04]">
         <Link
           href={ROUTES.SETTINGS}
-          className="flex items-center gap-3 px-3 py-[9px] rounded-lg text-[13px] font-medium text-zinc-400 hover:bg-white/[0.03] hover:text-zinc-400 transition-all duration-200"
+          className="flex items-center gap-3 px-3 py-[9px] rounded-lg text-[13px] font-medium text-zinc-400 hover:bg-white/[0.03] hover:text-zinc-300 transition-all duration-200"
         >
           <Settings className="w-[17px] h-[17px] flex-shrink-0" />
           <span>הגדרות</span>

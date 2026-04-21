@@ -11,6 +11,7 @@ import { ComparisonChart } from "@/components/reports/ComparisonChart";
 import { HorizontalBar } from "@/components/reports/HorizontalBar";
 import { HeatmapGrid } from "@/components/reports/HeatmapGrid";
 import { LiveRefresh } from "@/components/LiveRefresh";
+import { getEventLabel } from "@/lib/event-labels";
 import { formatNumber, formatRelativeTime } from "@/utils/formatters";
 
 export const dynamic = "force-dynamic";
@@ -80,7 +81,7 @@ export default async function ReportsPage() {
           />
           <MiniKpi
             label="אירוע מוביל"
-            value={data.topEventType ?? "—"}
+            value={data.topEventType ? getEventLabel(data.topEventType) : "—"}
             icon={Zap}
             color="amber"
           />
