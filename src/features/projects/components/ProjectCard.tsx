@@ -29,27 +29,27 @@ export function ProjectCard({
           </span>
           <div className="flex items-center gap-1.5">
             <span className={cn("w-1.5 h-1.5 rounded-full shadow-[0_0_6px_currentColor]", PROJECT_STATUS_COLORS[status])} />
-            <span className="text-[11px] text-zinc-500 font-medium">{PROJECT_STATUS_LABELS[status]}</span>
+            <span className="text-[11px] text-zinc-400 font-medium">{PROJECT_STATUS_LABELS[status]}</span>
           </div>
         </div>
 
         <h3 className="text-[15px] font-bold text-zinc-200 mb-1.5 group-hover:text-white transition-colors">{name}</h3>
 
         {description && (
-          <p className="text-[13px] text-zinc-500 leading-relaxed line-clamp-2 mb-4">{description}</p>
+          <p className="text-[13px] text-zinc-400 leading-relaxed line-clamp-2 mb-4">{description}</p>
         )}
 
         <div className="flex-1" />
 
         {/* Stats */}
         <div className="flex items-center gap-4 mb-3">
-          <div className="flex items-center gap-1.5 text-zinc-500">
+          <div className="flex items-center gap-1.5 text-zinc-400">
             <Activity className="w-3.5 h-3.5" />
             <span className="text-[12px] font-semibold">{eventCount.toLocaleString("he-IL")}</span>
-            <span className="text-[11px] text-zinc-600">אירועים</span>
+            <span className="text-[11px] text-zinc-400">אירועים</span>
           </div>
           {lastEventAt && (
-            <div className="flex items-center gap-1.5 text-zinc-600">
+            <div className="flex items-center gap-1.5 text-zinc-400">
               <Zap className="w-3 h-3" />
               <span className="text-[11px]">{formatRelativeTime(lastEventAt)}</span>
             </div>
@@ -58,7 +58,7 @@ export function ProjectCard({
 
         {/* Footer */}
         <div className="flex items-center justify-between pt-3 border-t border-white/[0.05]">
-          <div className="flex items-center gap-1.5 text-zinc-600">
+          <div className="flex items-center gap-1.5 text-zinc-400">
             <Calendar className="w-3.5 h-3.5" />
             <span className="text-[11px] font-medium">{formatDate(createdAt)}</span>
           </div>

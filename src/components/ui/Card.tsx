@@ -23,5 +23,5 @@ export function CardTitle({ children, className }: { children: React.ReactNode; 
 }
 
 export function CardDescription({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <p className={cn("text-[13px] text-zinc-500 mt-0.5", className)}>{children}</p>;
+  return <p className={cn("text-[13px] text-zinc-400 mt-0.5", className)}>{children}</p>;
 }

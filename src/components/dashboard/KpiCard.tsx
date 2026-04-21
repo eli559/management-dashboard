@@ -99,7 +99,7 @@ export function KpiCard({
           {value}
         </h3>
         <p className="text-[13px] text-zinc-400 font-medium">{title}</p>
-        <p className="text-[11px] text-zinc-600 mt-1.5">{changeLabel}</p>
+        <p className="text-[11px] text-zinc-400 mt-1.5">{changeLabel}</p>
       </div>
     </div>
   );

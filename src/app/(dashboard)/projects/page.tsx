@@ -3,6 +3,7 @@ import { getProjects } from "@/lib/dal/projects";
 import { ProjectCard } from "@/features/projects/components/ProjectCard";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ProjectsPageHeader } from "./ProjectsPageHeader";
+import { LiveRefresh } from "@/components/LiveRefresh";
 
 export const dynamic = "force-dynamic";
 
@@ -11,6 +12,7 @@ export default async function ProjectsPage() {
 
   return (
     <div className="space-y-8">
+      <LiveRefresh interval={15} />
       <ProjectsPageHeader />
 
       {projects.length > 0 ? (

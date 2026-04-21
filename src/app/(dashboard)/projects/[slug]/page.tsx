@@ -49,7 +49,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     <div className="space-y-8">
       <Link
         href="/projects"
-        className="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-300 transition-colors"
+        className="inline-flex items-center gap-2 text-sm text-zinc-400 hover:text-zinc-300 transition-colors"
       >
         <ArrowRight className="w-4 h-4" />
         <span>חזרה לפרויקטים</span>
@@ -82,11 +82,11 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               </div>
             </div>
             {project.description && (
-              <p className="text-[15px] text-zinc-500 max-w-xl leading-relaxed">
+              <p className="text-[15px] text-zinc-400 max-w-xl leading-relaxed">
                 {project.description}
               </p>
             )}
-            <div className="flex items-center gap-5 text-sm text-zinc-600">
+            <div className="flex items-center gap-5 text-sm text-zinc-400">
               <div className="flex items-center gap-1.5">
                 <Calendar className="w-4 h-4" />
                 <span>נוצר ב-{formatDate(project.createdAt)}</span>
@@ -102,13 +102,13 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
           <div className="lg:min-w-[380px]">
             <div className="flex items-center gap-2 mb-2">
-              <Key className="w-4 h-4 text-zinc-500" />
+              <Key className="w-4 h-4 text-zinc-400" />
               <span className="text-sm font-medium text-zinc-300">
                 מפתח API
               </span>
             </div>
             <ApiKeyDisplay apiKey={project.apiKey} />
-            <p className="text-[11px] text-zinc-600 mt-2">
+            <p className="text-[11px] text-zinc-400 mt-2">
               השתמש במפתח זה כדי לשלוח אירועים לפרויקט דרך ה-API
             </p>
           </div>
@@ -136,7 +136,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-bold text-zinc-200">אירועים אחרונים</h2>
-          <span className="text-sm text-zinc-600">
+          <span className="text-sm text-zinc-400">
             {recentEvents.length} אירועים מתוך{" "}
             {stats.totalEvents.toLocaleString("he-IL")}
           </span>

@@ -51,9 +51,9 @@ export function Dialog({ open, onClose, title, description, children, className 
         <div className="flex items-start justify-between p-6 pb-0">
           <div>
             <h2 id="dialog-title" className="text-lg font-bold text-zinc-100">{title}</h2>
-            {description && <p className="text-sm text-zinc-500 mt-1">{description}</p>}
+            {description && <p className="text-sm text-zinc-400 mt-1">{description}</p>}
           </div>
-          <button onClick={onClose} className="p-1.5 -m-1.5 rounded-lg hover:bg-white/[0.06] transition-colors text-zinc-500 hover:text-zinc-300">
+          <button onClick={onClose} className="p-1.5 -m-1.5 rounded-lg hover:bg-white/[0.06] transition-colors text-zinc-400 hover:text-zinc-300">
             <X className="w-5 h-5" />
           </button>
         </div>

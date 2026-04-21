@@ -31,7 +31,7 @@ export function DonutChart({ title, subtitle, items, className }: DonutChartProp
     return (
       <div className={cn("surface rounded-2xl p-6 overflow-hidden relative", className)}>
         <h3 className="text-[15px] font-bold text-zinc-200 mb-4">{title}</h3>
-        <div className="text-center py-10 text-[13px] text-zinc-600">אין נתונים</div>
+        <div className="text-center py-10 text-[13px] text-zinc-400">אין נתונים</div>
       </div>
     );
   }
@@ -52,7 +52,7 @@ export function DonutChart({ title, subtitle, items, className }: DonutChartProp
   return (
     <div className={cn("surface rounded-2xl p-6 overflow-hidden relative", className)}>
       <h3 className="text-[15px] font-bold text-zinc-200 mb-0.5">{title}</h3>
-      {subtitle && <p className="text-[12px] text-zinc-600 mb-4">{subtitle}</p>}
+      {subtitle && <p className="text-[12px] text-zinc-400 mb-4">{subtitle}</p>}
       {!subtitle && <div className="mb-4" />}
 
       <div className="flex items-center gap-6">
@@ -86,7 +86,7 @@ export function DonutChart({ title, subtitle, items, className }: DonutChartProp
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
               <p className="text-[20px] font-extrabold text-white">{total.toLocaleString("he-IL")}</p>
-              <p className="text-[9px] text-zinc-500">סה״כ</p>
+              <p className="text-[9px] text-zinc-400">סה״כ</p>
             </div>
           </div>
         </div>
@@ -99,7 +99,7 @@ export function DonutChart({ title, subtitle, items, className }: DonutChartProp
               <div key={seg.label} className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: seg.color }} />
                 <span className="text-[11px] text-zinc-400 truncate flex-1">{getEventLabel(seg.label)}</span>
-                <span className="text-[10px] text-zinc-500 tabular-nums">{pct}%</span>
+                <span className="text-[10px] text-zinc-400 tabular-nums">{pct}%</span>
               </div>
             );
           })}

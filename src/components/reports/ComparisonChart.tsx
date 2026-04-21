@@ -18,7 +18,7 @@ export function ComparisonChart({ comparison, days, className }: ComparisonChart
   return (
     <div className={cn("surface rounded-2xl p-6 overflow-hidden relative", className)}>
       <h3 className="text-[15px] font-bold text-zinc-200 mb-0.5">השוואת תקופות</h3>
-      <p className="text-[12px] text-zinc-600 mb-5">{days} ימים אחרונים מול {days} ימים לפני</p>
+      <p className="text-[12px] text-zinc-400 mb-5">{days} ימים אחרונים מול {days} ימים לפני</p>
 
       <div className="flex items-end gap-6 justify-center mb-4">
         {/* Previous */}
@@ -30,20 +30,20 @@ export function ComparisonChart({ comparison, days, className }: ComparisonChart
             />
           </div>
           <p className="text-[18px] font-bold text-zinc-400">{formatNumber(previous)}</p>
-          <p className="text-[10px] text-zinc-600">תקופה קודמת</p>
+          <p className="text-[10px] text-zinc-400">תקופה קודמת</p>
         </div>
 
         {/* Trend */}
         <div className="flex flex-col items-center gap-1 pb-8">
           <div className={cn(
             "w-12 h-12 rounded-full flex items-center justify-center",
-            isUp ? "bg-emerald-500/10 text-emerald-400" : isDown ? "bg-red-500/10 text-red-400" : "bg-zinc-800 text-zinc-500"
+            isUp ? "bg-emerald-500/10 text-emerald-400" : isDown ? "bg-red-500/10 text-red-400" : "bg-zinc-800 text-zinc-400"
           )}>
             {isUp ? <TrendingUp className="w-5 h-5" /> : isDown ? <TrendingDown className="w-5 h-5" /> : <Minus className="w-5 h-5" />}
           </div>
           <span className={cn(
             "text-[14px] font-bold",
-            isUp ? "text-emerald-400" : isDown ? "text-red-400" : "text-zinc-500"
+            isUp ? "text-emerald-400" : isDown ? "text-red-400" : "text-zinc-400"
           )}>
             {changePercent > 0 ? "+" : ""}{changePercent}%
           </span>
@@ -62,7 +62,7 @@ export function ComparisonChart({ comparison, days, className }: ComparisonChart
             />
           </div>
           <p className="text-[18px] font-bold text-white">{formatNumber(current)}</p>
-          <p className="text-[10px] text-zinc-500">תקופה נוכחית</p>
+          <p className="text-[10px] text-zinc-400">תקופה נוכחית</p>
         </div>
       </div>
     </div>

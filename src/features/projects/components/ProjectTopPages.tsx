@@ -13,7 +13,7 @@ export function ProjectTopPages({ pages }: Props) {
   return (
     <div className="surface rounded-2xl p-6 overflow-hidden relative">
       <h3 className="text-[15px] font-bold text-zinc-200 mb-1">עמודים נצפים</h3>
-      <p className="text-[13px] text-zinc-600 mb-5">העמודים שנצפו הכי הרבה</p>
+      <p className="text-[13px] text-zinc-400 mb-5">העמודים שנצפו הכי הרבה</p>
 
       <div className="space-y-2">
         {pages.map((page) => {
@@ -29,7 +29,7 @@ export function ProjectTopPages({ pages }: Props) {
                   style={{ width: `${Math.max(pct, 2)}%` }}
                 />
               </div>
-              <span className="text-[12px] text-zinc-500 tabular-nums w-10 text-start">
+              <span className="text-[12px] text-zinc-400 tabular-nums w-10 text-start">
                 {page.count.toLocaleString("he-IL")}
               </span>
             </div>

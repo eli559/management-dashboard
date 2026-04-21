@@ -60,13 +60,13 @@ export function MiniKpi({ label, value, icon: Icon, trend, sparkData, color = "b
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5 mb-2">
             <Icon className={cn("w-3.5 h-3.5 flex-shrink-0", c.icon)} />
-            <span className="text-[10px] text-zinc-500 font-medium truncate">{label}</span>
+            <span className="text-[10px] text-zinc-400 font-medium truncate">{label}</span>
           </div>
           <p className="text-[22px] font-extrabold text-white leading-none tracking-tight">{value}</p>
           {trend !== undefined && (
             <div className={cn(
               "flex items-center gap-0.5 mt-2 text-[9px] font-bold",
-              trend > 0 ? "text-emerald-400" : trend < 0 ? "text-red-400" : "text-zinc-600"
+              trend > 0 ? "text-emerald-400" : trend < 0 ? "text-red-400" : "text-zinc-400"
             )}>
               {trend > 0 ? <TrendingUp className="w-2.5 h-2.5" /> : trend < 0 ? <TrendingDown className="w-2.5 h-2.5" /> : <Minus className="w-2.5 h-2.5" />}
               <span>{trend > 0 ? "+" : ""}{trend}%</span>
