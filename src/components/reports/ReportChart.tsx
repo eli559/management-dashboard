@@ -16,10 +16,10 @@ interface ReportChartProps {
 }
 
 const colorMap = {
-  blue: { bar: "rgba(59,130,246,0.35)", barHover: "rgba(59,130,246,0.5)", glow: "rgba(59,130,246,0.2)", area: "rgba(59,130,246,0.08)" },
-  violet: { bar: "rgba(139,92,246,0.35)", barHover: "rgba(139,92,246,0.5)", glow: "rgba(139,92,246,0.2)", area: "rgba(139,92,246,0.08)" },
-  emerald: { bar: "rgba(16,185,129,0.35)", barHover: "rgba(16,185,129,0.5)", glow: "rgba(16,185,129,0.2)", area: "rgba(16,185,129,0.08)" },
-  amber: { bar: "rgba(245,158,11,0.35)", barHover: "rgba(245,158,11,0.5)", glow: "rgba(245,158,11,0.2)", area: "rgba(245,158,11,0.08)" },
+  blue: { bar: "rgba(59,130,246,0.55)", barHover: "rgba(59,130,246,0.7)", glow: "rgba(59,130,246,0.3)", area: "rgba(59,130,246,0.15)" },
+  violet: { bar: "rgba(139,92,246,0.55)", barHover: "rgba(139,92,246,0.7)", glow: "rgba(139,92,246,0.3)", area: "rgba(139,92,246,0.15)" },
+  emerald: { bar: "rgba(16,185,129,0.55)", barHover: "rgba(16,185,129,0.7)", glow: "rgba(16,185,129,0.3)", area: "rgba(16,185,129,0.15)" },
+  amber: { bar: "rgba(245,158,11,0.55)", barHover: "rgba(245,158,11,0.7)", glow: "rgba(245,158,11,0.3)", area: "rgba(245,158,11,0.15)" },
 };
 
 export function ReportChart({
@@ -54,10 +54,11 @@ export function ReportChart({
                   </div>
                   {type === "bar" ? (
                     <div
-                      className="w-full rounded-sm transition-all duration-300 animate-bar-rise"
+                      className="w-full rounded-sm transition-all duration-300 animate-bar-rise group-hover:brightness-125"
                       style={{
                         height: `${Math.max((pct / 100) * 160, 2)}px`,
                         background: `linear-gradient(to top, ${c.bar}, ${c.area})`,
+                        boxShadow: `0 0 12px -2px ${c.glow}`,
                         animationDelay: `${i * 30}ms`,
                       }}
                     />

@@ -41,13 +41,14 @@ export function ActivityChart({ data }: ActivityChartProps) {
                       <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-white/[0.05] rotate-45 border-b border-r border-white/[0.08]" />
                     </div>
                     <div
-                      className="w-full rounded-md transition-all duration-300 animate-bar-rise group-hover:shadow-[0_0_20px_-4px_rgba(59,130,246,0.3)]"
+                      className="w-full rounded-md transition-all duration-300 animate-bar-rise group-hover:brightness-125"
                       style={{
                         height: `${Math.max((heightPct / 100) * 208, 4)}px`,
                         background:
                           item.count > 0
-                            ? "linear-gradient(to top, rgba(59,130,246,0.3), rgba(59,130,246,0.08))"
+                            ? "linear-gradient(to top, rgba(59,130,246,0.55), rgba(59,130,246,0.15))"
                             : "rgba(255,255,255,0.03)",
+                        boxShadow: item.count > 0 ? "0 0 14px -3px rgba(59,130,246,0.3)" : "none",
                         animationDelay: `${i * 50}ms`,
                       }}
                     />
