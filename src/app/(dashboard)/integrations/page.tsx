@@ -6,7 +6,7 @@ export default function IntegrationsPage() {
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-bold text-white">אינטגרציות</h1>
-        <p className="text-zinc-400 mt-1 text-[15px]">
+        <p className="text-zinc-300 mt-1 text-[15px]">
           חיבור כלים ושירותים חיצוניים למערכת
         </p>
       </div>

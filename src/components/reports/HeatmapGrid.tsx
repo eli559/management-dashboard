@@ -13,12 +13,12 @@ export function HeatmapGrid({ hourly, weekday }: HeatmapGridProps) {
   return (
     <div className="surface rounded-2xl p-6 overflow-hidden relative">
       <h3 className="text-[15px] font-bold text-zinc-200 mb-0.5">פעילות לפי זמן</h3>
-      <p className="text-[12px] text-zinc-400 mb-5">שעות ביום ● ימים בשבוע</p>
+      <p className="text-[12px] text-zinc-300 mb-5">שעות ביום ● ימים בשבוע</p>
 
       <div className="grid grid-cols-2 gap-6">
         {/* Hourly */}
         <div>
-          <p className="text-[11px] text-zinc-400 mb-3 font-medium">שעות היממה</p>
+          <p className="text-[11px] text-zinc-300 mb-3 font-medium">שעות היממה</p>
           <div className="grid grid-cols-12 gap-[3px]">
             {hourly.map((h) => {
               const intensity = h.count / maxHourly;
@@ -49,13 +49,13 @@ export function HeatmapGrid({ hourly, weekday }: HeatmapGridProps) {
 
         {/* Weekday */}
         <div>
-          <p className="text-[11px] text-zinc-400 mb-3 font-medium">ימי השבוע</p>
+          <p className="text-[11px] text-zinc-300 mb-3 font-medium">ימי השבוע</p>
           <div className="space-y-[3px]">
             {weekday.map((w) => {
               const intensity = w.count / maxWeekday;
               return (
                 <div key={w.day} className="flex items-center gap-2">
-                  <span className="text-[10px] text-zinc-400 w-10 text-start">{w.day}</span>
+                  <span className="text-[10px] text-zinc-300 w-10 text-start">{w.day}</span>
                   <div className="flex-1 h-[18px] bg-white/[0.02] rounded-[3px] overflow-hidden">
                     <div
                       className="h-full rounded-[3px] transition-all duration-500"
@@ -65,7 +65,7 @@ export function HeatmapGrid({ hourly, weekday }: HeatmapGridProps) {
                       }}
                     />
                   </div>
-                  <span className="text-[10px] text-zinc-400 tabular-nums w-8 text-start">
+                  <span className="text-[10px] text-zinc-300 tabular-nums w-8 text-start">
                     {w.count}
                   </span>
                 </div>

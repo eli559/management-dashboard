@@ -16,7 +16,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     return (
       <div className="w-full">
         {label && (
-          <label htmlFor={id} className="block text-sm font-medium text-zinc-400 mb-2">
+          <label htmlFor={id} className="block text-sm font-medium text-zinc-300 mb-2">
             {label}
           </label>
         )}
@@ -36,7 +36,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             {placeholder && <option value="" disabled>{placeholder}</option>}
             {options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
-          <ChevronDown className="absolute end-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none" />
+          <ChevronDown className="absolute end-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-300 pointer-events-none" />
         </div>
         {error && <p className="mt-1.5 text-xs text-red-400">{error}</p>}
       </div>

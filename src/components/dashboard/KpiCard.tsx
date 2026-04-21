@@ -98,8 +98,8 @@ export function KpiCard({
         <h3 className="text-[34px] font-extrabold text-white mb-1 tracking-tight leading-none">
           {value}
         </h3>
-        <p className="text-[13px] text-zinc-400 font-medium">{title}</p>
-        <p className="text-[11px] text-zinc-400 mt-1.5">{changeLabel}</p>
+        <p className="text-[13px] text-zinc-300 font-medium">{title}</p>
+        <p className="text-[11px] text-zinc-300 mt-1.5">{changeLabel}</p>
       </div>
     </div>
   );

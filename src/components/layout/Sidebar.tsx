@@ -49,7 +49,7 @@ export function Sidebar() {
             <span className="text-[14px] font-bold text-white tracking-tight">
               {APP_NAME}
             </span>
-            <p className="text-[10px] text-zinc-400 font-medium mt-0.5">
+            <p className="text-[10px] text-zinc-300 font-medium mt-0.5">
               ניהול פרויקטים מתקדם
             </p>
           </div>
@@ -76,7 +76,7 @@ export function Sidebar() {
                 "relative flex items-center gap-3 px-3 py-[9px] rounded-lg text-[13px] font-medium transition-all duration-200",
                 isActive
                   ? "bg-white/[0.06] text-white shadow-[0_0_20px_-4px_rgba(245,158,11,0.08)]"
-                  : "text-zinc-400 hover:bg-white/[0.03] hover:text-zinc-300"
+                  : "text-zinc-300 hover:bg-white/[0.03] hover:text-zinc-300"
               )}
             >
               {isActive && (
@@ -98,7 +98,7 @@ export function Sidebar() {
       <div className="px-3 py-4 border-t border-white/[0.04]">
         <Link
           href={ROUTES.SETTINGS}
-          className="flex items-center gap-3 px-3 py-[9px] rounded-lg text-[13px] font-medium text-zinc-400 hover:bg-white/[0.03] hover:text-zinc-300 transition-all duration-200"
+          className="flex items-center gap-3 px-3 py-[9px] rounded-lg text-[13px] font-medium text-zinc-300 hover:bg-white/[0.03] hover:text-zinc-300 transition-all duration-200"
         >
           <Settings className="w-[17px] h-[17px] flex-shrink-0" />
           <span>הגדרות</span>

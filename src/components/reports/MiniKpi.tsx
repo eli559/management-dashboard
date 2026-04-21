@@ -16,7 +16,7 @@ const colorMap = {
   emerald: { icon: "text-emerald-400", spark: "rgba(16,185,129,0.6)", accent: "rgba(16,185,129,0.08)", glow: "shadow-[0_0_30px_-6px_rgba(16,185,129,0.15)]" },
   amber: { icon: "text-amber-400", spark: "rgba(245,158,11,0.6)", accent: "rgba(245,158,11,0.08)", glow: "shadow-[0_0_30px_-6px_rgba(245,158,11,0.15)]" },
   violet: { icon: "text-violet-400", spark: "rgba(139,92,246,0.6)", accent: "rgba(139,92,246,0.08)", glow: "shadow-[0_0_30px_-6px_rgba(139,92,246,0.15)]" },
-  zinc: { icon: "text-zinc-400", spark: "rgba(161,161,170,0.5)", accent: "rgba(161,161,170,0.05)", glow: "" },
+  zinc: { icon: "text-zinc-300", spark: "rgba(161,161,170,0.5)", accent: "rgba(161,161,170,0.05)", glow: "" },
 };
 
 function MiniSparkline({ data, color }: { data: number[]; color: string }) {
@@ -60,13 +60,13 @@ export function MiniKpi({ label, value, icon: Icon, trend, sparkData, color = "b
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5 mb-2">
             <Icon className={cn("w-3.5 h-3.5 flex-shrink-0", c.icon)} />
-            <span className="text-[10px] text-zinc-400 font-medium truncate">{label}</span>
+            <span className="text-[10px] text-zinc-300 font-medium truncate">{label}</span>
           </div>
           <p className="text-[22px] font-extrabold text-white leading-none tracking-tight">{value}</p>
           {trend !== undefined && (
             <div className={cn(
               "flex items-center gap-0.5 mt-2 text-[9px] font-bold",
-              trend > 0 ? "text-emerald-400" : trend < 0 ? "text-red-400" : "text-zinc-400"
+              trend > 0 ? "text-emerald-400" : trend < 0 ? "text-red-400" : "text-zinc-300"
             )}>
               {trend > 0 ? <TrendingUp className="w-2.5 h-2.5" /> : trend < 0 ? <TrendingDown className="w-2.5 h-2.5" /> : <Minus className="w-2.5 h-2.5" />}
               <span>{trend > 0 ? "+" : ""}{trend}%</span>

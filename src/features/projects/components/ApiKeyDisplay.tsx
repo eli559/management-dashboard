@@ -22,12 +22,12 @@ export function ApiKeyDisplay({ apiKey }: ApiKeyDisplayProps) {
 
   return (
     <div className="flex items-center gap-2 bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-2.5">
-      <code className="flex-1 text-[13px] font-mono text-zinc-400 select-all truncate" dir="ltr">
+      <code className="flex-1 text-[13px] font-mono text-zinc-300 select-all truncate" dir="ltr">
         {revealed ? apiKey : maskedKey}
       </code>
       <button
         onClick={() => setRevealed(!revealed)}
-        className="p-1.5 rounded-lg hover:bg-white/[0.06] transition-colors text-zinc-400 hover:text-zinc-400 flex-shrink-0"
+        className="p-1.5 rounded-lg hover:bg-white/[0.06] transition-colors text-zinc-300 hover:text-zinc-300 flex-shrink-0"
         title={revealed ? "הסתר" : "הצג"}
       >
         {revealed ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -36,7 +36,7 @@ export function ApiKeyDisplay({ apiKey }: ApiKeyDisplayProps) {
         onClick={handleCopy}
         className={cn(
           "p-1.5 rounded-lg transition-colors flex-shrink-0",
-          copied ? "bg-emerald-500/10 text-emerald-400" : "hover:bg-white/[0.06] text-zinc-400 hover:text-zinc-400"
+          copied ? "bg-emerald-500/10 text-emerald-400" : "hover:bg-white/[0.06] text-zinc-300 hover:text-zinc-300"
         )}
         title="העתק"
       >

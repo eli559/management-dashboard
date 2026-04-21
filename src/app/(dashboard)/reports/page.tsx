@@ -25,7 +25,7 @@ export default async function ReportsPage() {
       {/* ── כותרת ── */}
       <div className="animate-slide-up stagger-1">
         <h1 className="text-[22px] font-bold text-white">דוחות</h1>
-        <p className="text-zinc-400 mt-0.5 text-[14px]">
+        <p className="text-zinc-300 mt-0.5 text-[14px]">
           ניתוח מעמיק — {data.days} ימים אחרונים
         </p>
       </div>
@@ -104,7 +104,7 @@ export default async function ReportsPage() {
           מגמות — Line + Bar + Comparison
          ══════════════════════════════════════════ */}
       <div className="animate-slide-up stagger-3">
-        <p className="text-[10px] text-zinc-400 uppercase tracking-widest font-semibold mb-3 px-0.5">
+        <p className="text-[10px] text-zinc-300 uppercase tracking-widest font-semibold mb-3 px-0.5">
           מגמות
         </p>
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
@@ -126,7 +126,7 @@ export default async function ReportsPage() {
           התפלגויות — Donut + Bars + Area
          ══════════════════════════════════════════ */}
       <div className="animate-slide-up stagger-4">
-        <p className="text-[10px] text-zinc-400 uppercase tracking-widest font-semibold mb-3 px-0.5">
+        <p className="text-[10px] text-zinc-300 uppercase tracking-widest font-semibold mb-3 px-0.5">
           התפלגויות
         </p>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -155,7 +155,7 @@ export default async function ReportsPage() {
           דפוסים — Heatmap + Hourly chart
          ══════════════════════════════════════════ */}
       <div className="animate-slide-up stagger-5">
-        <p className="text-[10px] text-zinc-400 uppercase tracking-widest font-semibold mb-3 px-0.5">
+        <p className="text-[10px] text-zinc-300 uppercase tracking-widest font-semibold mb-3 px-0.5">
           דפוסי פעילות
         </p>
         <div className="grid grid-cols-1 xl:grid-cols-5 gap-4">
@@ -178,7 +178,7 @@ export default async function ReportsPage() {
           אירועים — Bar chart daily
          ══════════════════════════════════════════ */}
       <div className="animate-slide-up stagger-6">
-        <p className="text-[10px] text-zinc-400 uppercase tracking-widest font-semibold mb-3 px-0.5">
+        <p className="text-[10px] text-zinc-300 uppercase tracking-widest font-semibold mb-3 px-0.5">
           פעילות יומית
         </p>
         <ReportChart

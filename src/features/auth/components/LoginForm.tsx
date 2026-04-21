@@ -45,7 +45,7 @@ export function LoginForm() {
           <LayoutDashboard className="w-8 h-8 text-amber-400" />
         </div>
         <h1 className="text-3xl font-bold text-white mb-2">מערכת ניהול</h1>
-        <p className="text-zinc-400 text-[15px]">התחבר לחשבון שלך כדי להמשיך</p>
+        <p className="text-zinc-300 text-[15px]">התחבר לחשבון שלך כדי להמשיך</p>
       </div>
 
       <div className="glass-strong rounded-3xl p-8 shadow-2xl shadow-black/40">
@@ -57,16 +57,16 @@ export function LoginForm() {
           )}
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-zinc-400 mb-2">אימייל</label>
+            <label htmlFor="email" className="block text-sm font-medium text-zinc-300 mb-2">אימייל</label>
             <div className="relative">
-              <Mail className="absolute start-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-zinc-400" />
+              <Mail className="absolute start-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-zinc-300" />
               <input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@dashboard.com"
-                className="w-full ps-12 pe-4 py-3.5 bg-white/[0.03] border border-white/[0.06] rounded-xl text-white text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-1 focus:ring-amber-400/20 focus:border-amber-400/20 transition-all"
+                className="w-full ps-12 pe-4 py-3.5 bg-white/[0.03] border border-white/[0.06] rounded-xl text-white text-sm placeholder:text-zinc-300 focus:outline-none focus:ring-1 focus:ring-amber-400/20 focus:border-amber-400/20 transition-all"
                 required
                 dir="ltr"
               />
@@ -74,16 +74,16 @@ export function LoginForm() {
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-zinc-400 mb-2">סיסמה</label>
+            <label htmlFor="password" className="block text-sm font-medium text-zinc-300 mb-2">סיסמה</label>
             <div className="relative">
-              <Lock className="absolute start-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-zinc-400" />
+              <Lock className="absolute start-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-zinc-300" />
               <input
                 id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full ps-12 pe-4 py-3.5 bg-white/[0.03] border border-white/[0.06] rounded-xl text-white text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-1 focus:ring-amber-400/20 focus:border-amber-400/20 transition-all"
+                className="w-full ps-12 pe-4 py-3.5 bg-white/[0.03] border border-white/[0.06] rounded-xl text-white text-sm placeholder:text-zinc-300 focus:outline-none focus:ring-1 focus:ring-amber-400/20 focus:border-amber-400/20 transition-all"
                 required
                 dir="ltr"
               />

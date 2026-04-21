@@ -9,7 +9,7 @@ interface BadgeProps {
 }
 
 const variantStyles: Record<BadgeVariant, string> = {
-  default: "bg-white/[0.06] text-zinc-400 border-white/[0.06]",
+  default: "bg-white/[0.06] text-zinc-300 border-white/[0.06]",
   success: "bg-emerald-500/10 text-emerald-400 border-emerald-500/10",
   warning: "bg-amber-500/10 text-amber-400 border-amber-500/10",
   danger: "bg-red-500/10 text-red-400 border-red-500/10",

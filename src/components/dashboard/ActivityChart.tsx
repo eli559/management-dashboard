@@ -17,7 +17,7 @@ export function ActivityChart({ data }: ActivityChartProps) {
       <div className="relative z-10 flex items-center justify-between mb-8">
         <div>
           <h3 className="text-[15px] font-bold text-zinc-200">סקירת פעילות</h3>
-          <p className="text-[13px] text-zinc-400 mt-0.5">
+          <p className="text-[13px] text-zinc-300 mt-0.5">
             12 החודשים האחרונים
           </p>
         </div>
@@ -52,7 +52,7 @@ export function ActivityChart({ data }: ActivityChartProps) {
                       }}
                     />
                   </div>
-                  <span className="text-[10px] text-zinc-400 font-medium">
+                  <span className="text-[10px] text-zinc-300 font-medium">
                     {item.month}
                   </span>
                 </div>
@@ -62,8 +62,8 @@ export function ActivityChart({ data }: ActivityChartProps) {
         ) : (
           <div className="flex flex-col items-center justify-center h-52 text-center">
             <BarChart3 className="w-8 h-8 text-zinc-700 mb-3" />
-            <p className="text-[13px] text-zinc-400">אין נתונים עדיין</p>
-            <p className="text-[11px] text-zinc-400 mt-1">
+            <p className="text-[13px] text-zinc-300">אין נתונים עדיין</p>
+            <p className="text-[11px] text-zinc-300 mt-1">
               הגרף יתעדכן ברגע שיתקבלו אירועים
             </p>
           </div>

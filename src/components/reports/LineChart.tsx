@@ -29,7 +29,7 @@ export function LineChart({ title, subtitle, data, color = "blue", className, sh
     return (
       <div className={cn("surface rounded-2xl p-6 overflow-hidden relative", className)}>
         <h3 className="text-[15px] font-bold text-zinc-200 mb-4">{title}</h3>
-        <div className="flex items-center justify-center h-40 text-[13px] text-zinc-400">אין נתונים</div>
+        <div className="flex items-center justify-center h-40 text-[13px] text-zinc-300">אין נתונים</div>
       </div>
     );
   }
@@ -51,7 +51,7 @@ export function LineChart({ title, subtitle, data, color = "blue", className, sh
   return (
     <div className={cn("surface rounded-2xl p-6 overflow-hidden relative", className)}>
       <h3 className="text-[15px] font-bold text-zinc-200 mb-0.5">{title}</h3>
-      {subtitle && <p className="text-[12px] text-zinc-400 mb-4">{subtitle}</p>}
+      {subtitle && <p className="text-[12px] text-zinc-300 mb-4">{subtitle}</p>}
       {!subtitle && <div className="mb-4" />}
 
       <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-40" preserveAspectRatio="none">

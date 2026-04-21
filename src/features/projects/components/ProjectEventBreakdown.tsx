@@ -13,7 +13,7 @@ export function ProjectEventBreakdown({ data, totalEvents }: Props) {
   return (
     <div className="surface rounded-2xl p-6 overflow-hidden relative">
       <h3 className="text-[15px] font-bold text-zinc-200 mb-1">חלוקה לפי אירוע</h3>
-      <p className="text-[13px] text-zinc-400 mb-5">סוגי אירועים שנקלטו בפרויקט</p>
+      <p className="text-[13px] text-zinc-300 mb-5">סוגי אירועים שנקלטו בפרויקט</p>
 
       <div className="space-y-2.5">
         {data.map((item) => {
@@ -27,7 +27,7 @@ export function ProjectEventBreakdown({ data, totalEvents }: Props) {
                   style={{ width: `${Math.max(pct, 2)}%` }}
                 />
               </div>
-              <span className="text-[12px] text-zinc-400 tabular-nums w-12 text-start">
+              <span className="text-[12px] text-zinc-300 tabular-nums w-12 text-start">
                 {item.count.toLocaleString("he-IL")}
               </span>
             </div>

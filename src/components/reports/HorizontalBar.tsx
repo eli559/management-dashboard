@@ -38,7 +38,7 @@ export function HorizontalBar({
     return (
       <div className={cn("surface rounded-2xl p-6 overflow-hidden relative", className)}>
         <h3 className="text-[15px] font-bold text-zinc-200 mb-4">{title}</h3>
-        <div className="text-center py-8 text-[13px] text-zinc-400">{emptyText}</div>
+        <div className="text-center py-8 text-[13px] text-zinc-300">{emptyText}</div>
       </div>
     );
   }
@@ -48,7 +48,7 @@ export function HorizontalBar({
   return (
     <div className={cn("surface rounded-2xl p-6 overflow-hidden relative", className)}>
       <h3 className="text-[15px] font-bold text-zinc-200 mb-0.5">{title}</h3>
-      {subtitle && <p className="text-[12px] text-zinc-400 mb-4">{subtitle}</p>}
+      {subtitle && <p className="text-[12px] text-zinc-300 mb-4">{subtitle}</p>}
       {!subtitle && <div className="mb-4" />}
 
       <div className="space-y-2">
@@ -59,11 +59,11 @@ export function HorizontalBar({
               {useBadge ? (
                 <EventBadge eventName={item.label} />
               ) : mono ? (
-                <code className="text-[11px] text-zinc-400 font-mono truncate min-w-[120px] max-w-[160px]" dir="ltr">
+                <code className="text-[11px] text-zinc-300 font-mono truncate min-w-[120px] max-w-[160px]" dir="ltr">
                   {item.label}
                 </code>
               ) : (
-                <span className="text-[12px] text-zinc-400 min-w-[60px] truncate max-w-[120px]">{item.label}</span>
+                <span className="text-[12px] text-zinc-300 min-w-[60px] truncate max-w-[120px]">{item.label}</span>
               )}
               <div className="flex-1 h-[7px] bg-white/[0.03] rounded-full overflow-hidden">
                 <div
@@ -71,7 +71,7 @@ export function HorizontalBar({
                   style={{ width: `${Math.max(pct, 3)}%` }}
                 />
               </div>
-              <span className="text-[11px] text-zinc-400 tabular-nums w-10 text-start font-medium">
+              <span className="text-[11px] text-zinc-300 tabular-nums w-10 text-start font-medium">
                 {item.value.toLocaleString("he-IL")}
               </span>
             </div>

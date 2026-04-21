@@ -45,8 +45,8 @@ export function StatCard({ title, value, subtitle, icon: Icon, trend, glow = "bl
         )}
       </div>
       <h3 className="text-[26px] font-extrabold text-white leading-none mb-1">{value}</h3>
-      <p className="text-[12px] text-zinc-400 font-medium">{title}</p>
-      {subtitle && <p className="text-[10px] text-zinc-400 mt-0.5">{subtitle}</p>}
+      <p className="text-[12px] text-zinc-300 font-medium">{title}</p>
+      {subtitle && <p className="text-[10px] text-zinc-300 mt-0.5">{subtitle}</p>}
     </div>
   );
 }

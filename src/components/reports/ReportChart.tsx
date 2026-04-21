@@ -39,7 +39,7 @@ export function ReportChart({
     <div className={cn("relative surface rounded-2xl p-6 overflow-hidden", className)}>
 
       <h3 className="text-[15px] font-bold text-zinc-200 mb-0.5">{title}</h3>
-      {subtitle && <p className="text-[12px] text-zinc-400 mb-5">{subtitle}</p>}
+      {subtitle && <p className="text-[12px] text-zinc-300 mb-5">{subtitle}</p>}
       {!subtitle && <div className="mb-5" />}
 
       {hasData ? (
@@ -82,7 +82,7 @@ export function ReportChart({
           })}
         </div>
       ) : (
-        <div className="flex items-center justify-center h-40 text-[13px] text-zinc-400">
+        <div className="flex items-center justify-center h-40 text-[13px] text-zinc-300">
           {emptyText}
         </div>
       )}
