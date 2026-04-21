@@ -35,7 +35,7 @@ export default async function ReportsPage({ searchParams }: PageProps) {
 
   return (
     <div className="space-y-5">
-      <LiveRefresh interval={15} />
+      <LiveRefresh interval={30} />
       {/* ── כותרת + פילטר ── */}
       <div className="animate-slide-up stagger-1 flex items-start justify-between gap-4">
         <div>

@@ -9,7 +9,7 @@ export default async function ProjectsPage() {
 
   return (
     <>
-      <LiveRefresh interval={15} />
+      <LiveRefresh interval={30} />
       <ProjectsClient projects={projects} />
     </>
   );

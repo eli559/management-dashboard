@@ -20,7 +20,7 @@ export default async function VisitorsPage() {
 
   return (
     <div className="space-y-6">
-      <LiveRefresh interval={10} />
+      <LiveRefresh interval={30} />
 
       {/* ── כותרת ── */}
       <div className="animate-slide-up stagger-1">

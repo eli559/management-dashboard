@@ -47,10 +47,10 @@ export function NotificationBell() {
     } catch {}
   }, []);
 
-  // Poll every 8 seconds
+  // Poll every 20 seconds
   useEffect(() => {
     fetchNotifications();
-    const timer = setInterval(fetchNotifications, 8000);
+    const timer = setInterval(fetchNotifications, 20000);
     return () => clearInterval(timer);
   }, [fetchNotifications]);
 

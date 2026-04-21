@@ -13,7 +13,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <LiveRefresh interval={10} />
+      <LiveRefresh interval={30} />
       <div className="animate-slide-up stagger-1">
         <h1 className="text-[22px] font-bold text-white">דשבורד</h1>
         <p className="text-zinc-300 mt-0.5 text-[14px]">
