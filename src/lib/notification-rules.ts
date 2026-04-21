@@ -65,7 +65,7 @@ export async function checkNotificationRules(event: {
         await createNotification({
           type: "visitor",
           title: "מבקר חדש",
-          body: `מבקר חדש נכנס ל-${projectName}${event.page ? ` בעמוד ${event.page}` : ""}`,
+          body: `מבקר חדש נכנס ל-${projectName}${event.page && event.page !== "/" ? ` בעמוד ${event.page}` : ""}`,
           color: "blue",
         });
       }
