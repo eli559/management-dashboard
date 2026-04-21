@@ -19,14 +19,15 @@ import { Suspense } from "react";
 export const dynamic = "force-dynamic";
 
 interface PageProps {
-  searchParams: Promise<{ days?: string; project?: string }>;
+  searchParams: Promise<{ days?: string; project?: string; month?: string }>;
 }
 
 export default async function ReportsPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const days = params.days ? parseInt(params.days) : 30;
   const projectId = params.project || undefined;
-  const data = await getReportsData({ days, projectId });
+  const month = params.month || undefined;
+  const data = await getReportsData({ days, projectId, month });
 
   const currentProject = projectId
     ? data.allProjects.find((p) => p.id === projectId)
@@ -40,7 +41,7 @@ export default async function ReportsPage({ searchParams }: PageProps) {
         <div>
           <h1 className="text-[22px] font-bold text-white">דוחות</h1>
           <p className="text-zinc-300 mt-0.5 text-[14px]">
-            ניתוח מעמיק — {data.days} ימים אחרונים
+            ניתוח מעמיק — {data.periodLabel}
             {currentProject ? ` · ${currentProject.name}` : ""}
           </p>
         </div>
@@ -49,6 +50,7 @@ export default async function ReportsPage({ searchParams }: PageProps) {
             projects={data.allProjects}
             currentDays={days}
             currentProjectId={projectId}
+            currentMonth={month}
           />
         </Suspense>
       </div>

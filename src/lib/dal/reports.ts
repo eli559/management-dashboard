@@ -58,10 +58,27 @@ export async function getReportsData(filters?: {
   projectId?: string;
   eventName?: string;
   days?: number;
+  month?: string; // "2026-04" format
 }) {
-  const days = filters?.days ?? 30;
-  const since = daysAgo(days);
-  const previousStart = daysAgo(days * 2);
+  let days = filters?.days ?? 30;
+  let since: Date;
+  let previousStart: Date;
+  let periodLabel: string;
+
+  if (filters?.month) {
+    // Specific month mode
+    const [year, mon] = filters.month.split("-").map(Number);
+    since = new Date(year, mon - 1, 1);
+    const endOfMonth = new Date(year, mon, 1);
+    days = Math.ceil((endOfMonth.getTime() - since.getTime()) / (1000 * 60 * 60 * 24));
+    previousStart = new Date(year, mon - 2, 1);
+    periodLabel = filters.month;
+  } else {
+    since = daysAgo(days);
+    previousStart = daysAgo(days * 2);
+    periodLabel = `${days} ימים אחרונים`;
+  }
+
   const today = startOfDay(new Date());
   const weekAgo = daysAgo(7);
   const monthStart = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
@@ -183,6 +200,7 @@ export async function getReportsData(filters?: {
     eventNames: Object.keys(eventTypeCounts),
     days,
     sparkline,
+    periodLabel,
   };
 }
 

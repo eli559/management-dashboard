@@ -1,3 +1,5 @@
+const TZ = "Asia/Jerusalem";
+
 export function formatNumber(num: number): string {
   return new Intl.NumberFormat("he-IL").format(num);
 }
@@ -14,6 +16,26 @@ export function formatDate(date: Date | string): string {
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: TZ,
+  }).format(new Date(date));
+}
+
+export function formatDateTime(date: Date | string): string {
+  return new Intl.DateTimeFormat("he-IL", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: TZ,
+  }).format(new Date(date));
+}
+
+export function formatTime(date: Date | string): string {
+  return new Intl.DateTimeFormat("he-IL", {
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: TZ,
   }).format(new Date(date));
 }
 
@@ -31,3 +53,9 @@ export function formatRelativeTime(date: Date | string): string {
   if (diffDays < 7) return `לפני ${diffDays} ימים`;
   return formatDate(date);
 }
+
+/** Hebrew month names */
+export const MONTH_NAMES_HE = [
+  "ינואר", "פברואר", "מרץ", "אפריל", "מאי", "יוני",
+  "יולי", "אוגוסט", "ספטמבר", "אוקטובר", "נובמבר", "דצמבר",
+];
