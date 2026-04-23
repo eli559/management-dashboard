@@ -6,13 +6,20 @@ function isPublicPath(pathname: string): boolean {
   return PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(p + "/"));
 }
 
+// Security headers applied to all responses
+const SECURITY_HEADERS = {
+  "X-Content-Type-Options": "nosniff",
+  "X-Frame-Options": "DENY",
+  "X-XSS-Protection": "1; mode=block",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+  "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+};
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Public endpoints — no auth needed
-  if (isPublicPath(pathname)) return NextResponse.next();
-
-  // Static assets
+  // Static assets — pass through with headers
   if (
     pathname.startsWith("/_next") ||
     pathname.endsWith(".ico") ||
@@ -20,19 +27,35 @@ export function middleware(request: NextRequest) {
     pathname.endsWith(".png") ||
     pathname.endsWith(".jpg")
   ) {
-    return NextResponse.next();
+    const res = NextResponse.next();
+    for (const [k, v] of Object.entries(SECURITY_HEADERS)) res.headers.set(k, v);
+    return res;
   }
 
-  // No password configured — dev mode, allow all
-  if (!process.env.DASHBOARD_PASSWORD) return NextResponse.next();
+  // Public endpoints — pass with headers
+  if (isPublicPath(pathname)) {
+    const res = NextResponse.next();
+    for (const [k, v] of Object.entries(SECURITY_HEADERS)) res.headers.set(k, v);
+    return res;
+  }
 
-  // Check session cookie
+  // Auth required for everything else
+  if (!process.env.DASHBOARD_PASSWORD) {
+    // No password = reject (don't allow open access)
+    const loginUrl = new URL("/login", request.url);
+    return NextResponse.redirect(loginUrl);
+  }
+
   const session = request.cookies.get("dashboard_session");
-  if (session?.value) return NextResponse.next();
+  if (!session?.value) {
+    const loginUrl = new URL("/login", request.url);
+    return NextResponse.redirect(loginUrl);
+  }
 
-  // Not authenticated — redirect to login
-  const loginUrl = new URL("/login", request.url);
-  return NextResponse.redirect(loginUrl);
+  // Authenticated — add security headers
+  const res = NextResponse.next();
+  for (const [k, v] of Object.entries(SECURITY_HEADERS)) res.headers.set(k, v);
+  return res;
 }
 
 export const config = {

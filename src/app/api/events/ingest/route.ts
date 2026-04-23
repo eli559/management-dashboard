@@ -5,16 +5,23 @@ import { createEvent } from "@/lib/dal/events";
 import { isRateLimited } from "@/lib/rate-limit";
 import { checkNotificationRules } from "@/lib/notification-rules";
 
-// CORS: allow specific origins or all (configure via env)
+// CORS: explicit allowlist, deny by default
 function getCorsHeaders(origin: string | null) {
   const allowed = process.env.ALLOWED_ORIGINS;
-  const allowedList = allowed ? allowed.split(",").map((s) => s.trim()) : null;
 
-  const allowOrigin =
-    !allowedList || (origin && allowedList.includes(origin)) ? origin ?? "*" : "";
+  // If ALLOWED_ORIGINS is set, only allow those. Otherwise allow all (for initial setup).
+  if (allowed) {
+    const allowedList = allowed.split(",").map((s) => s.trim());
+    const allowOrigin = origin && allowedList.includes(origin) ? origin : "";
+    return {
+      "Access-Control-Allow-Origin": allowOrigin,
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+    };
+  }
 
   return {
-    "Access-Control-Allow-Origin": allowOrigin,
+    "Access-Control-Allow-Origin": origin ?? "*",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
   };
@@ -78,7 +85,7 @@ export async function POST(request: NextRequest) {
     const parsed = ingestEventSchema.safeParse(body);
     if (!parsed.success) {
       return NextResponse.json(
-        { error: "Invalid payload", details: parsed.error.flatten().fieldErrors },
+        { error: "Invalid payload" },
         { status: 400, headers: corsHeaders }
       );
     }
@@ -89,7 +96,7 @@ export async function POST(request: NextRequest) {
     const project = await getProjectByApiKey(apiKey);
     if (!project) {
       return NextResponse.json(
-        { error: "Invalid API key" },
+        { error: "Unauthorized" },
         { status: 401, headers: corsHeaders }
       );
     }

@@ -1,7 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
+import { randomBytes, timingSafeEqual } from "crypto";
+import { isRateLimited } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
   try {
+    // ── Rate limit login attempts ──
+    const ip =
+      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+      request.headers.get("x-real-ip") ?? "unknown";
+
+    if (isRateLimited(`login:${ip}`)) {
+      return NextResponse.json(
+        { error: "יותר מדי ניסיונות. נסה שוב מאוחר יותר." },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json().catch(() => null);
     if (!body?.email || !body?.password) {
       return NextResponse.json({ error: "חסרים פרטים" }, { status: 400 });
@@ -11,27 +25,35 @@ export async function POST(request: NextRequest) {
     const validPassword = process.env.DASHBOARD_PASSWORD;
 
     if (!validPassword) {
-      return NextResponse.json({ error: "לא הוגדרה סיסמה" }, { status: 500 });
+      return NextResponse.json({ error: "שגיאת הגדרות" }, { status: 500 });
     }
 
-    if (body.email !== validEmail || body.password !== validPassword) {
+    // ── Timing-safe comparison ──
+    const emailMatch =
+      body.email.length === validEmail.length &&
+      timingSafeEqual(Buffer.from(body.email), Buffer.from(validEmail));
+
+    const passwordMatch =
+      body.password.length === validPassword.length &&
+      timingSafeEqual(Buffer.from(body.password), Buffer.from(validPassword));
+
+    if (!emailMatch || !passwordMatch) {
       return NextResponse.json(
         { error: "אימייל או סיסמה שגויים" },
         { status: 401 }
       );
     }
 
-    const token = Buffer.from(`${Date.now()}-${validEmail}`).toString(
-      "base64url"
-    );
+    // ── Cryptographically secure token ──
+    const token = randomBytes(32).toString("hex");
 
     const response = NextResponse.json({ success: true });
     response.cookies.set("dashboard_session", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      secure: true,
+      sameSite: "strict",
       path: "/",
-      maxAge: 60 * 60 * 24 * 7, // 7 days
+      maxAge: 60 * 60 * 8, // 8 hours
     });
 
     return response;
