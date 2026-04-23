@@ -1,14 +1,25 @@
 /**
  * Bootstrap: ensures required projects exist on startup.
- * Uses better-sqlite3 directly to avoid Prisma ESM issues in production.
- * Idempotent: skips if project already exists.
+ * Uses pg directly for PostgreSQL (Neon).
  */
 
-import Database from "better-sqlite3";
-import { randomBytes } from "crypto";
+import "dotenv/config";
+import pg from "pg";
 
-const dbPath = (process.env.DATABASE_URL ?? "file:./prisma/dev.db").replace("file:", "");
-const db = new Database(dbPath);
+function parseDbUrl(url) {
+  const u = new URL(url);
+  return {
+    host: u.hostname,
+    port: parseInt(u.port || "5432"),
+    database: u.pathname.slice(1),
+    user: u.username,
+    password: u.password,
+    ssl: u.searchParams.get("sslmode") === "require" ? true : undefined,
+  };
+}
+
+const config = parseDbUrl(process.env.DATABASE_URL);
+const pool = new pg.Pool(config);
 
 const PROJECTS = [
   {
@@ -29,20 +40,27 @@ const PROJECTS = [
   },
 ];
 
-const insert = db.prepare(`
-  INSERT OR IGNORE INTO projects (id, name, slug, type, description, status, apiKey, createdAt, updatedAt)
-  VALUES (?, ?, ?, ?, ?, 'ACTIVE', ?, datetime('now'), datetime('now'))
-`);
+try {
+  for (const p of PROJECTS) {
+    const existing = await pool.query('SELECT id FROM projects WHERE "apiKey" = $1', [p.apiKey]);
+    if (existing.rows.length > 0) {
+      console.log(`✓ Project "${p.name}" already exists`);
+      continue;
+    }
 
-for (const p of PROJECTS) {
-  const result = insert.run(p.id, p.name, p.slug, p.type, p.description, p.apiKey);
-  if (result.changes > 0) {
+    await pool.query(
+      `INSERT INTO projects (id, name, slug, type, description, status, "apiKey", "createdAt", "updatedAt")
+       VALUES ($1, $2, $3, $4, $5, 'ACTIVE', $6, NOW(), NOW())
+       ON CONFLICT ("apiKey") DO NOTHING`,
+      [p.id, p.name, p.slug, p.type, p.description, p.apiKey]
+    );
     console.log(`✓ Created project "${p.name}"`);
-  } else {
-    console.log(`✓ Project "${p.name}" already exists`);
   }
-}
 
-const count = db.prepare("SELECT COUNT(*) as c FROM projects").get();
-console.log(`✓ Total projects: ${count.c}`);
-db.close();
+  const res = await pool.query("SELECT COUNT(*) as c FROM projects");
+  console.log(`✓ Total projects: ${res.rows[0].c}`);
+} catch (err) {
+  console.error("Bootstrap error:", err.message);
+} finally {
+  await pool.end();
+}
