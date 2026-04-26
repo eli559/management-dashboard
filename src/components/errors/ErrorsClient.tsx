@@ -43,9 +43,11 @@ const SEVERITY_MAP: Record<string, { label: string; color: string; dot: string }
 };
 
 const STATUS_MAP: Record<string, { label: string; color: string }> = {
-  new: { label: "חדשה", color: "text-red-400 bg-red-500/10 border-red-500/20" },
-  investigating: { label: "בבדיקה", color: "text-amber-400 bg-amber-500/10 border-amber-500/20" },
+  open: { label: "פתוחה", color: "text-red-400 bg-red-500/10 border-red-500/20" },
+  new: { label: "פתוחה", color: "text-red-400 bg-red-500/10 border-red-500/20" },
+  investigating: { label: "בטיפול", color: "text-amber-400 bg-amber-500/10 border-amber-500/20" },
   resolved: { label: "טופלה", color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20" },
+  ignored: { label: "התעלם", color: "text-zinc-300 bg-zinc-500/10 border-zinc-500/20" },
 };
 
 const PAGE_SIZE = 30;
@@ -95,8 +97,8 @@ export function ErrorsClient({ errors, stats, projects, currentProject, currentS
           <p className="text-[24px] font-extrabold text-white">{stats.total}</p>
         </div>
         <div className="surface-sm rounded-xl p-4">
-          <div className="flex items-center gap-2 mb-2"><AlertTriangle className="w-4 h-4 text-amber-400" /><span className="text-[11px] text-zinc-300">חדשות</span></div>
-          <p className="text-[24px] font-extrabold text-white">{stats.newErrors}</p>
+          <div className="flex items-center gap-2 mb-2"><AlertTriangle className="w-4 h-4 text-amber-400" /><span className="text-[11px] text-zinc-300">פתוחות</span></div>
+          <p className="text-[24px] font-extrabold text-white">{stats.openErrors}</p>
         </div>
         <div className="surface-sm rounded-xl p-4">
           <div className="flex items-center gap-2 mb-2"><AlertTriangle className="w-4 h-4 text-red-400" /><span className="text-[11px] text-zinc-300">קריטיות</span></div>
@@ -125,10 +127,12 @@ export function ErrorsClient({ errors, stats, projects, currentProject, currentS
         </select>
         <select value={currentStatus ?? ""} onChange={(e) => navigate({ project: currentProject, severity: currentSeverity, status: e.target.value || undefined })}
           className="px-3 py-1.5 bg-white/[0.04] border border-white/[0.1] rounded-lg text-[12px] text-zinc-200 cursor-pointer">
-          <option value="">כל הסטטוסים</option>
-          <option value="new">חדשה</option>
-          <option value="investigating">בבדיקה</option>
-          <option value="resolved">טופלה</option>
+          <option value="">פתוחות + בטיפול</option>
+          <option value="all">הכל</option>
+          <option value="open">פתוחות</option>
+          <option value="investigating">בטיפול</option>
+          <option value="resolved">טופלו</option>
+          <option value="ignored">התעלמו</option>
         </select>
       </div>
 
@@ -217,17 +221,29 @@ export function ErrorsClient({ errors, stats, projects, currentProject, currentS
                 <div><span className="text-zinc-300">זמן:</span> <span className="text-zinc-200">{timeAgo(detail.createdAt)}</span></div>
               </div>
 
-              <div className="flex gap-2 pt-2">
+              <div className="flex flex-wrap gap-2 pt-2">
+                {(detail.status === "open" || detail.status === "new") && (
+                  <button onClick={() => updateStatus(detail.id, "investigating")}
+                    className="flex-1 py-2.5 rounded-xl text-[13px] font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 transition-all">
+                    סמן כבטיפול
+                  </button>
+                )}
                 {detail.status !== "resolved" && (
                   <button onClick={() => updateStatus(detail.id, "resolved")}
                     className="flex-1 py-2.5 rounded-xl text-[13px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 transition-all">
-                    סמן כטופלה
+                    סמן כטופל
                   </button>
                 )}
-                {detail.status === "new" && (
-                  <button onClick={() => updateStatus(detail.id, "investigating")}
-                    className="flex-1 py-2.5 rounded-xl text-[13px] font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 transition-all">
-                    בבדיקה
+                {detail.status !== "ignored" && detail.status !== "resolved" && (
+                  <button onClick={() => updateStatus(detail.id, "ignored")}
+                    className="flex-1 py-2.5 rounded-xl text-[13px] font-medium bg-zinc-500/10 text-zinc-300 border border-zinc-500/20 hover:bg-zinc-500/20 transition-all">
+                    התעלם
+                  </button>
+                )}
+                {(detail.status === "resolved" || detail.status === "ignored") && (
+                  <button onClick={() => updateStatus(detail.id, "open")}
+                    className="flex-1 py-2.5 rounded-xl text-[13px] font-medium bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 transition-all">
+                    פתח מחדש
                   </button>
                 )}
               </div>

@@ -2,6 +2,9 @@ import { prisma } from "@/lib/prisma";
 import { parseDevice } from "@/lib/device-parser";
 import { createHash } from "crypto";
 
+// Statuses: open, investigating, resolved, ignored
+// Hebrew: פתוח, בטיפול, טופל, התעלם
+
 function parseBrowser(ua: string | null): string {
   if (!ua) return "לא ידוע";
   const s = ua.toLowerCase();
@@ -12,7 +15,7 @@ function parseBrowser(ua: string | null): string {
   return "אחר";
 }
 
-function fingerprint(projectId: string, message: string, page: string | null): string {
+function makeFingerprint(projectId: string, message: string, page: string | null): string {
   return createHash("md5").update(`${projectId}:${message}:${page ?? ""}`).digest("hex").substring(0, 16);
 }
 
@@ -33,26 +36,38 @@ export async function createError(data: {
   userAgent?: string | null;
   isUnhandled?: boolean;
 }) {
-  const fp = fingerprint(data.projectId, data.message, data.page ?? null);
+  const fp = makeFingerprint(data.projectId, data.message, data.page ?? null);
   const device = parseDevice(data.userAgent);
   const browser = parseBrowser(data.userAgent ?? null);
   const severity = calcSeverity(data.message, data.isUnhandled ?? false);
+  const now = new Date();
 
-  // Dedup: if same fingerprint in last hour, increment count
-  const hourAgo = new Date(Date.now() - 60 * 60 * 1000);
+  // Find existing issue by fingerprint (any time, not just last hour)
   const existing = await prisma.projectError.findFirst({
-    where: { fingerprint: fp, createdAt: { gte: hourAgo } },
+    where: { fingerprint: fp },
     orderBy: { createdAt: "desc" },
   });
 
   if (existing) {
+    const updateData: Record<string, unknown> = {
+      count: { increment: 1 },
+      updatedAt: now,
+    };
+
+    // If was resolved/ignored and error comes back → reopen
+    if (existing.status === "resolved" || existing.status === "ignored") {
+      updateData.status = "open";
+      updateData.metadata = JSON.stringify({ reopened: true, previousStatus: existing.status, reopenedAt: now.toISOString() });
+    }
+
     await prisma.projectError.update({
       where: { id: existing.id },
-      data: { count: { increment: 1 }, updatedAt: new Date() },
+      data: updateData,
     });
     return existing;
   }
 
+  // New error issue
   return prisma.projectError.create({
     data: {
       projectId: data.projectId,
@@ -60,7 +75,7 @@ export async function createError(data: {
       stack: data.stack?.substring(0, 3000) ?? null,
       page: data.page ?? null,
       severity,
-      status: "new",
+      status: "open",
       sessionId: data.sessionId ?? null,
       userAgent: data.userAgent?.substring(0, 300) ?? null,
       deviceType: device.type,
@@ -75,48 +90,44 @@ export async function getErrors(filters?: { projectId?: string; severity?: strin
   const where: Record<string, unknown> = {};
   if (filters?.projectId) where.projectId = filters.projectId;
   if (filters?.severity) where.severity = filters.severity;
-  if (filters?.status) where.status = filters.status;
+
+  // Default: show open + investigating. "all" = no filter.
+  if (filters?.status && filters.status !== "all") {
+    where.status = filters.status;
+  } else if (!filters?.status) {
+    where.status = { in: ["open", "new", "investigating"] };
+  }
 
   return prisma.projectError.findMany({
     where,
-    orderBy: { createdAt: "desc" },
+    orderBy: { updatedAt: "desc" },
     take: 200,
     include: { project: { select: { name: true, slug: true } } },
   });
 }
 
 export async function getErrorStats() {
-  const now = new Date();
-  const dayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-
-  const [total, newErrors, critical, projectsWithErrors] = await Promise.all([
+  const [total, openErrors, critical, projectsWithErrors] = await Promise.all([
     prisma.projectError.count(),
-    prisma.projectError.count({ where: { status: "new" } }),
-    prisma.projectError.count({ where: { severity: { in: ["critical", "high"] } } }),
+    prisma.projectError.count({ where: { status: "open" } }),
+    prisma.projectError.count({ where: { severity: { in: ["critical", "high"] }, status: { in: ["open", "investigating"] } } }),
     prisma.projectError.findMany({
-      where: { status: "new" },
+      where: { status: "open" },
       distinct: ["projectId"],
       select: { projectId: true },
     }),
   ]);
 
-  return { total, newErrors, critical, projectsWithErrors: projectsWithErrors.length };
+  return { total, openErrors, critical, projectsWithErrors: projectsWithErrors.length };
 }
 
-export async function getNewErrorCount(): Promise<number> {
-  return prisma.projectError.count({ where: { status: "new" } });
+export async function getOpenErrorCount(): Promise<number> {
+  return prisma.projectError.count({ where: { status: "open" } });
 }
 
-export async function markErrorResolved(id: string) {
+export async function updateErrorStatus(id: string, status: string) {
   return prisma.projectError.update({
     where: { id },
-    data: { status: "resolved" },
-  });
-}
-
-export async function markErrorInvestigating(id: string) {
-  return prisma.projectError.update({
-    where: { id },
-    data: { status: "investigating" },
+    data: { status, updatedAt: new Date() },
   });
 }
