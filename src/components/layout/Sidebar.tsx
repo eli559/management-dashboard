@@ -80,19 +80,21 @@ export function Sidebar() {
               key={item.href}
               href={item.href}
               className={cn(
-                "relative flex items-center gap-3 px-3 py-[9px] rounded-lg text-[13px] font-medium transition-all duration-200",
+                "relative flex items-center gap-3 px-3 py-[10px] rounded-xl text-[13px] font-medium transition-all duration-300 group/nav",
                 isActive
-                  ? "bg-white/[0.06] text-white shadow-[0_0_20px_-4px_rgba(245,158,11,0.08)]"
-                  : "text-zinc-300 hover:bg-white/[0.03] hover:text-zinc-300"
+                  ? "bg-gradient-to-l from-amber-400/[0.08] to-transparent text-white"
+                  : "text-zinc-400 hover:bg-white/[0.04] hover:text-zinc-200"
               )}
             >
               {isActive && (
-                <div className="absolute inset-y-1.5 start-0 w-[3px] rounded-full bg-amber-400/70 shadow-[0_0_8px_rgba(245,158,11,0.4)]" />
+                <div className="absolute inset-y-2 start-0 w-[3px] rounded-full bg-amber-400 shadow-[0_0_12px_rgba(245,158,11,0.6)]" />
               )}
+              {/* Hover glow */}
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-l from-white/[0.02] to-transparent opacity-0 group-hover/nav:opacity-100 transition-opacity duration-300 pointer-events-none" />
               <Icon
                 className={cn(
-                  "w-[17px] h-[17px] flex-shrink-0",
-                  isActive ? "text-amber-400/80" : ""
+                  "w-[17px] h-[17px] flex-shrink-0 transition-colors duration-200",
+                  isActive ? "text-amber-400" : "group-hover/nav:text-zinc-300"
                 )}
               />
               <span className="flex-1">{item.label}</span>
