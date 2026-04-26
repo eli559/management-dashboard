@@ -1,6 +1,7 @@
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Topbar } from "@/components/layout/Topbar";
 import { AnimatedBackground } from "@/components/layout/AnimatedBackground";
+import { ToastProvider } from "@/components/ui/Toast";
 
 export default function DashboardLayout({
   children,
@@ -36,7 +37,9 @@ export default function DashboardLayout({
         style={{ marginInlineStart: "272px" }}
       >
         <Topbar />
-        <main className="flex-1 p-7 animate-page">{children}</main>
+        <main className="flex-1 p-7 animate-page">
+          <ToastProvider>{children}</ToastProvider>
+        </main>
       </div>
     </div>
   );

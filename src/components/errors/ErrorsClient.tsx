@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/Toast";
 import {
   AlertTriangle, Bug, CheckCircle, Search as SearchIcon,
   ChevronLeft, ChevronRight, X, Eye,
@@ -63,6 +64,7 @@ function timeAgo(d: string) {
 
 export function ErrorsClient({ errors, stats, projects, currentProject, currentSeverity, currentStatus }: Props) {
   const router = useRouter();
+  const toast = useToast();
   const [page, setPage] = useState(0);
   const [detail, setDetail] = useState<ProjectError | null>(null);
 
@@ -84,6 +86,8 @@ export function ErrorsClient({ errors, stats, projects, currentProject, currentS
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status }),
     });
+    const labels: Record<string, string> = { open: "נפתחה מחדש", investigating: "סומנה כבטיפול", resolved: "סומנה כטופלה", ignored: "סומנה כהתעלם" };
+    toast.success(labels[status] ?? "סטטוס עודכן");
     router.refresh();
     setDetail(null);
   }

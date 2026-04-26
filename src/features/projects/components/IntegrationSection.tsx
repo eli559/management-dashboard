@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Copy, Check, Code, Bot, Eye, EyeOff, ChevronDown, ChevronUp } from "lucide-react";
 import { generateTrackingCode, generateClaudePrompt } from "@/lib/integration-generator";
+import { useToast } from "@/components/ui/Toast";
 
 interface IntegrationSectionProps {
   apiKey: string;
@@ -12,9 +13,10 @@ interface IntegrationSectionProps {
 
 function CopyBtn({ text, label }: { text: string; label: string }) {
   const [copied, setCopied] = useState(false);
+  const toast = useToast();
   return (
     <button
-      onClick={async () => { await navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
+      onClick={async () => { await navigator.clipboard.writeText(text); setCopied(true); toast.success("הועתק ללוח"); setTimeout(() => setCopied(false), 2000); }}
       className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] font-medium bg-white/[0.05] border border-white/[0.1] text-zinc-200 hover:bg-white/[0.08] transition-all"
     >
       {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}

@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { createPortal } from "react-dom";
+import { useToast } from "@/components/ui/Toast";
 
 interface Credential {
   id: string;
@@ -48,6 +49,7 @@ function timeAgo(d: string) {
 
 export function VaultClient({ credentials, projects }: { credentials: Credential[]; projects: Project[] }) {
   const router = useRouter();
+  const toast = useToast();
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
   const [showForm, setShowForm] = useState(false);
@@ -64,7 +66,8 @@ export function VaultClient({ credentials, projects }: { credentials: Credential
   async function revealSecret(id: string) {
     if (revealedId === id) { setRevealedId(null); setRevealedSecret(""); return; }
     const res = await fetch(`/api/vault/${id}`);
-    if (res.ok) { const d = await res.json(); setRevealedId(id); setRevealedSecret(d.secret); }
+    if (res.ok) { const d = await res.json(); setRevealedId(id); setRevealedSecret(d.secret); toast.info("הסיסמה מוצגת"); }
+    else { toast.error("שגיאה בהצגת הסיסמה"); }
   }
 
   async function copySecret(id: string) {
@@ -74,12 +77,14 @@ export function VaultClient({ credentials, projects }: { credentials: Credential
       await navigator.clipboard.writeText(d.secret);
       setCopiedId(id);
       setTimeout(() => setCopiedId(null), 2000);
-    }
+      toast.success("הסיסמה הועתקה ללוח");
+    } else { toast.error("שגיאה בהעתקה"); }
   }
 
   async function handleDelete(id: string) {
     await fetch(`/api/vault/${id}`, { method: "DELETE" });
     setDeleteConfirm(null);
+    toast.success("הגישה נמחקה");
     router.refresh();
   }
 
@@ -106,7 +111,8 @@ export function VaultClient({ credentials, projects }: { credentials: Credential
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
-    if (res.ok) { setEditCred(null); router.refresh(); }
+    if (res.ok) { setEditCred(null); toast.success("הגישה עודכנה בהצלחה"); router.refresh(); }
+    else { toast.error("שגיאה בעדכון"); }
   }
 
   async function handleCreate(e: React.FormEvent<HTMLFormElement>) {
@@ -133,7 +139,8 @@ export function VaultClient({ credentials, projects }: { credentials: Credential
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
-    if (res.ok) { setShowForm(false); router.refresh(); }
+    if (res.ok) { setShowForm(false); toast.success("הגישה נשמרה בכספת"); router.refresh(); }
+    else { toast.error("שגיאה בשמירה"); }
   }
 
   return (

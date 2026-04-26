@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/Textarea";
 import { createProjectAction } from "@/features/projects/actions/create-project";
 import { PROJECT_TYPE_OPTIONS } from "@/features/projects/types";
 import { generateTrackingCode, generateClaudePrompt } from "@/lib/integration-generator";
+import { useToast } from "@/components/ui/Toast";
 import { FolderPlus, Sparkles, Copy, Check, Eye, EyeOff, Code, Bot, ArrowLeft } from "lucide-react";
 
 interface CreateProjectDialogProps {
@@ -29,9 +30,10 @@ function generateSlug(name: string): string {
 
 function CopyButton({ text, label }: { text: string; label: string }) {
   const [copied, setCopied] = useState(false);
+  const toast = useToast();
   return (
     <button
-      onClick={async () => { await navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
+      onClick={async () => { await navigator.clipboard.writeText(text); setCopied(true); toast.success("הועתק ללוח"); setTimeout(() => setCopied(false), 2000); }}
       className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-[13px] font-medium bg-white/[0.05] border border-white/[0.1] text-zinc-200 hover:bg-white/[0.08] transition-all"
     >
       {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
