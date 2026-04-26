@@ -12,7 +12,7 @@ import {
 } from "@/lib/dal/events";
 import { ApiKeyDisplay } from "@/features/projects/components/ApiKeyDisplay";
 import { ProjectKpiGrid } from "@/features/projects/components/ProjectKpiGrid";
-import { EventsTable } from "@/features/projects/components/EventsTable";
+import { PaginatedEventsTable } from "@/features/projects/components/PaginatedEventsTable";
 import { ProjectEventBreakdown } from "@/features/projects/components/ProjectEventBreakdown";
 import { ProjectTopPages } from "@/features/projects/components/ProjectTopPages";
 import { ActivityChart } from "@/components/dashboard/ActivityChart";
@@ -39,7 +39,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const [stats, recentEvents, eventBreakdown, topPages, monthlyData] =
     await Promise.all([
       getProjectEventStats(project.id),
-      getRecentEventsByProject(project.id, 20),
+      getRecentEventsByProject(project.id, 200),
       getProjectEventBreakdown(project.id),
       getProjectTopPages(project.id),
       getProjectMonthlyEvents(project.id),
@@ -134,14 +134,11 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
       {/* אירועים אחרונים */}
       <div>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold text-zinc-200">אירועים אחרונים</h2>
-          <span className="text-sm text-zinc-300">
-            {recentEvents.length} אירועים מתוך{" "}
-            {stats.totalEvents.toLocaleString("he-IL")}
-          </span>
-        </div>
-        <EventsTable events={recentEvents} />
+        <h2 className="text-lg font-bold text-zinc-200 mb-4">אירועים אחרונים</h2>
+        <PaginatedEventsTable
+          events={recentEvents.map((e) => ({ ...e, createdAt: e.createdAt.toISOString() }))}
+          totalEvents={stats.totalEvents}
+        />
       </div>
     </div>
   );
