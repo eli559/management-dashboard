@@ -28,7 +28,7 @@ interface ProjectError {
 
 interface Props {
   errors: ProjectError[];
-  stats: { total: number; newErrors: number; critical: number; projectsWithErrors: number };
+  stats: { total: number; openErrors: number; critical: number; projectsWithErrors: number };
   projects: { id: string; name: string }[];
   currentProject?: string;
   currentSeverity?: string;
