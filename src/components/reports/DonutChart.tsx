@@ -15,14 +15,18 @@ interface DonutChartProps {
 }
 
 const COLORS = [
-  "rgba(59,130,246,0.7)",
-  "rgba(139,92,246,0.7)",
-  "rgba(16,185,129,0.7)",
-  "rgba(245,158,11,0.7)",
-  "rgba(236,72,153,0.7)",
-  "rgba(14,165,233,0.7)",
-  "rgba(168,85,247,0.7)",
-  "rgba(34,197,94,0.7)",
+  "rgba(59,130,246,0.8)",   // כחול
+  "rgba(245,158,11,0.8)",   // כתום
+  "rgba(16,185,129,0.8)",   // ירוק
+  "rgba(168,85,247,0.8)",   // סגול
+  "rgba(236,72,153,0.8)",   // ורוד
+  "rgba(14,165,233,0.8)",   // תכלת
+  "rgba(234,179,8,0.8)",    // צהוב
+  "rgba(239,68,68,0.8)",    // אדום
+  "rgba(99,102,241,0.8)",   // אינדיגו
+  "rgba(20,184,166,0.8)",   // טורקיז
+  "rgba(249,115,22,0.8)",   // כתום כהה
+  "rgba(132,204,22,0.8)",   // ליים
 ];
 
 export function DonutChart({ title, subtitle, items, className }: DonutChartProps) {
@@ -97,9 +101,9 @@ export function DonutChart({ title, subtitle, items, className }: DonutChartProp
             const pct = Math.round((seg.value / total) * 100);
             return (
               <div key={seg.label} className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: seg.color }} />
-                <span className="text-[11px] text-zinc-300 truncate flex-1">{getEventLabel(seg.label)}</span>
-                <span className="text-[10px] text-zinc-300 tabular-nums">{pct}%</span>
+                <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ background: seg.color }} />
+                <span className="text-[12px] text-zinc-200 truncate flex-1">{getEventLabel(seg.label)}</span>
+                <span className="text-[11px] text-zinc-300 tabular-nums font-medium">{pct}%</span>
               </div>
             );
           })}
