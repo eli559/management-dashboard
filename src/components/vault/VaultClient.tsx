@@ -242,7 +242,7 @@ export function VaultClient({ credentials, projects }: { credentials: Credential
             </div>
             <form onSubmit={handleCreate} className="space-y-4">
               <div>
-                <label className="block text-[12px] text-zinc-300 mb-1.5">שם השירות</label>
+                <label className="block text-[12px] text-zinc-300 mb-1.5">כותרת</label>
                 <input name="serviceName" placeholder="גישה כללית" className="w-full py-2.5 px-4 bg-white/[0.03] border border-white/[0.08] rounded-xl text-sm text-zinc-200 placeholder:text-zinc-300 focus:outline-none focus:ring-1 focus:ring-white/[0.12] transition-all" />
               </div>
               <div>
@@ -319,7 +319,7 @@ export function VaultClient({ credentials, projects }: { credentials: Credential
             </div>
             <form onSubmit={handleEdit} className="space-y-4">
               <div>
-                <label className="block text-[12px] text-zinc-300 mb-1.5">שם השירות</label>
+                <label className="block text-[12px] text-zinc-300 mb-1.5">כותרת</label>
                 <input name="serviceName" defaultValue={editCred.serviceName} className="w-full py-2.5 px-4 bg-white/[0.03] border border-white/[0.08] rounded-xl text-sm text-zinc-200 focus:outline-none focus:ring-1 focus:ring-white/[0.12] transition-all" />
               </div>
               <div>
