@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 
 interface FilterModalProps {
@@ -11,6 +12,10 @@ interface FilterModalProps {
 }
 
 export function FilterModal({ open, onClose, title, children }: FilterModalProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => { setMounted(true); }, []);
+
   const handleEscape = useCallback(
     (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); },
     [onClose]
@@ -27,15 +32,38 @@ export function FilterModal({ open, onClose, title, children }: FilterModalProps
     };
   }, [open, handleEscape]);
 
-  if (!open) return null;
+  if (!open || !mounted) return null;
 
-  return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+  return createPortal(
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 99999,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "16px",
+      }}
+    >
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/50 backdrop-blur-sm animate-[fade-in_150ms_ease-out]"
         onClick={onClose}
         aria-hidden="true"
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: "rgba(0,0,0,0.6)",
+          backdropFilter: "blur(4px)",
+          WebkitBackdropFilter: "blur(4px)",
+          zIndex: 99999,
+        }}
       />
 
       {/* Panel */}
@@ -43,23 +71,46 @@ export function FilterModal({ open, onClose, title, children }: FilterModalProps
         role="dialog"
         aria-modal="true"
         aria-label={title}
-        className="relative w-full max-w-[380px] max-h-[80vh] overflow-y-auto glass-strong rounded-2xl shadow-2xl shadow-black/60 animate-[dialog-in_200ms_ease-out] p-6"
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          position: "relative",
+          zIndex: 100000,
+          width: "100%",
+          maxWidth: "380px",
+          maxHeight: "80vh",
+          overflowY: "auto",
+          borderRadius: "16px",
+          padding: "24px",
+          background: "rgba(12,12,18,0.95)",
+          border: "1px solid rgba(255,255,255,0.1)",
+          boxShadow: "0 24px 80px -12px rgba(0,0,0,0.8)",
+          animation: "dialog-in 200ms ease-out",
+        }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between mb-5">
-          <h2 className="text-[16px] font-bold text-white">{title}</h2>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
+          <h2 style={{ fontSize: "16px", fontWeight: 700, color: "white", margin: 0 }}>{title}</h2>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg hover:bg-white/[0.08] transition-colors text-zinc-300 hover:text-white"
             aria-label="סגור"
+            style={{
+              padding: "6px",
+              borderRadius: "8px",
+              border: "none",
+              background: "transparent",
+              color: "#a1a1aa",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+            }}
           >
-            <X className="w-5 h-5" />
+            <X size={20} />
           </button>
         </div>
 
-        {/* Content */}
         {children}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
