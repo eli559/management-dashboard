@@ -7,6 +7,7 @@ import {
   FolderKanban,
   BarChart3,
   Eye,
+  Lightbulb,
   UserCog,
   Puzzle,
   Settings,
@@ -21,6 +22,7 @@ const iconMap: Record<string, LucideIcon> = {
   FolderKanban,
   BarChart3,
   Eye,
+  Lightbulb,
   UserCog,
   Puzzle,
 };
@@ -30,6 +32,7 @@ const navigationItems: NavItem[] = [
   { label: "פרויקטים", href: ROUTES.PROJECTS, icon: "FolderKanban" },
   { label: "דוחות", href: ROUTES.REPORTS, icon: "BarChart3" },
   { label: "מבקרים", href: ROUTES.VISITORS, icon: "Eye" },
+  { label: "תובנות", href: ROUTES.INSIGHTS, icon: "Lightbulb" },
   { label: "צוות", href: ROUTES.TEAM, icon: "UserCog" },
   { label: "אינטגרציות", href: ROUTES.INTEGRATIONS, icon: "Puzzle" },
 ];

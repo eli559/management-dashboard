@@ -8,6 +8,7 @@ export const ROUTES = {
   PROJECTS: "/projects",
   REPORTS: "/reports",
   VISITORS: "/visitors",
+  INSIGHTS: "/insights",
   TEAM: "/team",
   INTEGRATIONS: "/integrations",
   SETTINGS: "/settings",
