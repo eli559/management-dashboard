@@ -25,11 +25,12 @@ interface Credential {
 interface Project { id: string; name: string; }
 
 const TYPE_LABELS: Record<string, string> = {
-  hosting: "אחסון", cms: "CMS", email: "אימייל", api: "API",
+  password: "סיסמה ושם משתמש", hosting: "אחסון", cms: "CMS", email: "אימייל", api: "API",
   db: "מסד נתונים", ftp: "FTP", social: "רשת חברתית", other: "אחר",
 };
 
 const TYPE_OPTIONS = [
+  { value: "password", label: "סיסמה ושם משתמש" },
   { value: "hosting", label: "אחסון" }, { value: "cms", label: "CMS" },
   { value: "email", label: "אימייל" }, { value: "api", label: "API" },
   { value: "db", label: "מסד נתונים" }, { value: "ftp", label: "FTP" },
