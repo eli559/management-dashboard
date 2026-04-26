@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { EventBadge } from "@/components/ui/EventBadge";
 import { getPageLabel } from "@/lib/page-labels";
+import { enrichEventDescription } from "@/lib/event-enrichment";
 import { cn } from "@/utils/cn";
 
 interface EventRow {
@@ -13,6 +14,7 @@ interface EventRow {
   sessionId: string | null;
   page: string | null;
   value: number | null;
+  metadata: string;
   createdAt: string;
 }
 
@@ -55,9 +57,8 @@ export function PaginatedEventsTable({ events, totalEvents }: Props) {
             <thead>
               <tr className="border-b border-white/[0.05]">
                 <th className="text-start text-[11px] font-semibold text-zinc-300 uppercase tracking-wider px-6 py-3.5">אירוע</th>
-                <th className="text-start text-[11px] font-semibold text-zinc-300 uppercase tracking-wider px-6 py-3.5">משתמש</th>
+                <th className="text-start text-[11px] font-semibold text-zinc-300 uppercase tracking-wider px-6 py-3.5">פרטים</th>
                 <th className="text-start text-[11px] font-semibold text-zinc-300 uppercase tracking-wider px-6 py-3.5">עמוד</th>
-                <th className="text-start text-[11px] font-semibold text-zinc-300 uppercase tracking-wider px-6 py-3.5">ערך</th>
                 <th className="text-start text-[11px] font-semibold text-zinc-300 uppercase tracking-wider px-6 py-3.5">זמן</th>
               </tr>
             </thead>
@@ -71,9 +72,12 @@ export function PaginatedEventsTable({ events, totalEvents }: Props) {
                   )}
                 >
                   <td className="px-6 py-3.5"><EventBadge eventName={event.eventName} /></td>
-                  <td className="px-6 py-3.5"><span className="text-[12px] text-zinc-300 font-mono">{event.userIdentifier ?? "—"}</span></td>
+                  <td className="px-6 py-3.5">
+                    <span className="text-[12px] text-zinc-200 block max-w-[250px] truncate">
+                      {enrichEventDescription(event.eventName, event.metadata) || "—"}
+                    </span>
+                  </td>
                   <td className="px-6 py-3.5"><span className="text-[12px] text-zinc-300 truncate max-w-[200px] block">{getPageLabel(event.page)}</span></td>
-                  <td className="px-6 py-3.5"><span className="text-[12px] text-zinc-300 tabular-nums">{event.value != null ? event.value : "—"}</span></td>
                   <td className="px-6 py-3.5"><span className="text-[11px] text-zinc-300 whitespace-nowrap">{timeAgo(event.createdAt)}</span></td>
                 </tr>
               ))}
