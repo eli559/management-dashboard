@@ -19,7 +19,6 @@ export const EVENT_LABELS: Record<string, string> = {
   click_waze: "לחיצה על Waze",
   booking_submit: "הזמנת תור",
   test_neon: "בדיקת חיבור",
-  test_event: "אירוע בדיקה",
 };
 
 export function getEventLabel(eventName: string): string {
