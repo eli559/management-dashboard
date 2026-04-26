@@ -44,8 +44,26 @@ export function LoginForm() {
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-amber-400/10 mb-5 shadow-[0_0_40px_-8px_rgba(245,158,11,0.2)]">
           <LayoutDashboard className="w-8 h-8 text-amber-400" />
         </div>
-        <h1 className="text-[26px] font-bold text-white mb-1">מערכת ניהול וניטור</h1>
-        <p className="text-zinc-300 text-[14px]">ניהול פרויקטים מתקדם</p>
+        <h1
+          className="text-[28px] font-extrabold mb-1"
+          style={{
+            background: "linear-gradient(90deg, #d4af37, #fff, #d4af37, #b8860b, #fff, #d4af37)",
+            backgroundSize: "300% 100%",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            animation: "shimmer 4s ease-in-out infinite",
+          }}
+        >מערכת ניהול וניטור</h1>
+        <p
+          className="text-[14px] font-medium"
+          style={{
+            background: "linear-gradient(90deg, #a1a1aa, #e4e4e7, #a1a1aa)",
+            backgroundSize: "200% 100%",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            animation: "shimmer 5s ease-in-out infinite",
+          }}
+        >ניהול פרויקטים מתקדם</p>
       </div>
 
       {/* Form */}
