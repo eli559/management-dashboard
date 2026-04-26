@@ -3,7 +3,7 @@ import { NotificationBell } from "./NotificationBell";
 
 export function Topbar() {
   return (
-    <header className="h-[64px] bg-[#06060a]/50 backdrop-blur-md border-b border-white/[0.05] flex items-center justify-end px-8 sticky top-0 z-30">
+    <header className="h-[72px] bg-[#06060a]/50 backdrop-blur-md border-b border-white/[0.05] flex items-center justify-end px-8 sticky top-0 z-30">
       <div className="flex items-center gap-1.5">
         <NotificationBell />
 
