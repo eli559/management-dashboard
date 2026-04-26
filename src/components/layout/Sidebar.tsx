@@ -47,14 +47,14 @@ export function Sidebar() {
   return (
     <aside className="fixed inset-y-0 start-0 z-40 w-[272px] bg-[#08080a]/70 backdrop-blur-md flex flex-col border-e border-white/[0.05]">
       {/* ── לוגו ── */}
-      <div className="h-[64px] flex items-center px-6 border-b border-white/[0.04]">
+      <div className="h-[72px] flex items-center px-6 border-b border-white/[0.04]">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg bg-amber-400/10 flex items-center justify-center shadow-[0_0_20px_-4px_rgba(245,158,11,0.15)]">
-            <LayoutDashboard className="w-[18px] h-[18px] text-amber-400" />
+          <div className="w-10 h-10 rounded-xl bg-amber-400/10 flex items-center justify-center shadow-[0_0_20px_-4px_rgba(245,158,11,0.15)]">
+            <LayoutDashboard className="w-5 h-5 text-amber-400" />
           </div>
           <div>
-            <span className="text-[14px] font-bold text-white tracking-tight">
-              {APP_NAME}
+            <span className="text-[15px] font-bold text-white tracking-tight">
+              מערכת ניהול וניטור
             </span>
             <p className="text-[10px] text-zinc-300 font-medium mt-0.5">
               ניהול פרויקטים מתקדם

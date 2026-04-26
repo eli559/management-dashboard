@@ -1,5 +1,5 @@
-export const APP_NAME = "מערכת ניהול";
-export const APP_DESCRIPTION = "מערכת ניהול פרויקטים מתקדמת";
+export const APP_NAME = "מערכת ניהול וניטור";
+export const APP_DESCRIPTION = "מערכת ניהול וניטור פרויקטים מתקדמת";
 
 export const ROUTES = {
   HOME: "/",

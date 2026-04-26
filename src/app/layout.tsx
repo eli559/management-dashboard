@@ -9,8 +9,8 @@ const heebo = Heebo({
 });
 
 export const metadata: Metadata = {
-  title: "מערכת ניהול",
-  description: "מערכת ניהול פרויקטים מתקדמת",
+  title: "מערכת ניהול וניטור",
+  description: "מערכת ניהול וניטור פרויקטים מתקדמת",
 };
 
 export default function RootLayout({
