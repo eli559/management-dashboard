@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { SlidersHorizontal, X } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { MONTH_NAMES_HE } from "@/utils/formatters";
+import { FilterModal } from "@/components/ui/FilterModal";
 
 interface Project { id: string; name: string; slug: string; }
 
@@ -36,36 +37,7 @@ function getMonths() {
 export function ReportsFilter({ projects, currentDays, currentProjectId, currentMonth }: ReportsFilterProps) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  const btnRef = useRef<HTMLButtonElement>(null);
-  const panelRef = useRef<HTMLDivElement>(null);
-  const [style, setStyle] = useState<React.CSSProperties>({});
   const hasFilter = currentDays !== 30 || currentProjectId || currentMonth;
-
-  useEffect(() => {
-    if (open && btnRef.current) {
-      const r = btnRef.current.getBoundingClientRect();
-      // Position: right-aligned with button, below it
-      setStyle({
-        position: "fixed",
-        top: r.bottom + 8,
-        right: window.innerWidth - r.right,
-        zIndex: 9999,
-      });
-    }
-  }, [open]);
-
-  // Close on outside click
-  useEffect(() => {
-    if (!open) return;
-    function handleClick(e: MouseEvent) {
-      if (panelRef.current && !panelRef.current.contains(e.target as Node) &&
-          btnRef.current && !btnRef.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, [open]);
 
   function go(params: Record<string, string | undefined>) {
     const p = new URLSearchParams();
@@ -81,7 +53,7 @@ export function ReportsFilter({ projects, currentDays, currentProjectId, current
 
   return (
     <>
-      <button ref={btnRef} onClick={() => setOpen(!open)}
+      <button onClick={() => setOpen(true)}
         className={cn("flex items-center gap-2 px-3.5 py-2 rounded-lg text-[13px] font-medium transition-all duration-200",
           hasFilter ? "bg-amber-400/10 text-amber-300 border border-amber-400/20" : "bg-white/[0.04] text-zinc-300 border border-white/[0.1] hover:bg-white/[0.06]"
         )}>
@@ -90,13 +62,10 @@ export function ReportsFilter({ projects, currentDays, currentProjectId, current
         {hasFilter && <span className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_6px_rgba(245,158,11,0.5)]" />}
       </button>
 
-      {open && (
-        <div ref={panelRef} style={style}
-          className="w-[320px] max-h-[60vh] overflow-y-auto glass-strong rounded-xl animate-[dialog-in_150ms_ease-out] p-4 space-y-4 shadow-2xl shadow-black/60">
-
-          {/* תקופה */}
+      <FilterModal open={open} onClose={() => setOpen(false)} title="סינון דוחות">
+        <div className="space-y-5">
           <div>
-            <p className="text-[11px] text-zinc-300 font-semibold mb-2">תקופה אחרונה</p>
+            <p className="text-[12px] text-zinc-300 font-semibold mb-2">תקופה אחרונה</p>
             <div className="flex flex-wrap gap-1.5">
               {TIME_OPTIONS.map((opt) => (
                 <button key={opt.value} onClick={() => go({ days: opt.value, project: currentProjectId })}
@@ -107,10 +76,9 @@ export function ReportsFilter({ projects, currentDays, currentProjectId, current
             </div>
           </div>
 
-          {/* חודש */}
           <div>
-            <p className="text-[11px] text-zinc-300 font-semibold mb-2">חודש ספציפי</p>
-            <div className="grid grid-cols-2 gap-1.5 max-h-[120px] overflow-y-auto">
+            <p className="text-[12px] text-zinc-300 font-semibold mb-2">חודש ספציפי</p>
+            <div className="grid grid-cols-2 gap-1.5 max-h-[140px] overflow-y-auto">
               {months.map((m) => (
                 <button key={m.value} onClick={() => go({ month: m.value, project: currentProjectId })}
                   className={cn("px-3 py-1.5 rounded-lg text-[12px] font-medium transition-all text-start",
@@ -120,11 +88,10 @@ export function ReportsFilter({ projects, currentDays, currentProjectId, current
             </div>
           </div>
 
-          {/* פרויקט */}
           {projects.length > 1 && (
             <div>
-              <p className="text-[11px] text-zinc-300 font-semibold mb-2">פרויקט</p>
-              <div className="space-y-1 max-h-[100px] overflow-y-auto">
+              <p className="text-[12px] text-zinc-300 font-semibold mb-2">פרויקט</p>
+              <div className="space-y-1 max-h-[120px] overflow-y-auto">
                 <button onClick={() => go({ days: currentMonth ? undefined : String(currentDays), month: currentMonth })}
                   className={cn("w-full text-start px-3 py-2 rounded-lg text-[12px] font-medium transition-all",
                     !currentProjectId ? "bg-white/[0.12] text-white border border-white/[0.15]" : "bg-white/[0.04] text-zinc-300 hover:bg-white/[0.08]"
@@ -139,15 +106,14 @@ export function ReportsFilter({ projects, currentDays, currentProjectId, current
             </div>
           )}
 
-          {/* ניקוי */}
           {hasFilter && (
             <button onClick={() => { router.push("/reports"); setOpen(false); }}
-              className="w-full flex items-center justify-center gap-1.5 py-2 rounded-lg text-[12px] text-zinc-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.06] transition-all">
+              className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-[13px] text-zinc-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.06] border border-white/[0.06] transition-all">
               <X className="w-3.5 h-3.5" /><span>נקה סינון</span>
             </button>
           )}
         </div>
-      )}
+      </FilterModal>
     </>
   );
 }
