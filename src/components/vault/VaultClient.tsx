@@ -200,13 +200,15 @@ export function VaultClient({ credentials, projects }: { credentials: Credential
               </div>
               <div>
                 <label className="block text-[12px] text-zinc-300 mb-1.5">סוג גישה</label>
-                <select name="type" className="w-full py-2.5 px-4 bg-white/[0.03] border border-white/[0.08] rounded-xl text-sm text-zinc-200 cursor-pointer">
+                <select name="type" defaultValue="" className="w-full py-2.5 px-4 bg-white/[0.03] border border-white/[0.08] rounded-xl text-sm text-zinc-200 cursor-pointer">
+                  <option value="" disabled>בחר סוג...</option>
                   {TYPE_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
                 </select>
               </div>
               <div>
                 <label className="block text-[12px] text-zinc-300 mb-1.5">פרויקט</label>
-                <select name="projectId" className="w-full py-2.5 px-4 bg-white/[0.03] border border-white/[0.08] rounded-xl text-sm text-zinc-200 cursor-pointer">
+                <select name="projectId" defaultValue="" className="w-full py-2.5 px-4 bg-white/[0.03] border border-white/[0.08] rounded-xl text-sm text-zinc-200 cursor-pointer">
+                  <option value="" disabled>בחר פרויקט...</option>
                   <option value="">ללא פרויקט</option>
                   {projects.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
                 </select>
