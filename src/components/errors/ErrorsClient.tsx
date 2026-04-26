@@ -81,13 +81,17 @@ export function ErrorsClient({ errors, stats, projects, currentProject, currentS
   }
 
   async function updateStatus(id: string, status: string) {
-    await fetch(`/api/errors/${id}`, {
+    const res = await fetch(`/api/errors/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status }),
     });
-    const labels: Record<string, string> = { open: "נפתחה מחדש", investigating: "סומנה כבטיפול", resolved: "סומנה כטופלה", ignored: "סומנה כהתעלם" };
-    toast.success(labels[status] ?? "סטטוס עודכן");
+    if (res.ok) {
+      const labels: Record<string, string> = { open: "נפתחה מחדש", investigating: "סומנה כבטיפול", resolved: "סומנה כטופלה", ignored: "סומנה כהתעלם" };
+      toast.success(labels[status] ?? "סטטוס עודכן");
+    } else {
+      toast.error("שגיאה בעדכון סטטוס");
+    }
     router.refresh();
     setDetail(null);
   }

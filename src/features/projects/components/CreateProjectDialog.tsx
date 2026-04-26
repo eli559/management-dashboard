@@ -44,6 +44,7 @@ function CopyButton({ text, label }: { text: string; label: string }) {
 
 export function CreateProjectDialog({ open, onClose }: CreateProjectDialogProps) {
   const router = useRouter();
+  const toast = useToast();
   const [isPending, startTransition] = useTransition();
   const [errors, setErrors] = useState<Record<string, string[]>>({});
   const [name, setName] = useState("");
@@ -67,8 +68,10 @@ export function CreateProjectDialog({ open, onClose }: CreateProjectDialogProps)
       const result = await createProjectAction(formData);
       if (result.success && result.project) {
         setCreated({ slug: result.project.slug, apiKey: result.project.apiKey, name: result.project.name, techType: result.project.techType });
+        toast.success("הפרויקט נוצר בהצלחה");
       } else if (result.errors) {
         setErrors(result.errors);
+        toast.error("שגיאה ביצירת הפרויקט");
       }
     });
   };

@@ -82,9 +82,10 @@ export function VaultClient({ credentials, projects }: { credentials: Credential
   }
 
   async function handleDelete(id: string) {
-    await fetch(`/api/vault/${id}`, { method: "DELETE" });
+    const res = await fetch(`/api/vault/${id}`, { method: "DELETE" });
     setDeleteConfirm(null);
-    toast.success("הגישה נמחקה");
+    if (res.ok) { toast.success("הגישה נמחקה"); }
+    else { toast.error("שגיאה במחיקה"); }
     router.refresh();
   }
 
