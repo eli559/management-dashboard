@@ -85,14 +85,21 @@ export function VaultClient({ credentials, projects }: { credentials: Credential
   async function handleCreate(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
+
+    // Match project name to ID, or store as custom name
+    const projectInput = String(fd.get("projectName") || "").trim();
+    const matchedProject = projects.find((p) => p.name === projectInput);
+    const projectId = matchedProject?.id || null;
+    const serviceName = String(fd.get("serviceName") || "").trim() || (projectInput || "גישה כללית");
+
     const body = {
-      projectId: fd.get("projectId") || null,
+      projectId,
       type: fd.get("type"),
-      serviceName: fd.get("serviceName"),
+      serviceName,
       loginUrl: fd.get("loginUrl") || null,
       username: fd.get("username") || null,
       secret: fd.get("secret"),
-      notes: fd.get("notes") || null,
+      notes: fd.get("notes") || (projectInput && !matchedProject ? `פרויקט: ${projectInput}` : null),
     };
     const res = await fetch("/api/vault", {
       method: "POST",
@@ -214,11 +221,11 @@ export function VaultClient({ credentials, projects }: { credentials: Credential
               </div>
               <div>
                 <label className="block text-[12px] text-zinc-300 mb-1.5">פרויקט</label>
-                <select name="projectId" defaultValue="" className="w-full py-2.5 px-4 bg-white/[0.03] border border-white/[0.08] rounded-xl text-sm text-zinc-200 cursor-pointer">
-                  <option value="" disabled>בחר פרויקט...</option>
-                  <option value="">ללא פרויקט</option>
-                  {projects.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
-                </select>
+                <input name="projectName" list="project-list" placeholder="הקלד שם או בחר מהרשימה..."
+                  className="w-full py-2.5 px-4 bg-white/[0.03] border border-white/[0.08] rounded-xl text-sm text-zinc-200 placeholder:text-zinc-300 focus:outline-none focus:ring-1 focus:ring-white/[0.12] transition-all" />
+                <datalist id="project-list">
+                  {projects.map((p) => <option key={p.id} value={p.name} />)}
+                </datalist>
               </div>
               <div>
                 <label className="block text-[12px] text-zinc-300 mb-1.5">כתובת התחברות</label>
