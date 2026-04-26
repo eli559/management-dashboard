@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { EventBadge } from "@/components/ui/EventBadge";
+import { getPageLabel } from "@/lib/page-labels";
 import { cn } from "@/utils/cn";
 
 interface EventRow {
@@ -71,7 +72,7 @@ export function PaginatedEventsTable({ events, totalEvents }: Props) {
                 >
                   <td className="px-6 py-3.5"><EventBadge eventName={event.eventName} /></td>
                   <td className="px-6 py-3.5"><span className="text-[12px] text-zinc-300 font-mono">{event.userIdentifier ?? "—"}</span></td>
-                  <td className="px-6 py-3.5"><span className="text-[12px] text-zinc-300 font-mono truncate max-w-[200px] block" dir="ltr">{event.page ?? "—"}</span></td>
+                  <td className="px-6 py-3.5"><span className="text-[12px] text-zinc-300 truncate max-w-[200px] block">{getPageLabel(event.page)}</span></td>
                   <td className="px-6 py-3.5"><span className="text-[12px] text-zinc-300 tabular-nums">{event.value != null ? event.value : "—"}</span></td>
                   <td className="px-6 py-3.5"><span className="text-[11px] text-zinc-300 whitespace-nowrap">{timeAgo(event.createdAt)}</span></td>
                 </tr>

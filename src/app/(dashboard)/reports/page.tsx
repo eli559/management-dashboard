@@ -14,6 +14,7 @@ import { LiveRefresh } from "@/components/LiveRefresh";
 import { ReportsFilter } from "@/components/reports/ReportsFilter";
 import { getEventLabel } from "@/lib/event-labels";
 import { formatNumber, formatRelativeTime } from "@/utils/formatters";
+import { getPageLabel } from "@/lib/page-labels";
 import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";
@@ -163,9 +164,8 @@ export default async function ReportsPage({ searchParams }: PageProps) {
           <HorizontalBar
             title="עמודים מובילים"
             subtitle="הנצפים ביותר"
-            items={data.topPages.map((p) => ({ label: p.page, value: p.count }))}
+            items={data.topPages.map((p) => ({ label: getPageLabel(p.page), value: p.count }))}
             color="emerald"
-            mono
           />
           <HorizontalBar
             title="פרויקטים"

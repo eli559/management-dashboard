@@ -1,5 +1,6 @@
 import { Globe } from "lucide-react";
 import type { TopPage } from "@/lib/dal/events";
+import { getPageLabel } from "@/lib/page-labels";
 
 interface Props {
   pages: TopPage[];
@@ -20,9 +21,9 @@ export function ProjectTopPages({ pages }: Props) {
           const pct = (page.count / maxCount) * 100;
           return (
             <div key={page.page} className="flex items-center gap-3">
-              <code className="text-[11px] text-zinc-300 font-mono truncate max-w-[180px]" dir="ltr">
-                {page.page}
-              </code>
+              <span className="text-[12px] text-zinc-200 truncate min-w-[100px] max-w-[180px]">
+                {getPageLabel(page.page)}
+              </span>
               <div className="flex-1 h-2 bg-white/[0.04] rounded-full overflow-hidden">
                 <div
                   className="h-full bg-gradient-to-l from-emerald-500/40 to-emerald-500/20 rounded-full"
