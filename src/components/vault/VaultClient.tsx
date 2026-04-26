@@ -157,6 +157,13 @@ export function VaultClient({ credentials, projects }: { credentials: Credential
 
                 {/* Actions */}
                 <div className="flex items-center gap-1 flex-shrink-0">
+                  {cred.loginUrl && (
+                    <a href={cred.loginUrl} target="_blank" rel="noopener noreferrer" title="פתח עמוד התחברות"
+                      onClick={() => { if (cred.username) navigator.clipboard.writeText(cred.username); }}
+                      className="p-2 rounded-lg hover:bg-blue-500/10 text-zinc-300 hover:text-blue-400 transition-colors">
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  )}
                   <button onClick={() => revealSecret(cred.id)} title={revealedId === cred.id ? "הסתר" : "הצג סיסמה"}
                     className="p-2 rounded-lg hover:bg-white/[0.06] text-zinc-300 transition-colors">
                     {revealedId === cred.id ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
