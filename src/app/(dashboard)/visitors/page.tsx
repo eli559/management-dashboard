@@ -107,7 +107,7 @@ export default async function VisitorsPage({ searchParams }: PageProps) {
 
       <div className="animate-slide-up stagger-4">
         <h2 className="text-[16px] font-bold text-zinc-200 mb-4">מבקרים אחרונים</h2>
-        <VisitorsTable sessions={serialized} />
+        <VisitorsTable sessions={serialized} totalCount={stats.totalSessions} />
       </div>
     </div>
   );

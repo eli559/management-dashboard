@@ -23,6 +23,7 @@ interface Session {
 
 interface VisitorsTableProps {
   sessions: Session[];
+  totalCount?: number;
 }
 
 const PAGE_SIZE = 30;
@@ -37,7 +38,7 @@ function timeAgo(dateStr: string): string {
   return `לפני ${Math.floor(hours / 24)} ימים`;
 }
 
-export function VisitorsTable({ sessions }: VisitorsTableProps) {
+export function VisitorsTable({ sessions, totalCount }: VisitorsTableProps) {
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(0);
 
@@ -72,7 +73,7 @@ export function VisitorsTable({ sessions }: VisitorsTableProps) {
         <List className="w-4 h-4" />
         <span>{open ? "הסתר רשימת מבקרים" : "הצג רשימת מבקרים"}</span>
         <span className="text-[11px] text-zinc-300 bg-white/[0.06] px-2 py-0.5 rounded-full">
-          {sessions.length}
+          {(totalCount ?? sessions.length).toLocaleString("he-IL")}
         </span>
       </button>
 
