@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Lock, ArrowLeft, LayoutDashboard } from "lucide-react";
+import { Lock, ArrowLeft, LayoutDashboard, Eye, EyeOff } from "lucide-react";
 import { ROUTES } from "@/lib/constants";
 
 export function LoginForm() {
   const router = useRouter();
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -59,18 +60,25 @@ export function LoginForm() {
           <div>
             <label htmlFor="password" className="block text-[13px] font-medium text-zinc-300 mb-2">סיסמה</label>
             <div className="relative">
-              <Lock className="absolute start-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-zinc-300" />
+              <Lock className="absolute start-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-zinc-300 pointer-events-none" />
               <input
                 id="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="הכנס סיסמה..."
-                className="w-full ps-12 pe-4 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-xl text-white text-sm placeholder:text-zinc-300 focus:outline-none focus:ring-1 focus:ring-amber-400/20 focus:border-amber-400/20 transition-all"
+                className="w-full ps-12 pe-12 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-xl text-white text-sm placeholder:text-zinc-300 focus:outline-none focus:ring-1 focus:ring-amber-400/20 focus:border-amber-400/20 transition-all"
                 required
                 dir="ltr"
                 autoFocus
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute end-3.5 top-1/2 -translate-y-1/2 p-1 rounded hover:bg-white/[0.06] text-zinc-300 transition-colors"
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
             </div>
           </div>
 
@@ -91,7 +99,6 @@ export function LoginForm() {
         </form>
       </div>
 
-      <p className="text-center text-[12px] text-zinc-300 mt-8">© 2026 מערכת ניהול וניטור. כל הזכויות שמורות.</p>
     </div>
   );
 }
