@@ -16,14 +16,14 @@ export async function POST(request: NextRequest) {
   if (!isAuth(request)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await request.json().catch(() => null);
-  if (!body?.serviceName || !body?.secret || !body?.type) {
-    return NextResponse.json({ error: "חסרים פרטים" }, { status: 400 });
+  if (!body?.secret) {
+    return NextResponse.json({ error: "סיסמה היא שדה חובה" }, { status: 400 });
   }
 
   const cred = await createCredential({
     projectId: body.projectId || null,
-    type: body.type,
-    serviceName: body.serviceName,
+    type: body.type || "other",
+    serviceName: body.serviceName || "גישה כללית",
     loginUrl: body.loginUrl || null,
     username: body.username || null,
     secret: body.secret,

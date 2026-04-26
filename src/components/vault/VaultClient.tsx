@@ -132,7 +132,7 @@ export function VaultClient({ credentials, projects }: { credentials: Credential
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1 flex-wrap">
-                    <span className="text-[14px] font-bold text-white">{cred.serviceName}</span>
+                    <span className="text-[14px] font-bold text-white">{cred.serviceName || "גישה כללית"}</span>
                     <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/[0.06] text-zinc-300 border border-white/[0.06]">
                       {TYPE_LABELS[cred.type] ?? cred.type}
                     </span>
@@ -194,12 +194,12 @@ export function VaultClient({ credentials, projects }: { credentials: Credential
             </div>
             <form onSubmit={handleCreate} className="space-y-4">
               <div>
-                <label className="block text-[12px] text-zinc-300 mb-1.5">שם השירות *</label>
-                <input name="serviceName" required className="w-full py-2.5 px-4 bg-white/[0.03] border border-white/[0.08] rounded-xl text-sm text-zinc-200 focus:outline-none focus:ring-1 focus:ring-white/[0.12] transition-all" />
+                <label className="block text-[12px] text-zinc-300 mb-1.5">שם השירות</label>
+                <input name="serviceName" placeholder="גישה כללית" className="w-full py-2.5 px-4 bg-white/[0.03] border border-white/[0.08] rounded-xl text-sm text-zinc-200 placeholder:text-zinc-300 focus:outline-none focus:ring-1 focus:ring-white/[0.12] transition-all" />
               </div>
               <div>
-                <label className="block text-[12px] text-zinc-300 mb-1.5">סוג גישה *</label>
-                <select name="type" required className="w-full py-2.5 px-4 bg-white/[0.03] border border-white/[0.08] rounded-xl text-sm text-zinc-200 cursor-pointer">
+                <label className="block text-[12px] text-zinc-300 mb-1.5">סוג גישה</label>
+                <select name="type" className="w-full py-2.5 px-4 bg-white/[0.03] border border-white/[0.08] rounded-xl text-sm text-zinc-200 cursor-pointer">
                   {TYPE_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
                 </select>
               </div>
