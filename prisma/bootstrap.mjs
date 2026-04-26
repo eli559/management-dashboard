@@ -38,6 +38,14 @@ const PROJECTS = [
     description: "דף נחיתה שיווקי — מעקב כניסות, קליקים, המרות",
     apiKey: "pk_landing_7f3a9c2e1b4d6e8a0f5c3b7d9e1a4f6c8b2d0e3a5c7f9b",
   },
+  {
+    id: "proj_lak_gal",
+    name: "אתר ללק גל",
+    slug: "lak-gal",
+    type: "WEBSITE",
+    description: "אתר לק ג׳ל — הזמנת תורים, גלריה, יצירת קשר",
+    apiKey: "pk_lakgal_a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2",
+  },
 ];
 
 try {
