@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { randomBytes, timingSafeEqual } from "crypto";
+import { randomBytes } from "crypto";
+import bcrypt from "bcryptjs";
+import { prisma } from "@/lib/prisma";
 import { isRateLimited } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
   try {
-    // ── Rate limit login attempts ──
     const ip =
       request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
       request.headers.get("x-real-ip") ?? "unknown";
@@ -17,34 +18,31 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json().catch(() => null);
-    if (!body?.email || !body?.password) {
+    if (!body?.password) {
       return NextResponse.json({ error: "חסרים פרטים" }, { status: 400 });
     }
 
-    const validEmail = process.env.DASHBOARD_EMAIL ?? "admin@dashboard.com";
-    const validPassword = process.env.DASHBOARD_PASSWORD;
+    const email = body.email ?? "admin@dashboard.com";
 
-    if (!validPassword) {
-      return NextResponse.json({ error: "שגיאת הגדרות" }, { status: 500 });
+    // Try DB first
+    const user = await prisma.user.findUnique({ where: { email } });
+
+    if (user) {
+      const valid = await bcrypt.compare(body.password, user.password);
+      if (!valid) {
+        return NextResponse.json({ error: "סיסמה שגויה" }, { status: 401 });
+      }
+
+      // Update last login
+      await prisma.user.update({ where: { id: user.id }, data: { lastLogin: new Date() } });
+    } else {
+      // Fallback to env var (for first run before bootstrap)
+      const envPassword = process.env.DASHBOARD_PASSWORD;
+      if (!envPassword || body.password !== envPassword) {
+        return NextResponse.json({ error: "סיסמה שגויה" }, { status: 401 });
+      }
     }
 
-    // ── Timing-safe comparison ──
-    const emailMatch =
-      body.email.length === validEmail.length &&
-      timingSafeEqual(Buffer.from(body.email), Buffer.from(validEmail));
-
-    const passwordMatch =
-      body.password.length === validPassword.length &&
-      timingSafeEqual(Buffer.from(body.password), Buffer.from(validPassword));
-
-    if (!emailMatch || !passwordMatch) {
-      return NextResponse.json(
-        { error: "אימייל או סיסמה שגויים" },
-        { status: 401 }
-      );
-    }
-
-    // ── Cryptographically secure token ──
     const token = randomBytes(32).toString("hex");
 
     const response = NextResponse.json({ success: true });
@@ -53,7 +51,7 @@ export async function POST(request: NextRequest) {
       secure: true,
       sameSite: "strict",
       path: "/",
-      maxAge: 60 * 60 * 8, // 8 hours
+      maxAge: 60 * 60 * 8,
     });
 
     return response;

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { timingSafeEqual } from "crypto";
+import bcrypt from "bcryptjs";
+import { prisma } from "@/lib/prisma";
 
 export async function POST(request: NextRequest) {
   if (!request.cookies.get("dashboard_session")?.value) {
@@ -11,30 +12,27 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "חסרים פרטים" }, { status: 400 });
   }
 
-  const currentValid = process.env.DASHBOARD_PASSWORD;
-  if (!currentValid) {
-    return NextResponse.json({ error: "שגיאת הגדרות" }, { status: 500 });
-  }
-
-  // Verify current password
-  const match =
-    body.currentPassword.length === currentValid.length &&
-    timingSafeEqual(Buffer.from(body.currentPassword), Buffer.from(currentValid));
-
-  if (!match) {
-    return NextResponse.json({ error: "הסיסמה הנוכחית שגויה" }, { status: 401 });
-  }
-
   if (body.newPassword.length < 6) {
     return NextResponse.json({ error: "הסיסמה החדשה חייבת להכיל לפחות 6 תווים" }, { status: 400 });
   }
 
-  // Note: This updates the env var at runtime but won't persist across deploys.
-  // For persistent change, update Cloud Run env var.
-  process.env.DASHBOARD_PASSWORD = body.newPassword;
+  const email = "admin@dashboard.com";
+  const user = await prisma.user.findUnique({ where: { email } });
 
-  return NextResponse.json({
-    success: true,
-    message: "הסיסמה שונתה בהצלחה. לשינוי קבוע, עדכן את משתנה הסביבה DASHBOARD_PASSWORD ב-Cloud Run.",
+  if (!user) {
+    return NextResponse.json({ error: "משתמש לא נמצא" }, { status: 404 });
+  }
+
+  const valid = await bcrypt.compare(body.currentPassword, user.password);
+  if (!valid) {
+    return NextResponse.json({ error: "הסיסמה הנוכחית שגויה" }, { status: 401 });
+  }
+
+  const newHash = await bcrypt.hash(body.newPassword, 10);
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { password: newHash },
   });
+
+  return NextResponse.json({ success: true, message: "הסיסמה שונתה בהצלחה" });
 }

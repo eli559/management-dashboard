@@ -67,6 +67,23 @@ try {
 
   const res = await pool.query("SELECT COUNT(*) as c FROM projects");
   console.log(`✓ Total projects: ${res.rows[0].c}`);
+
+  // ── Admin user ──
+  const adminEmail = process.env.DASHBOARD_EMAIL || "admin@dashboard.com";
+  const adminPassword = process.env.DASHBOARD_PASSWORD || "admin123";
+  const existingUser = await pool.query("SELECT id FROM users WHERE email = $1", [adminEmail]);
+  if (existingUser.rows.length === 0) {
+    const bcrypt = await import("bcryptjs");
+    const hash = bcrypt.default.hashSync(adminPassword, 10);
+    await pool.query(
+      `INSERT INTO users (id, email, name, password, role, "isActive", "createdAt", "updatedAt")
+       VALUES ($1, $2, $3, $4, 'ADMIN', true, NOW(), NOW())`,
+      ["admin_user", adminEmail, "מנהל", hash]
+    );
+    console.log(`✓ Created admin user: ${adminEmail}`);
+  } else {
+    console.log(`✓ Admin user already exists`);
+  }
 } catch (err) {
   console.error("Bootstrap error:", err.message);
 } finally {
