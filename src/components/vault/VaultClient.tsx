@@ -173,11 +173,6 @@ export function VaultClient({ credentials, projects }: { credentials: Credential
                     </span>
                   </div>
                   {cred.username && <p className="text-[12px] text-zinc-300 font-mono" dir="ltr">{cred.username}</p>}
-                  {cred.loginUrl && (
-                    <a href={cred.loginUrl} target="_blank" rel="noopener" className="text-[11px] text-blue-400 hover:underline flex items-center gap-1 mt-1" dir="ltr">
-                      {cred.loginUrl.substring(0, 50)}<ExternalLink className="w-3 h-3" />
-                    </a>
-                  )}
 
                   {/* Revealed secret */}
                   {revealedId === cred.id && (
