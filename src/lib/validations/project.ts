@@ -17,6 +17,8 @@ export const createProjectSchema = z.object({
     message: "יש לבחור סוג פרויקט",
   }),
   description: z.string().max(500, "התיאור ארוך מדי").optional().nullable(),
+  websiteUrl: z.string().max(500).optional().nullable(),
+  techType: z.enum(["js", "react", "next"]).optional().default("js"),
 });
 
 export type CreateProjectInput = z.infer<typeof createProjectSchema>;

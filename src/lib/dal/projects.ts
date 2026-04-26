@@ -35,7 +35,7 @@ export async function getProjectByApiKey(apiKey: string) {
 }
 
 export async function createProject(
-  data: CreateProjectInput & { apiKey: string }
+  data: CreateProjectInput & { apiKey: string; websiteUrl?: string | null; techType?: string }
 ) {
   return prisma.project.create({
     data: {
@@ -43,6 +43,8 @@ export async function createProject(
       slug: data.slug,
       type: data.type,
       description: data.description ?? null,
+      websiteUrl: data.websiteUrl ?? null,
+      techType: data.techType ?? "js",
       apiKey: data.apiKey,
     },
   });

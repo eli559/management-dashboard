@@ -16,6 +16,7 @@ import { PaginatedEventsTable } from "@/features/projects/components/PaginatedEv
 import { ProjectEventBreakdown } from "@/features/projects/components/ProjectEventBreakdown";
 import { ProjectTopPages } from "@/features/projects/components/ProjectTopPages";
 import { ActivityChart } from "@/components/dashboard/ActivityChart";
+import { IntegrationSection } from "@/features/projects/components/IntegrationSection";
 import {
   PROJECT_TYPE_LABELS,
   PROJECT_STATUS_LABELS,
@@ -114,6 +115,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           </div>
         </div>
       </div>
+
+      {/* הטמעה */}
+      <IntegrationSection apiKey={project.apiKey} projectName={project.name} eventCount={stats.totalEvents} />
 
       {/* KPI */}
       <ProjectKpiGrid {...stats} />
