@@ -113,3 +113,40 @@ model ProjectError {
   @@index([fingerprint])
   @@map("project_errors")
 }
+
+// ── Access Credentials (Vault) ──
+
+model AccessCredential {
+  id              String    @id @default(cuid())
+  projectId       String?
+  type            String    // hosting, cms, email, api, db, ftp, social, other
+  serviceName     String
+  loginUrl        String?
+  username        String?
+  encryptedSecret String    // AES-256-GCM encrypted
+  notes           String?
+  createdBy       String?
+  lastViewedAt    DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  auditLogs CredentialAuditLog[]
+
+  @@index([projectId])
+  @@index([type])
+  @@map("access_credentials")
+}
+
+model CredentialAuditLog {
+  id           String   @id @default(cuid())
+  credentialId String
+  credential   AccessCredential @relation(fields: [credentialId], references: [id], onDelete: Cascade)
+  action       String   // view, copy, create, update, delete
+  userId       String?
+  details      String?
+  createdAt    DateTime @default(now())
+
+  @@index([credentialId])
+  @@index([createdAt])
+  @@map("credential_audit_logs")
+}

@@ -9,6 +9,7 @@ import {
   Eye,
   Lightbulb,
   Bug,
+  Shield,
   UserCog,
   Puzzle,
   Settings,
@@ -27,6 +28,7 @@ const iconMap: Record<string, LucideIcon> = {
   Eye,
   Lightbulb,
   Bug,
+  Shield,
   UserCog,
   Puzzle,
 };
@@ -38,6 +40,7 @@ const navigationItems: NavItem[] = [
   { label: "מבקרים", href: ROUTES.VISITORS, icon: "Eye" },
   { label: "תובנות", href: ROUTES.INSIGHTS, icon: "Lightbulb" },
   { label: "שגיאות", href: ROUTES.ERRORS, icon: "Bug" },
+  { label: "כספת גישות", href: ROUTES.VAULT, icon: "Shield" },
   { label: "צוות", href: ROUTES.TEAM, icon: "UserCog" },
   { label: "אינטגרציות", href: ROUTES.INTEGRATIONS, icon: "Puzzle" },
 ];
