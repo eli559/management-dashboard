@@ -16,6 +16,7 @@ import {
 import { cn } from "@/utils/cn";
 import { APP_NAME, ROUTES } from "@/lib/constants";
 import { ErrorBadge } from "./ErrorBadge";
+import { LogoutButton } from "./LogoutButton";
 import type { NavItem } from "@/types/navigation";
 import type { LucideIcon } from "lucide-react";
 
@@ -105,14 +106,23 @@ export function Sidebar() {
       </nav>
 
       {/* ── תחתית ── */}
-      <div className="px-3 py-4 border-t border-white/[0.04]">
+      <div className="px-3 py-4 border-t border-white/[0.04] space-y-0.5">
         <Link
           href={ROUTES.SETTINGS}
-          className="flex items-center gap-3 px-3 py-[9px] rounded-lg text-[13px] font-medium text-zinc-300 hover:bg-white/[0.03] hover:text-zinc-300 transition-all duration-200"
+          className={cn(
+            "relative flex items-center gap-3 px-3 py-[10px] rounded-xl text-[13px] font-medium transition-all duration-300",
+            pathname === ROUTES.SETTINGS
+              ? "bg-gradient-to-l from-amber-400/[0.15] via-amber-400/[0.06] to-transparent text-white border border-white/[0.06]"
+              : "text-zinc-300 hover:bg-white/[0.04] hover:text-zinc-200"
+          )}
         >
-          <Settings className="w-[17px] h-[17px] flex-shrink-0" />
+          {pathname === ROUTES.SETTINGS && (
+            <div className="absolute inset-y-2 start-0 w-[3px] rounded-full bg-amber-400 shadow-[0_0_12px_rgba(245,158,11,0.6)]" />
+          )}
+          <Settings className={cn("w-[17px] h-[17px] flex-shrink-0", pathname === ROUTES.SETTINGS ? "text-amber-400" : "")} />
           <span>הגדרות</span>
         </Link>
+        <LogoutButton />
       </div>
     </aside>
   );

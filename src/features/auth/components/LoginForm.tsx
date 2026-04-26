@@ -2,12 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Mail, Lock, ArrowLeft, LayoutDashboard } from "lucide-react";
+import { Lock, ArrowLeft, LayoutDashboard } from "lucide-react";
 import { ROUTES } from "@/lib/constants";
 
 export function LoginForm() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -21,15 +20,14 @@ export function LoginForm() {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email: "admin@dashboard.com", password }),
       });
 
       if (res.ok) {
         router.push(ROUTES.DASHBOARD);
         router.refresh();
       } else {
-        const data = await res.json();
-        setError(data.error || "שגיאה בהתחברות");
+        setError("סיסמה שגויה");
       }
     } catch {
       setError("שגיאת חיבור לשרת");
@@ -39,42 +37,27 @@ export function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-[420px]">
+    <div className="w-full max-w-[400px]">
+      {/* Logo */}
       <div className="text-center mb-10">
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-amber-400/10 mb-5 shadow-[0_0_40px_-8px_rgba(245,158,11,0.15)]">
+        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-amber-400/10 mb-5 shadow-[0_0_40px_-8px_rgba(245,158,11,0.2)]">
           <LayoutDashboard className="w-8 h-8 text-amber-400" />
         </div>
-        <h1 className="text-3xl font-bold text-white mb-2">מערכת ניהול</h1>
-        <p className="text-zinc-300 text-[15px]">התחבר לחשבון שלך כדי להמשיך</p>
+        <h1 className="text-[26px] font-bold text-white mb-1">מערכת ניהול וניטור</h1>
+        <p className="text-zinc-300 text-[14px]">ניהול פרויקטים מתקדם</p>
       </div>
 
-      <div className="glass-strong rounded-3xl p-8 shadow-2xl shadow-black/40">
+      {/* Form */}
+      <div className="surface rounded-2xl p-8">
         <form onSubmit={handleSubmit} className="space-y-5">
           {error && (
-            <div className="bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3 text-sm text-red-400">
+            <div className="bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3 text-[13px] text-red-400 text-center">
               {error}
             </div>
           )}
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-zinc-300 mb-2">אימייל</label>
-            <div className="relative">
-              <Mail className="absolute start-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-zinc-300" />
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@dashboard.com"
-                className="w-full ps-12 pe-4 py-3.5 bg-white/[0.03] border border-white/[0.06] rounded-xl text-white text-sm placeholder:text-zinc-300 focus:outline-none focus:ring-1 focus:ring-amber-400/20 focus:border-amber-400/20 transition-all"
-                required
-                dir="ltr"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-zinc-300 mb-2">סיסמה</label>
+            <label htmlFor="password" className="block text-[13px] font-medium text-zinc-300 mb-2">סיסמה</label>
             <div className="relative">
               <Lock className="absolute start-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-zinc-300" />
               <input
@@ -82,10 +65,11 @@ export function LoginForm() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full ps-12 pe-4 py-3.5 bg-white/[0.03] border border-white/[0.06] rounded-xl text-white text-sm placeholder:text-zinc-300 focus:outline-none focus:ring-1 focus:ring-amber-400/20 focus:border-amber-400/20 transition-all"
+                placeholder="הכנס סיסמה..."
+                className="w-full ps-12 pe-4 py-3.5 bg-white/[0.04] border border-white/[0.08] rounded-xl text-white text-sm placeholder:text-zinc-300 focus:outline-none focus:ring-1 focus:ring-amber-400/20 focus:border-amber-400/20 transition-all"
                 required
                 dir="ltr"
+                autoFocus
               />
             </div>
           </div>
@@ -93,13 +77,13 @@ export function LoginForm() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-3.5 bg-amber-400 text-zinc-950 font-bold text-sm rounded-xl hover:bg-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-400/40 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-[0_0_30px_-8px_rgba(245,158,11,0.25)] mt-2"
+            className="w-full py-3.5 bg-amber-400 text-zinc-950 font-bold text-sm rounded-xl hover:bg-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-400/40 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-[0_0_30px_-8px_rgba(245,158,11,0.25)]"
           >
             {isLoading ? (
               <div className="w-5 h-5 border-2 border-zinc-900/30 border-t-zinc-900 rounded-full animate-spin" />
             ) : (
               <>
-                <span>התחברות</span>
+                <span>כניסה למערכת</span>
                 <ArrowLeft className="w-4 h-4" />
               </>
             )}
@@ -107,7 +91,7 @@ export function LoginForm() {
         </form>
       </div>
 
-      <p className="text-center text-[13px] text-zinc-400 mt-8">© 2026 מערכת ניהול. כל הזכויות שמורות.</p>
+      <p className="text-center text-[12px] text-zinc-300 mt-8">© 2026 מערכת ניהול וניטור. כל הזכויות שמורות.</p>
     </div>
   );
 }
