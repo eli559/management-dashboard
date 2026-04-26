@@ -55,6 +55,7 @@ export function VaultClient({ credentials, projects }: { credentials: Credential
   const [revealedSecret, setRevealedSecret] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const [editCred, setEditCred] = useState<Credential | null>(null);
 
   let filtered = credentials;
   if (search) filtered = filtered.filter((c) => c.serviceName.toLowerCase().includes(search.toLowerCase()) || c.username?.toLowerCase().includes(search.toLowerCase()));
@@ -80,6 +81,32 @@ export function VaultClient({ credentials, projects }: { credentials: Credential
     await fetch(`/api/vault/${id}`, { method: "DELETE" });
     setDeleteConfirm(null);
     router.refresh();
+  }
+
+  async function handleEdit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!editCred) return;
+    const fd = new FormData(e.currentTarget);
+    const secret = String(fd.get("secret") || "").trim();
+    const projectInput = String(fd.get("projectName") || "").trim();
+    const matchedProject = projects.find((p) => p.name === projectInput);
+
+    const body: Record<string, unknown> = {
+      serviceName: fd.get("serviceName") || editCred.serviceName,
+      type: fd.get("type") || editCred.type,
+      projectId: matchedProject?.id || null,
+      loginUrl: fd.get("loginUrl") || null,
+      username: fd.get("username") || null,
+      notes: fd.get("notes") || (projectInput && !matchedProject ? `פרויקט: ${projectInput}` : null),
+    };
+    if (secret) body.secret = secret;
+
+    const res = await fetch(`/api/vault/${editCred.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    if (res.ok) { setEditCred(null); router.refresh(); }
   }
 
   async function handleCreate(e: React.FormEvent<HTMLFormElement>) {
@@ -175,6 +202,10 @@ export function VaultClient({ credentials, projects }: { credentials: Credential
                     className="p-2 rounded-lg hover:bg-white/[0.06] text-zinc-300 transition-colors">
                     {revealedId === cred.id ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
+                  <button onClick={() => setEditCred(cred)} title="עריכה"
+                    className="p-2 rounded-lg hover:bg-amber-500/10 text-zinc-300 hover:text-amber-400 transition-colors">
+                    <Edit className="w-4 h-4" />
+                  </button>
                   <button onClick={() => copySecret(cred.id)} title="העתק סיסמה"
                     className="p-2 rounded-lg hover:bg-white/[0.06] text-zinc-300 transition-colors">
                     {copiedId === cred.id ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
@@ -269,6 +300,61 @@ export function VaultClient({ credentials, projects }: { credentials: Credential
                 ביטול
               </button>
             </div>
+          </div>
+        </div>,
+        document.body
+      )}
+      {/* Edit modal */}
+      {editCred && createPortal(
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setEditCred(null)} />
+          <div className="relative z-[100000] w-full max-w-[440px] max-h-[85vh] overflow-y-auto p-6 rounded-2xl"
+            style={{ background: "rgba(12,12,18,0.95)", border: "1px solid rgba(255,255,255,0.1)", boxShadow: "0 24px 80px -12px rgba(0,0,0,0.8)", animation: "dialog-in 200ms ease-out" }}
+            onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-[16px] font-bold text-white">עריכת גישה</h2>
+              <button onClick={() => setEditCred(null)} className="p-1.5 rounded-lg hover:bg-white/[0.08] text-zinc-300"><X className="w-5 h-5" /></button>
+            </div>
+            <form onSubmit={handleEdit} className="space-y-4">
+              <div>
+                <label className="block text-[12px] text-zinc-300 mb-1.5">שם השירות</label>
+                <input name="serviceName" defaultValue={editCred.serviceName} className="w-full py-2.5 px-4 bg-white/[0.03] border border-white/[0.08] rounded-xl text-sm text-zinc-200 focus:outline-none focus:ring-1 focus:ring-white/[0.12] transition-all" />
+              </div>
+              <div>
+                <label className="block text-[12px] text-zinc-300 mb-1.5">סוג גישה</label>
+                <select name="type" defaultValue={editCred.type} className="w-full py-2.5 px-4 bg-white/[0.03] border border-white/[0.08] rounded-xl text-sm text-zinc-200 cursor-pointer">
+                  {TYPE_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-[12px] text-zinc-300 mb-1.5">פרויקט</label>
+                <input name="projectName" list="edit-project-list" defaultValue={projects.find((p) => p.id === editCred.projectId)?.name ?? ""} placeholder="הקלד שם או בחר..."
+                  className="w-full py-2.5 px-4 bg-white/[0.03] border border-white/[0.08] rounded-xl text-sm text-zinc-200 placeholder:text-zinc-300 focus:outline-none focus:ring-1 focus:ring-white/[0.12] transition-all" />
+                <datalist id="edit-project-list">
+                  {projects.map((p) => <option key={p.id} value={p.name} />)}
+                </datalist>
+              </div>
+              <div>
+                <label className="block text-[12px] text-zinc-300 mb-1.5">כתובת התחברות</label>
+                <input name="loginUrl" defaultValue={editCred.loginUrl ?? ""} dir="ltr" className="w-full py-2.5 px-4 bg-white/[0.03] border border-white/[0.08] rounded-xl text-sm text-zinc-200 focus:outline-none focus:ring-1 focus:ring-white/[0.12] transition-all" />
+              </div>
+              <div>
+                <label className="block text-[12px] text-zinc-300 mb-1.5">שם משתמש</label>
+                <input name="username" defaultValue={editCred.username ?? ""} dir="ltr" className="w-full py-2.5 px-4 bg-white/[0.03] border border-white/[0.08] rounded-xl text-sm text-zinc-200 focus:outline-none focus:ring-1 focus:ring-white/[0.12] transition-all" />
+              </div>
+              <div>
+                <label className="block text-[12px] text-zinc-300 mb-1.5">סיסמה חדשה</label>
+                <input name="secret" type="password" placeholder="השאר ריק כדי לא לשנות" dir="ltr" className="w-full py-2.5 px-4 bg-white/[0.03] border border-white/[0.08] rounded-xl text-sm text-zinc-200 placeholder:text-zinc-300 focus:outline-none focus:ring-1 focus:ring-white/[0.12] transition-all" />
+              </div>
+              <div>
+                <label className="block text-[12px] text-zinc-300 mb-1.5">הערות</label>
+                <textarea name="notes" rows={2} defaultValue={editCred.notes ?? ""} className="w-full py-2.5 px-4 bg-white/[0.03] border border-white/[0.08] rounded-xl text-sm text-zinc-200 resize-none focus:outline-none focus:ring-1 focus:ring-white/[0.12] transition-all" />
+              </div>
+              <div className="flex gap-3">
+                <button type="submit" className="flex-1 py-2.5 bg-white text-zinc-900 font-medium text-[13px] rounded-xl hover:bg-zinc-100 transition-all">שמור שינויים</button>
+                <button type="button" onClick={() => setEditCred(null)} className="flex-1 py-2.5 bg-white/[0.05] text-zinc-300 font-medium text-[13px] rounded-xl border border-white/[0.1] hover:bg-white/[0.08] transition-all">ביטול</button>
+              </div>
+            </form>
           </div>
         </div>,
         document.body
