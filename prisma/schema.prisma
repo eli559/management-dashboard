@@ -41,6 +41,7 @@ model Project {
   updatedAt    DateTime @updatedAt
 
   events Event[]
+  errors ProjectError[]
 
   @@map("projects")
 }
@@ -81,4 +82,34 @@ model Notification {
   @@index([read])
   @@index([createdAt])
   @@map("notifications")
+}
+
+// ── Project Errors ──
+
+model ProjectError {
+  id         String   @id @default(cuid())
+  projectId  String
+  project    Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  message    String
+  stack      String?
+  page       String?
+  severity   String   @default("medium")
+  status     String   @default("new")
+  sessionId  String?
+  userAgent  String?
+  deviceType String?
+  deviceName String?
+  browser    String?
+  count      Int      @default(1)
+  fingerprint String?
+  metadata   String   @default("{}")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([projectId])
+  @@index([severity])
+  @@index([status])
+  @@index([createdAt])
+  @@index([fingerprint])
+  @@map("project_errors")
 }

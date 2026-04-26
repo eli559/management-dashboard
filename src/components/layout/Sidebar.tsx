@@ -8,12 +8,14 @@ import {
   BarChart3,
   Eye,
   Lightbulb,
+  Bug,
   UserCog,
   Puzzle,
   Settings,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { APP_NAME, ROUTES } from "@/lib/constants";
+import { ErrorBadge } from "./ErrorBadge";
 import type { NavItem } from "@/types/navigation";
 import type { LucideIcon } from "lucide-react";
 
@@ -23,6 +25,7 @@ const iconMap: Record<string, LucideIcon> = {
   BarChart3,
   Eye,
   Lightbulb,
+  Bug,
   UserCog,
   Puzzle,
 };
@@ -33,6 +36,7 @@ const navigationItems: NavItem[] = [
   { label: "דוחות", href: ROUTES.REPORTS, icon: "BarChart3" },
   { label: "מבקרים", href: ROUTES.VISITORS, icon: "Eye" },
   { label: "תובנות", href: ROUTES.INSIGHTS, icon: "Lightbulb" },
+  { label: "שגיאות", href: ROUTES.ERRORS, icon: "Bug" },
   { label: "צוות", href: ROUTES.TEAM, icon: "UserCog" },
   { label: "אינטגרציות", href: ROUTES.INTEGRATIONS, icon: "Puzzle" },
 ];
@@ -91,7 +95,8 @@ export function Sidebar() {
                   isActive ? "text-amber-400/80" : ""
                 )}
               />
-              <span>{item.label}</span>
+              <span className="flex-1">{item.label}</span>
+              {item.href === ROUTES.ERRORS && <ErrorBadge />}
             </Link>
           );
         })}

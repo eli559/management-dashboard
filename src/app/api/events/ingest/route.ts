@@ -4,6 +4,7 @@ import { getProjectByApiKey } from "@/lib/dal/projects";
 import { createEvent } from "@/lib/dal/events";
 import { isRateLimited } from "@/lib/rate-limit";
 import { checkNotificationRules } from "@/lib/notification-rules";
+import { createError } from "@/lib/dal/errors";
 
 // CORS: explicit allowlist, deny by default
 function getCorsHeaders(origin: string | null) {
@@ -118,6 +119,20 @@ export async function POST(request: NextRequest) {
       value: eventData.value ?? null,
       metadata: eventData.metadata ?? {},
     });
+
+    // ── Save error if js_error event ──
+    if (eventData.eventName === "js_error") {
+      const meta = (eventData.metadata ?? {}) as Record<string, unknown>;
+      createError({
+        projectId: project.id,
+        message: String(meta.message ?? "Unknown error").substring(0, 1000),
+        stack: meta.stack ? String(meta.stack).substring(0, 3000) : null,
+        page: eventData.page ?? null,
+        sessionId: eventData.sessionId ?? null,
+        userAgent: meta.ua ? String(meta.ua) : null,
+        isUnhandled: !!meta.unhandled,
+      }).catch(() => {});
+    }
 
     // ── Notifications (async, non-blocking) ──
     checkNotificationRules({
