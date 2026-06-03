@@ -4,10 +4,12 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
-import { getVisitorStats, getRecentSessions } from "@/lib/dal/visitors";
+import { AnimatedStat } from "@/components/ui/AnimatedStat";
+import { getVisitorStats, getRecentSessions, getEnrichedAnalytics } from "@/lib/dal/visitors";
 import { LiveRefresh } from "@/components/LiveRefresh";
 import { VisitorsFilter } from "@/components/visitors/VisitorsFilter";
 import { VisitorsTable } from "@/components/visitors/VisitorsTable";
+import { TrafficInsights } from "@/components/visitors/TrafficInsights";
 import { formatNumber } from "@/utils/formatters";
 import { prisma } from "@/lib/prisma";
 
@@ -23,14 +25,14 @@ export default async function VisitorsPage({ searchParams }: PageProps) {
   const projectFilter = params.project || undefined;
   const deviceFilter = params.device || undefined;
 
-  const [stats, sessions, allProjects] = await Promise.all([
-    getVisitorStats(),
-    getRecentSessions(200),
+  const [stats, sessions, allProjects, analytics] = await Promise.all([
+    getVisitorStats(projectFilter),
+    getRecentSessions(200, projectFilter),
     prisma.project.findMany({ select: { id: true, name: true, slug: true } }),
+    getEnrichedAnalytics(projectFilter),
   ]);
 
   let filtered = sessions;
-  if (projectFilter) filtered = filtered.filter((s) => s.projectSlug === allProjects.find((p) => p.id === projectFilter)?.slug);
   if (deviceFilter) filtered = filtered.filter((s) => s.deviceType === deviceFilter);
 
   const serialized = filtered.map((s) => ({
@@ -40,42 +42,47 @@ export default async function VisitorsPage({ searchParams }: PageProps) {
   }));
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       <LiveRefresh interval={30} />
 
-      <div className="animate-slide-up stagger-1 flex items-start justify-between gap-4">
+      <div className="animate-slide-up stagger-1 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 md:gap-4">
         <div>
-          <h1 className="text-[22px] font-bold text-white">מבקרים</h1>
-          <p className="text-zinc-300 mt-0.5 text-[14px]">כל מי שנכנס לאתרים שלך — בזמן אמת</p>
+          <h1 className="text-[clamp(1.2rem,3vw,1.375rem)] font-bold text-white tracking-tight">מבקרים ותובנות</h1>
+          <p className="text-zinc-300 mt-0.5 text-[clamp(0.75rem,2vw,0.875rem)]">מקורות תנועה, המרות ונתונים לפרסום</p>
         </div>
         <Suspense fallback={null}>
           <VisitorsFilter projects={allProjects} currentDays={days} currentProjectId={projectFilter} currentDevice={deviceFilter} />
         </Suspense>
       </div>
 
-      <div className="animate-slide-up stagger-2 grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="animate-slide-up stagger-2 grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4">
         <div className="surface-sm rounded-xl p-4">
           <div className="flex items-center gap-2 mb-2"><Users className="w-4 h-4 text-blue-400" /><span className="text-[11px] text-zinc-300">סה״כ מבקרים</span></div>
-          <p className="text-[24px] font-extrabold text-white">{formatNumber(stats.totalSessions)}</p>
+          <AnimatedStat value={formatNumber(stats.totalSessions)} />
         </div>
         <div className="surface-sm rounded-xl p-4">
           <div className="flex items-center gap-2 mb-2"><Calendar className="w-4 h-4 text-emerald-400" /><span className="text-[11px] text-zinc-300">היום</span></div>
-          <p className="text-[24px] font-extrabold text-white">{formatNumber(stats.todaySessions)}</p>
+          <AnimatedStat value={formatNumber(stats.todaySessions)} />
         </div>
         <div className="surface-sm rounded-xl p-4">
           <div className="flex items-center gap-2 mb-2"><TrendingUp className="w-4 h-4 text-violet-400" /><span className="text-[11px] text-zinc-300">השבוע</span></div>
-          <p className="text-[24px] font-extrabold text-white">{formatNumber(stats.thisWeekSessions)}</p>
+          <AnimatedStat value={formatNumber(stats.thisWeekSessions)} />
         </div>
         <div className="surface-sm rounded-xl p-4">
           <div className="flex items-center gap-2 mb-2"><Activity className="w-4 h-4 text-amber-400" /><span className="text-[11px] text-zinc-300">ממוצע פעולות</span></div>
-          <p className="text-[24px] font-extrabold text-white">{stats.avgEventsPerSession}</p>
+          <AnimatedStat value={String(stats.avgEventsPerSession)} />
         </div>
       </div>
 
+      {/* ── Traffic Insights ── */}
+      <div className="animate-slide-up stagger-3">
+        <TrafficInsights analytics={analytics} />
+      </div>
+
       {(stats.sessionsByProject.length > 0 || stats.topReferrers.length > 0) && (
-        <div className="animate-slide-up stagger-3 grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <div className="animate-slide-up stagger-4 grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-5">
           {stats.sessionsByProject.length > 0 && (
-            <div className="surface rounded-2xl p-6">
+            <div className="surface rounded-2xl p-4 md:p-6">
               <h3 className="text-[15px] font-bold text-zinc-200 mb-4">מבקרים לפי פרויקט</h3>
               <div className="space-y-2">
                 {stats.sessionsByProject.map((p) => (
@@ -89,8 +96,8 @@ export default async function VisitorsPage({ searchParams }: PageProps) {
             </div>
           )}
           {stats.topReferrers.length > 0 && (
-            <div className="surface rounded-2xl p-6">
-              <h3 className="text-[15px] font-bold text-zinc-200 mb-4">מקורות הגעה</h3>
+            <div className="surface rounded-2xl p-4 md:p-6">
+              <h3 className="text-[15px] font-bold text-zinc-200 mb-4">דומיינים מפנים</h3>
               <div className="space-y-2">
                 {stats.topReferrers.map((r) => (
                   <div key={r.referrer} className="flex items-center gap-3 p-2">
@@ -105,7 +112,7 @@ export default async function VisitorsPage({ searchParams }: PageProps) {
         </div>
       )}
 
-      <div className="animate-slide-up stagger-4">
+      <div className="animate-slide-up stagger-5">
         <h2 className="text-[16px] font-bold text-zinc-200 mb-4">מבקרים אחרונים</h2>
         <VisitorsTable sessions={serialized} totalCount={stats.totalSessions} />
       </div>
