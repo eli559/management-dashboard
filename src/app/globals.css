@@ -30,7 +30,9 @@ body {
   outline-offset: 2px;
 }
 
-/* ── Animations ── */
+/* ══════════════════════════════════════════
+   Animations — Core
+   ══════════════════════════════════════════ */
 
 @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
 
@@ -49,6 +51,75 @@ body {
   to { transform: scaleY(1); }
 }
 
+@keyframes shimmer {
+  0% { background-position: 100% 50%; }
+  50% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Drawer / Bottom Sheet ── */
+@keyframes drawer-up {
+  from { opacity: 0; transform: translateY(100%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes drawer-backdrop {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ── Count up pulse ── */
+@keyframes count-in {
+  0% { opacity: 0; transform: scale(0.7); }
+  60% { opacity: 1; transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+
+/* ── Glow pulse for active KPI ── */
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.7; }
+}
+
+/* ── Skeleton shimmer ── */
+@keyframes skeleton-wave {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* ── Nav indicator dot ── */
+@keyframes nav-dot {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* ── Subtle float for icons ── */
+@keyframes icon-bounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-2px) scale(1.08); }
+}
+
+/* ── SVG line draw ── */
+@keyframes line-draw {
+  from { stroke-dashoffset: var(--line-length, 2000); }
+  to { stroke-dashoffset: 0; }
+}
+
+/* ── Area fade in ── */
+@keyframes area-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ══════════════════════════════════════════
+   Animation Utilities
+   ══════════════════════════════════════════ */
+
 .animate-slide-up { animation: slide-up 0.55s cubic-bezier(0.16,1,0.3,1) both; }
 .stagger-1 { animation-delay: 0ms; }
 .stagger-2 { animation-delay: 60ms; }
@@ -60,16 +131,97 @@ body {
 
 .animate-bar-rise { animation: bar-rise 0.8s cubic-bezier(0.16,1,0.3,1) both; transform-origin: bottom; }
 .animate-page { animation: slide-up 0.45s cubic-bezier(0.16,1,0.3,1) both; }
+.animate-drawer-up { animation: drawer-up 0.35s cubic-bezier(0.32,0.72,0,1) both; }
+.animate-drawer-backdrop { animation: drawer-backdrop 0.25s ease-out both; }
+.animate-count-in { animation: count-in 0.6s cubic-bezier(0.16,1,0.3,1) both; }
+.animate-glow-pulse { animation: glow-pulse 3s ease-in-out infinite; }
+.animate-nav-dot { animation: nav-dot 0.3s cubic-bezier(0.34,1.56,0.64,1) both; }
 
-@keyframes slide-down {
-  from { opacity: 0; transform: translateY(-12px); }
-  to { opacity: 1; transform: translateY(0); }
+/* Mobile: faster animations, limited glow cycles */
+@media (max-width: 767px) {
+  .animate-slide-up { animation-duration: 0.4s; }
+  .animate-bar-rise { animation-duration: 0.6s; }
+  .animate-page { animation-duration: 0.35s; }
+  .animate-glow-pulse { animation-iteration-count: 3; }
+  .stagger-2 { animation-delay: 40ms; }
+  .stagger-3 { animation-delay: 80ms; }
+  .stagger-4 { animation-delay: 120ms; }
+  .stagger-5 { animation-delay: 160ms; }
+  .stagger-6 { animation-delay: 200ms; }
+  .stagger-7 { animation-delay: 240ms; }
 }
 
-@keyframes shimmer {
-  0% { background-position: 100% 50%; }
-  50% { background-position: 0% 50%; }
-  100% { background-position: 100% 50%; }
+/* Minimum touch target */
+@media (pointer: coarse) {
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  /* Exceptions for inline/icon buttons */
+  .inline-btn { min-height: auto; min-width: auto; }
+}
+
+/* ══════════════════════════════════════════
+   Mobile touch interactions
+   ══════════════════════════════════════════ */
+
+/* Tap feedback — scale down on press */
+.tap-scale {
+  transition: transform 0.15s cubic-bezier(0.16,1,0.3,1), opacity 0.15s ease;
+}
+.tap-scale:active {
+  transform: scale(0.96);
+  opacity: 0.85;
+}
+
+/* Card press — subtle sink */
+.card-press {
+  transition: transform 0.2s cubic-bezier(0.16,1,0.3,1), box-shadow 0.2s ease;
+}
+.card-press:active {
+  transform: scale(0.985) translateY(1px);
+}
+
+/* Button press glow */
+.btn-glow {
+  position: relative;
+  overflow: hidden;
+}
+.btn-glow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.12) 0%, transparent 70%);
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.btn-glow:active::after {
+  opacity: 1;
+}
+
+/* ══════════════════════════════════════════
+   Skeleton Loader
+   ══════════════════════════════════════════ */
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255,255,255,0.04);
+  border-radius: 8px;
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255,255,255,0.06) 50%,
+    transparent 100%
+  );
+  animation: skeleton-wave 1.8s ease-in-out infinite;
 }
 
 /* ══════════════════════════════════════════
@@ -97,6 +249,17 @@ body {
     0 12px 48px -8px rgba(0,0,0,0.7),
     0 0 40px -12px rgba(212,175,55,0.06);
   transform: translateY(-1px);
+}
+
+/* Mobile: disable hover lift, add press effect */
+@media (max-width: 767px) {
+  .surface:hover {
+    transform: none;
+  }
+  .surface:active {
+    transform: scale(0.99);
+    border-color: rgba(255,255,255,0.22);
+  }
 }
 
 .surface-sm {
@@ -141,4 +304,94 @@ body {
     0 0 0 1px rgba(255,255,255,0.08),
     inset 0 1px 0 0 rgba(255,255,255,0.08),
     0 8px 32px -8px rgba(0,0,0,0.6);
+}
+
+/* ── Gradient border buttons ── */
+.gradient-border {
+  position: relative;
+}
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(14,165,233,0.35), rgba(139,92,246,0.25), rgba(14,165,233,0.2));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+.gradient-border-active::before {
+  background: linear-gradient(135deg, rgba(14,165,233,0.6), rgba(139,92,246,0.45), rgba(14,165,233,0.35));
+  padding: 1.5px;
+}
+
+/* ── Styled select dropdowns ── */
+select.filter-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left 10px center;
+  padding-inline-start: 14px;
+  padding-inline-end: 32px;
+}
+
+/* ── Mobile nav glass bar ── */
+.nav-glass {
+  background: rgba(8,8,14,0.92);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  box-shadow:
+    0 -4px 30px -4px rgba(0,0,0,0.5),
+    inset 0 1px 0 0 rgba(255,255,255,0.06);
+}
+
+/* ── Gradient accent line ── */
+.gradient-line {
+  background: linear-gradient(90deg, transparent, rgba(14,165,233,0.4), rgba(139,92,246,0.3), transparent);
+}
+
+/* ── Mobile safe area ── */
+@media (max-width: 767px) {
+  .mobile-main-padding {
+    padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px) + 12px);
+  }
+
+  /* Lighter backdrop-filter on mobile for better performance */
+  .nav-glass {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: rgba(8,8,14,0.96);
+  }
+  .glass-strong {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: rgba(12,12,16,0.96);
+  }
+  .glass {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background: rgba(12,12,16,0.94);
+  }
+}
+
+/* ── Reduced motion — respect user preference ── */
+@media (prefers-reduced-motion: reduce) {
+  .animate-slide-up,
+  .animate-page,
+  .animate-drawer-up,
+  .animate-drawer-backdrop,
+  .animate-count-in,
+  .animate-bar-rise,
+  .animate-nav-dot {
+    animation: none !important;
+  }
+  .animate-glow-pulse {
+    animation: none !important;
+  }
+  .tap-scale:active,
+  .card-press:active {
+    transform: none !important;
+  }
 }

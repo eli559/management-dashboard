@@ -43,23 +43,41 @@ export function PaginatedEventsTable({ events, totalEvents }: Props) {
 
   if (events.length === 0) {
     return (
-      <div className="surface rounded-2xl p-12 text-center">
-        <p className="text-sm text-zinc-300">אין אירועים עדיין</p>
+      <div className="surface rounded-2xl p-10 md:p-12 text-center">
+        <p className="text-[13px] text-zinc-400">אין אירועים עדיין</p>
       </div>
     );
   }
 
   return (
     <div className="space-y-3">
-      <div className="surface rounded-2xl overflow-hidden">
+      {/* ── Mobile cards ── */}
+      <div className="md:hidden space-y-2">
+        {visible.map((event) => {
+          const desc = enrichEventDescription(event.eventName, event.metadata);
+          return (
+            <div key={event.id} className="surface rounded-xl p-3.5 card-press">
+              <div className="flex items-center justify-between mb-1.5">
+                <EventBadge eventName={event.eventName} />
+                <span className="text-[10px] text-zinc-400">{timeAgo(event.createdAt)}</span>
+              </div>
+              {desc && <p className="text-[12px] text-zinc-300 truncate mb-1">{desc}</p>}
+              {event.page && <p className="text-[11px] text-zinc-400 truncate">{getPageLabel(event.page)}</p>}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* ── Desktop table ── */}
+      <div className="hidden md:block surface rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="border-b border-white/[0.05]">
-                <th className="text-start text-[11px] font-semibold text-zinc-300 uppercase tracking-wider px-6 py-3.5">אירוע</th>
-                <th className="text-start text-[11px] font-semibold text-zinc-300 uppercase tracking-wider px-6 py-3.5">פרטים</th>
-                <th className="text-start text-[11px] font-semibold text-zinc-300 uppercase tracking-wider px-6 py-3.5">עמוד</th>
-                <th className="text-start text-[11px] font-semibold text-zinc-300 uppercase tracking-wider px-6 py-3.5">זמן</th>
+                <th className="text-start text-[11px] font-semibold text-zinc-400 uppercase tracking-wider px-5 py-3">אירוע</th>
+                <th className="text-start text-[11px] font-semibold text-zinc-400 uppercase tracking-wider px-5 py-3">פרטים</th>
+                <th className="text-start text-[11px] font-semibold text-zinc-400 uppercase tracking-wider px-5 py-3">עמוד</th>
+                <th className="text-start text-[11px] font-semibold text-zinc-400 uppercase tracking-wider px-5 py-3">זמן</th>
               </tr>
             </thead>
             <tbody>
@@ -71,14 +89,14 @@ export function PaginatedEventsTable({ events, totalEvents }: Props) {
                     idx < visible.length - 1 && "border-b border-white/[0.03]"
                   )}
                 >
-                  <td className="px-6 py-3.5"><EventBadge eventName={event.eventName} /></td>
-                  <td className="px-6 py-3.5">
-                    <span className="text-[12px] text-zinc-200 block max-w-[250px] truncate">
+                  <td className="px-5 py-3"><EventBadge eventName={event.eventName} /></td>
+                  <td className="px-5 py-3">
+                    <span className="text-[12px] text-zinc-300 block max-w-[250px] truncate">
                       {enrichEventDescription(event.eventName, event.metadata) || "—"}
                     </span>
                   </td>
-                  <td className="px-6 py-3.5"><span className="text-[12px] text-zinc-300 truncate max-w-[200px] block">{getPageLabel(event.page)}</span></td>
-                  <td className="px-6 py-3.5"><span className="text-[11px] text-zinc-300 whitespace-nowrap">{timeAgo(event.createdAt)}</span></td>
+                  <td className="px-5 py-3"><span className="text-[12px] text-zinc-400 truncate max-w-[200px] block">{getPageLabel(event.page)}</span></td>
+                  <td className="px-5 py-3"><span className="text-[11px] text-zinc-400 whitespace-nowrap">{timeAgo(event.createdAt)}</span></td>
                 </tr>
               ))}
             </tbody>
@@ -86,24 +104,17 @@ export function PaginatedEventsTable({ events, totalEvents }: Props) {
         </div>
       </div>
 
-      {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-3">
-          <button
-            onClick={() => setPage(Math.max(0, page - 1))}
-            disabled={page === 0}
-            className="p-2 rounded-lg bg-white/[0.04] border border-white/[0.08] text-zinc-300 hover:bg-white/[0.08] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-          >
+          <button onClick={() => setPage(Math.max(0, page - 1))} disabled={page === 0}
+            className="p-2 rounded-lg bg-white/[0.04] border border-white/[0.08] text-zinc-300 hover:bg-white/[0.08] disabled:opacity-30 transition-all tap-scale">
             <ChevronRight className="w-4 h-4" />
           </button>
-          <span className="text-[13px] text-zinc-300 tabular-nums">
+          <span className="text-[13px] text-zinc-400 tabular-nums">
             {start + 1}–{Math.min(start + PAGE_SIZE, events.length)} מתוך {totalEvents.toLocaleString("he-IL")}
           </span>
-          <button
-            onClick={() => setPage(Math.min(totalPages - 1, page + 1))}
-            disabled={page >= totalPages - 1}
-            className="p-2 rounded-lg bg-white/[0.04] border border-white/[0.08] text-zinc-300 hover:bg-white/[0.08] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-          >
+          <button onClick={() => setPage(Math.min(totalPages - 1, page + 1))} disabled={page >= totalPages - 1}
+            className="p-2 rounded-lg bg-white/[0.04] border border-white/[0.08] text-zinc-300 hover:bg-white/[0.08] disabled:opacity-30 transition-all tap-scale">
             <ChevronLeft className="w-4 h-4" />
           </button>
         </div>

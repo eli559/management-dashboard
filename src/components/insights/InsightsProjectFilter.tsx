@@ -17,7 +17,7 @@ export function InsightsProjectFilter({ projects, currentProjectId }: Props) {
         const val = e.target.value;
         router.push(val ? `/insights?project=${val}` : "/insights");
       }}
-      className="px-3 py-2 bg-white/[0.04] border border-white/[0.1] rounded-lg text-[13px] text-zinc-200 focus:outline-none focus:ring-1 focus:ring-white/[0.15] cursor-pointer"
+      className="px-3 py-2.5 bg-white/[0.04] border border-white/[0.1] rounded-xl text-[13px] text-zinc-200 focus:outline-none focus:ring-1 focus:ring-sky-500/30 cursor-pointer tap-scale"
     >
       <option value="">כל הפרויקטים</option>
       {projects.map((p) => (

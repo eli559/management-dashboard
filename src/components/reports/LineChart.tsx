@@ -27,9 +27,9 @@ export function LineChart({ title, subtitle, data, color = "blue", className, sh
 
   if (!hasData) {
     return (
-      <div className={cn("surface rounded-2xl p-6 overflow-hidden relative", className)}>
-        <h3 className="text-[15px] font-bold text-zinc-200 mb-4">{title}</h3>
-        <div className="flex items-center justify-center h-40 text-[13px] text-zinc-300">אין נתונים</div>
+      <div className={cn("surface rounded-2xl p-4 md:p-6 overflow-hidden relative", className)}>
+        <h3 className="text-[14px] md:text-[15px] font-bold text-zinc-200 mb-4">{title}</h3>
+        <div className="flex items-center justify-center h-32 md:h-40 text-[13px] text-zinc-400">אין נתונים</div>
       </div>
     );
   }
@@ -48,31 +48,44 @@ export function LineChart({ title, subtitle, data, color = "blue", className, sh
   const linePath = points.map((p, i) => (i === 0 ? `M${p.x},${p.y}` : `L${p.x},${p.y}`)).join(" ");
   const areaPath = `${linePath} L${w - padX},${h} L${padX},${h} Z`;
 
-  return (
-    <div className={cn("surface rounded-2xl p-6 overflow-hidden relative", className)}>
-      <h3 className="text-[15px] font-bold text-zinc-200 mb-0.5">{title}</h3>
-      {subtitle && <p className="text-[12px] text-zinc-300 mb-4">{subtitle}</p>}
-      {!subtitle && <div className="mb-4" />}
+  // Pick ~5 evenly spaced labels, always include first and last
+  const labelCount = 5;
+  const step = Math.max(Math.floor(data.length / (labelCount - 1)), 1);
+  const pickedLabels: { label: string; idx: number }[] = [];
+  for (let i = 0; i < data.length; i += step) {
+    pickedLabels.push({ label: data[i].label, idx: i });
+  }
+  if (pickedLabels.length > 0 && pickedLabels[pickedLabels.length - 1].idx !== data.length - 1) {
+    pickedLabels.push({ label: data[data.length - 1].label, idx: data.length - 1 });
+  }
 
-      <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-40" preserveAspectRatio="none">
+  return (
+    <div className={cn("surface rounded-2xl p-4 md:p-6 overflow-hidden relative", className)}>
+      <h3 className="text-[14px] md:text-[15px] font-bold text-zinc-200 mb-0.5">{title}</h3>
+      {subtitle && <p className="text-[11px] md:text-[12px] text-zinc-400 mb-3 md:mb-4">{subtitle}</p>}
+      {!subtitle && <div className="mb-3 md:mb-4" />}
+
+      <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-32 md:h-40" preserveAspectRatio="none">
         <defs>
           <linearGradient id={`lg-${color}`} x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor={`rgba(${c.fill},0.25)`} />
             <stop offset="100%" stopColor={`rgba(${c.fill},0)`} />
           </linearGradient>
         </defs>
-        {showArea && <path d={areaPath} fill={`url(#lg-${color})`} />}
-        <path d={linePath} fill="none" stroke={c.stroke} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.8" />
-        {/* Dots on hover points */}
+        {showArea && <path d={areaPath} fill={`url(#lg-${color})`} style={{ animation: "area-fade 1.2s ease-out 1.4s both" }} />}
+        <path
+          d={linePath} fill="none" stroke={c.stroke} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.8"
+          style={{ strokeDasharray: 2000, strokeDashoffset: 2000, animation: "line-draw 2s cubic-bezier(0.25,0.46,0.45,0.94) 0.3s both" } as React.CSSProperties}
+        />
         {points.filter((_, i) => i % Math.max(Math.floor(data.length / 8), 1) === 0).map((p, i) => (
           <circle key={i} cx={p.x} cy={p.y} r="3" fill={c.stroke} opacity="0.6" />
         ))}
       </svg>
 
       {/* X-axis labels */}
-      <div className="flex justify-between mt-1.5 px-0.5">
-        {data.filter((_, i) => i % Math.max(Math.floor(data.length / 6), 1) === 0).map((d, i) => (
-          <span key={i} className="text-[10px] text-zinc-400">{d.label}</span>
+      <div className="flex justify-between mt-1.5 px-0.5" dir="ltr">
+        {pickedLabels.map((p, i) => (
+          <span key={i} className="text-[9px] md:text-[10px] text-zinc-400">{p.label}</span>
         ))}
       </div>
     </div>

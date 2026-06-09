@@ -35,12 +35,12 @@ function PasswordInput({ label, value, onChange }: { label: string; value: strin
           onChange={(e) => onChange(e.target.value)}
           required
           dir="ltr"
-          className="w-full py-2.5 ps-11 pe-11 bg-white/[0.03] border border-white/[0.08] rounded-xl text-sm text-zinc-200 placeholder:text-zinc-300 focus:outline-none focus:ring-1 focus:ring-white/[0.12] transition-all"
+          className="w-full py-2.5 ps-11 pe-14 bg-white/[0.03] border border-white/[0.08] rounded-xl text-sm text-zinc-200 placeholder:text-zinc-500 focus:outline-none focus:ring-1 focus:ring-sky-500/30 transition-all"
         />
         <button
           type="button"
           onClick={() => setShow(!show)}
-          className="absolute end-3 top-1/2 -translate-y-1/2 p-1 rounded hover:bg-white/[0.06] text-zinc-300 transition-colors"
+          className="absolute end-3 top-1/2 -translate-y-1/2 p-2 rounded-lg hover:bg-white/[0.06] text-zinc-400 transition-colors"
         >
           {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
         </button>
@@ -95,7 +95,7 @@ function PasswordSection() {
 
       {/* Form — collapsible */}
       {open && (
-        <div className="px-6 pb-6 border-t border-white/[0.05] pt-4">
+        <div className="px-4 md:px-6 pb-4 md:pb-6 border-t border-white/[0.05] pt-4">
           <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
             <PasswordInput label="סיסמה נוכחית" value={current} onChange={setCurrent} />
             <PasswordInput label="סיסמה חדשה" value={newPass} onChange={setNewPass} />
@@ -109,7 +109,7 @@ function PasswordSection() {
             )}
 
             <button type="submit" disabled={status === "loading"}
-              className="px-6 py-2.5 bg-white text-zinc-900 font-medium text-[13px] rounded-xl hover:bg-zinc-100 disabled:opacity-50 transition-all">
+              className="px-6 py-2.5 bg-gradient-to-l from-sky-500 to-violet-500 text-white font-medium text-[13px] rounded-xl hover:from-sky-400 hover:to-violet-400 shadow-[0_0_20px_-4px_rgba(14,165,233,0.3)] disabled:opacity-50 transition-all">
               {status === "loading" ? "משנה..." : "שנה סיסמה"}
             </button>
           </form>
@@ -159,7 +159,7 @@ function ExportSection({ projects }: { projects: Project[] }) {
       </button>
 
       {open && (
-        <div className="px-6 pb-6 border-t border-white/[0.05] pt-4">
+        <div className="px-4 md:px-6 pb-4 md:pb-6 border-t border-white/[0.05] pt-4">
           <p className="text-[13px] text-zinc-300 mb-4">ייצוא אירועים לקובץ CSV (תואם אקסל). עד 10,000 אירועים.</p>
 
           <div className="space-y-2">

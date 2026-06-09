@@ -150,3 +150,37 @@ model CredentialAuditLog {
   @@index([createdAt])
   @@map("credential_audit_logs")
 }
+
+// ── Leads (contact-form submissions from landing pages) ──
+
+model Lead {
+  id        String   @id @default(cuid())
+  projectId String?
+  name      String
+  phone     String
+  business  String?
+  budget    String?
+  services  String?
+  source    String?  // utm_source / referrer summary
+  page      String?
+  status    String   @default("new") // new, contacted, closed
+  metadata  String   @default("{}")  // full attribution + meta, JSON
+  createdAt DateTime @default(now())
+
+  @@index([status])
+  @@index([createdAt])
+  @@map("leads")
+}
+
+// ── Web Push subscriptions (phone notifications) ──
+
+model PushSubscription {
+  id        String   @id @default(cuid())
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@map("push_subscriptions")
+}

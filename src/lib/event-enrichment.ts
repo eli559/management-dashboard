@@ -74,6 +74,45 @@ export function enrichEventDescription(eventName: string, metadata: string | nul
         return msg ? String(msg).substring(0, 60) : "";
       }
 
+      case "water_update": {
+        const liters = Number(meta.glasses ?? meta.liters ?? meta.value);
+        return liters ? `${liters} ליטר` : "";
+      }
+
+      case "sleep_update": {
+        const hours = Number(meta.hours ?? meta.value);
+        return hours ? `${hours} שעות` : "";
+      }
+
+      case "meal_add":
+      case "quick_add": {
+        const name = meta.name ?? meta.meal_name ?? meta.food;
+        const cal = meta.calories;
+        if (name && cal) return `${name} (${cal} קל׳)`;
+        if (name) return String(name);
+        if (cal) return `${cal} קלוריות`;
+        return "";
+      }
+
+      case "meal_delete": {
+        const mealName = meta.name ?? meta.meal_name;
+        return mealName ? `${mealName}` : "";
+      }
+
+      case "weight_update": {
+        const kg = meta.weight ?? meta.value;
+        return kg ? `${kg} ק״ג` : "";
+      }
+
+      case "trainee_login":
+      case "trainer_login": {
+        const userName = meta.name ?? meta.user;
+        return userName ? String(userName) : "";
+      }
+
+      case "chat_message":
+        return meta.direction === "sent" ? "נשלחה הודעה" : "התקבלה הודעה";
+
       default:
         return "";
     }

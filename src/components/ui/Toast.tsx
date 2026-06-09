@@ -91,7 +91,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     <ToastContext.Provider value={value}>
       {children}
       {mounted && createPortal(
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[999999] flex flex-col items-center gap-2 pointer-events-none" style={{ minWidth: "320px" }}>
+        <div className="fixed bottom-20 md:top-4 md:bottom-auto left-1/2 -translate-x-1/2 z-[999999] flex flex-col items-center gap-2 pointer-events-none w-[calc(100%-2rem)] md:w-auto" style={{ minWidth: "280px", maxWidth: "400px" }}>
           {toasts.map((toast) => {
             const Icon = ICONS[toast.type];
             return (

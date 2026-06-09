@@ -78,11 +78,11 @@ export function NotificationBell() {
       {/* Bell button */}
       <button
         onClick={() => setOpen(!open)}
-        className="relative p-2 rounded-lg hover:bg-white/[0.06] transition-colors duration-200"
+        className="relative p-2.5 rounded-xl hover:bg-white/[0.06] transition-all duration-200 tap-scale"
       >
-        <Bell className={cn("w-[18px] h-[18px]", count > 0 ? "text-white" : "text-zinc-300")} />
+        <Bell className={cn("w-[19px] h-[19px]", count > 0 ? "text-sky-300" : "text-zinc-400")} />
         {count > 0 && (
-          <span className="absolute -top-0.5 -end-0.5 min-w-[18px] h-[18px] bg-amber-400 text-[9px] font-bold text-zinc-950 rounded-full flex items-center justify-center px-1 shadow-[0_0_10px_rgba(245,158,11,0.5)] animate-[fade-in_200ms_ease-out]">
+          <span className="absolute -top-0.5 -end-0.5 min-w-[18px] h-[18px] bg-gradient-to-r from-sky-500 to-violet-500 text-[9px] font-bold text-white rounded-full flex items-center justify-center px-1 shadow-[0_0_10px_rgba(14,165,233,0.5)] animate-[fade-in_200ms_ease-out]">
             {count > 9 ? "9+" : count}
           </span>
         )}

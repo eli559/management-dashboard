@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   KeyRound, Plus, Eye, EyeOff, Copy, Check, Trash2,
-  Edit, X, Shield, ExternalLink, Search,
+  Edit, X, Shield, ExternalLink, Search, Lock,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { createPortal } from "react-dom";
@@ -37,6 +37,24 @@ const TYPE_OPTIONS = [
   { value: "db", label: "מסד נתונים" }, { value: "ftp", label: "FTP" },
   { value: "social", label: "רשת חברתית" }, { value: "other", label: "אחר" },
 ];
+
+function VaultPasswordInput({ name, required, placeholder }: { name: string; required?: boolean; placeholder?: string }) {
+  const [show, setShow] = useState(false);
+  return (
+    <div className="relative">
+      <Lock className="absolute start-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 pointer-events-none" />
+      <input
+        name={name} type={show ? "text" : "password"} required={required}
+        placeholder={placeholder} dir="ltr"
+        className="w-full py-2.5 ps-11 pe-14 bg-white/[0.03] border border-white/[0.08] rounded-xl text-sm text-zinc-200 placeholder:text-zinc-500 focus:outline-none focus:ring-1 focus:ring-sky-500/30 transition-all"
+      />
+      <button type="button" onClick={() => setShow(!show)}
+        className="absolute end-3 top-1/2 -translate-y-1/2 p-2 rounded-lg hover:bg-white/[0.06] text-zinc-400 transition-colors">
+        {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+      </button>
+    </div>
+  );
+}
 
 function timeAgo(d: string) {
   const mins = Math.floor((Date.now() - new Date(d).getTime()) / 60000);
@@ -147,19 +165,19 @@ export function VaultClient({ credentials, projects }: { credentials: Credential
   return (
     <div className="space-y-5">
       {/* Actions bar */}
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="relative flex-1 max-w-xs">
+      <div className="flex flex-wrap items-center gap-2 md:gap-3">
+        <div className="relative flex-1 min-w-[140px] max-w-xs">
           <Search className="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-300" />
           <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="חיפוש..."
             className="w-full ps-9 pe-4 py-2 bg-white/[0.04] border border-white/[0.1] rounded-lg text-[13px] text-zinc-200 placeholder:text-zinc-300 focus:outline-none focus:ring-1 focus:ring-white/[0.15] transition-all" />
         </div>
         <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}
-          className="px-3 py-2 bg-white/[0.04] border border-white/[0.1] rounded-lg text-[12px] text-zinc-200 cursor-pointer">
+          className="filter-select px-3 py-2.5 bg-white/[0.04] border border-white/[0.1] rounded-xl text-[12px] text-zinc-200 cursor-pointer focus:outline-none focus:ring-1 focus:ring-sky-500/30 transition-all">
           <option value="">כל הסוגים</option>
           {TYPE_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
         <button onClick={() => setShowForm(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-white text-zinc-900 font-medium text-[13px] rounded-lg hover:bg-zinc-100 transition-all">
+          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-l from-sky-500 to-violet-500 text-white font-medium text-[13px] rounded-lg hover:from-sky-400 hover:to-violet-400 shadow-[0_0_20px_-4px_rgba(14,165,233,0.3)] transition-all">
           <Plus className="w-4 h-4" /><span>גישה חדשה</span>
         </button>
       </div>
@@ -168,9 +186,9 @@ export function VaultClient({ credentials, projects }: { credentials: Credential
       {filtered.length > 0 ? (
         <div className="space-y-2">
           {filtered.map((cred) => (
-            <div key={cred.id} className="surface rounded-2xl p-5">
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-xl bg-amber-500/[0.08] flex items-center justify-center flex-shrink-0">
+            <div key={cred.id} className="surface rounded-2xl p-4 md:p-5">
+              <div className="flex items-start gap-3 md:gap-4">
+                <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-amber-500/[0.08] flex items-center justify-center flex-shrink-0 hidden sm:flex">
                   <KeyRound className="w-5 h-5 text-amber-400" />
                 </div>
                 <div className="flex-1 min-w-0">
@@ -193,7 +211,7 @@ export function VaultClient({ credentials, projects }: { credentials: Credential
                 </div>
 
                 {/* Actions */}
-                <div className="flex items-center gap-1 flex-shrink-0">
+                <div className="flex items-center gap-0.5 md:gap-1 flex-shrink-0">
                   {cred.loginUrl && (
                     <a href={cred.loginUrl} target="_blank" rel="noopener noreferrer" title="פתח עמוד התחברות"
                       onClick={() => { if (cred.username) navigator.clipboard.writeText(cred.username); }}
@@ -271,13 +289,13 @@ export function VaultClient({ credentials, projects }: { credentials: Credential
               </div>
               <div>
                 <label className="block text-[12px] text-zinc-300 mb-1.5">סיסמה / מפתח *</label>
-                <input name="secret" type="password" required dir="ltr" className="w-full py-2.5 px-4 bg-white/[0.03] border border-white/[0.08] rounded-xl text-sm text-zinc-200 focus:outline-none focus:ring-1 focus:ring-white/[0.12] transition-all" />
+                <VaultPasswordInput name="secret" required />
               </div>
               <div>
                 <label className="block text-[12px] text-zinc-300 mb-1.5">הערות</label>
                 <textarea name="notes" rows={2} className="w-full py-2.5 px-4 bg-white/[0.03] border border-white/[0.08] rounded-xl text-sm text-zinc-200 resize-none focus:outline-none focus:ring-1 focus:ring-white/[0.12] transition-all" />
               </div>
-              <button type="submit" className="w-full py-2.5 bg-white text-zinc-900 font-medium text-[13px] rounded-xl hover:bg-zinc-100 transition-all">שמור בכספת</button>
+              <button type="submit" className="w-full py-2.5 bg-gradient-to-l from-sky-500 to-violet-500 text-white font-medium text-[13px] rounded-xl hover:from-sky-400 hover:to-violet-400 shadow-[0_0_20px_-4px_rgba(14,165,233,0.3)] transition-all">שמור בכספת</button>
             </form>
           </div>
         </div>,
@@ -347,14 +365,14 @@ export function VaultClient({ credentials, projects }: { credentials: Credential
               </div>
               <div>
                 <label className="block text-[12px] text-zinc-300 mb-1.5">סיסמה חדשה</label>
-                <input name="secret" type="password" placeholder="השאר ריק כדי לא לשנות" dir="ltr" className="w-full py-2.5 px-4 bg-white/[0.03] border border-white/[0.08] rounded-xl text-sm text-zinc-200 placeholder:text-zinc-300 focus:outline-none focus:ring-1 focus:ring-white/[0.12] transition-all" />
+                <VaultPasswordInput name="secret" placeholder="השאר ריק כדי לא לשנות" />
               </div>
               <div>
                 <label className="block text-[12px] text-zinc-300 mb-1.5">הערות</label>
                 <textarea name="notes" rows={2} defaultValue={editCred.notes ?? ""} className="w-full py-2.5 px-4 bg-white/[0.03] border border-white/[0.08] rounded-xl text-sm text-zinc-200 resize-none focus:outline-none focus:ring-1 focus:ring-white/[0.12] transition-all" />
               </div>
               <div className="flex gap-3">
-                <button type="submit" className="flex-1 py-2.5 bg-white text-zinc-900 font-medium text-[13px] rounded-xl hover:bg-zinc-100 transition-all">שמור שינויים</button>
+                <button type="submit" className="flex-1 py-2.5 bg-gradient-to-l from-sky-500 to-violet-500 text-white font-medium text-[13px] rounded-xl hover:from-sky-400 hover:to-violet-400 shadow-[0_0_20px_-4px_rgba(14,165,233,0.3)] transition-all">שמור שינויים</button>
                 <button type="button" onClick={() => setEditCred(null)} className="flex-1 py-2.5 bg-white/[0.05] text-zinc-300 font-medium text-[13px] rounded-xl border border-white/[0.1] hover:bg-white/[0.08] transition-all">ביטול</button>
               </div>
             </form>

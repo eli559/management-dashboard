@@ -47,7 +47,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     ]);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-5 md:space-y-8">
       <Link
         href="/projects"
         className="inline-flex items-center gap-2 text-sm text-zinc-300 hover:text-zinc-300 transition-colors"
@@ -57,11 +57,11 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       </Link>
 
       {/* כותרת */}
-      <div className="surface rounded-2xl p-8 relative overflow-hidden">
-        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 relative z-10">
+      <div className="surface rounded-2xl p-4 md:p-8 relative overflow-hidden">
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 md:gap-6 relative z-10">
           <div className="space-y-4">
             <div className="flex items-center gap-3 flex-wrap">
-              <h1 className="text-2xl font-bold text-white">{project.name}</h1>
+              <h1 className="text-xl md:text-2xl font-bold text-white">{project.name}</h1>
               <span
                 className={cn(
                   "inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold border",
@@ -101,7 +101,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             </div>
           </div>
 
-          <div className="lg:min-w-[380px]">
+          <div className="w-full lg:min-w-[380px]">
             <div className="flex items-center gap-2 mb-2">
               <Key className="w-4 h-4 text-zinc-300" />
               <span className="text-sm font-medium text-zinc-300">
@@ -127,7 +127,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
       {/* חלוקה + עמודים */}
       {(eventBreakdown.length > 0 || topPages.length > 0) && (
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-5">
           <ProjectEventBreakdown
             data={eventBreakdown}
             totalEvents={stats.totalEvents}

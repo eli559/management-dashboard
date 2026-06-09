@@ -46,6 +46,14 @@ const PROJECTS = [
     description: "אתר לק ג׳ל — הזמנת תורים, גלריה, יצירת קשר",
     apiKey: "pk_lakgal_a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2",
   },
+  {
+    id: "proj_dc_landing",
+    name: "DIGITALCRAFT — דף נחיתה",
+    slug: "digitalcraft-landing",
+    type: "WEBSITE",
+    description: "דף נחיתה לפיתוח אתרים — לידים, קליקים, המרות, ומקורות הגעה",
+    apiKey: "pk_dc_005d1d8c21a895bf47c71fccbd45c324264cc8275292",
+  },
 ];
 
 try {

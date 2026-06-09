@@ -55,12 +55,12 @@ export function IntegrationSection({ apiKey, projectName, eventCount }: Integrat
 
       {/* Expanded content */}
       {expanded && (
-        <div className="px-6 pb-6 space-y-4 border-t border-white/[0.05] pt-4">
+        <div className="px-4 md:px-6 pb-4 md:pb-6 space-y-4 border-t border-white/[0.05] pt-4">
           {/* API Key */}
           <div>
             <p className="text-[12px] text-zinc-300 font-semibold mb-2">מפתח API</p>
             <div className="flex items-center gap-2 bg-white/[0.03] border border-white/[0.08] rounded-xl px-3 py-2.5">
-              <code className="flex-1 text-[12px] font-mono text-zinc-300 truncate" dir="ltr">
+              <code className="flex-1 text-[11px] md:text-[12px] font-mono text-zinc-300 truncate" dir="ltr">
                 {showKey ? apiKey : maskedKey}
               </code>
               <button onClick={() => setShowKey(!showKey)} className="p-1 rounded hover:bg-white/[0.06] text-zinc-300">
@@ -72,7 +72,7 @@ export function IntegrationSection({ apiKey, projectName, eventCount }: Integrat
           {/* Endpoint */}
           <div>
             <p className="text-[12px] text-zinc-300 font-semibold mb-2">Endpoint</p>
-            <code className="block text-[11px] font-mono text-zinc-300 bg-white/[0.03] border border-white/[0.08] rounded-xl px-3 py-2.5 truncate" dir="ltr">
+            <code className="block text-[10px] md:text-[11px] font-mono text-zinc-300 bg-white/[0.03] border border-white/[0.08] rounded-xl px-3 py-2.5 break-all" dir="ltr">
               https://management-dashboard-248948614304.me-west1.run.app/api/events/ingest
             </code>
           </div>

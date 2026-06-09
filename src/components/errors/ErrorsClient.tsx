@@ -6,9 +6,12 @@ import { useToast } from "@/components/ui/Toast";
 import {
   AlertTriangle, Bug, CheckCircle, Search as SearchIcon,
   ChevronLeft, ChevronRight, X, Eye,
+  Smartphone, Monitor, Tablet,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { getPageLabel } from "@/lib/page-labels";
+import { explainError, truncateError } from "@/lib/error-explainer";
+import { AnimatedNumber } from "@/components/ui/AnimatedNumber";
 
 interface ProjectError {
   id: string;
@@ -89,6 +92,7 @@ export function ErrorsClient({ errors, stats, projects, currentProject, currentS
     if (res.ok) {
       const labels: Record<string, string> = { open: "נפתחה מחדש", investigating: "סומנה כבטיפול", resolved: "סומנה כטופלה", ignored: "סומנה כהתעלם" };
       toast.success(labels[status] ?? "סטטוס עודכן");
+      window.dispatchEvent(new Event("error-status-changed"));
     } else {
       toast.error("שגיאה בעדכון סטטוס");
     }
@@ -97,36 +101,36 @@ export function ErrorsClient({ errors, stats, projects, currentProject, currentS
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4 md:space-y-5">
       {/* KPI */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="surface-sm rounded-xl p-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4">
+        <div className="surface-sm rounded-xl p-3 md:p-4">
           <div className="flex items-center gap-2 mb-2"><Bug className="w-4 h-4 text-red-400" /><span className="text-[11px] text-zinc-300">סה״כ שגיאות</span></div>
-          <p className="text-[24px] font-extrabold text-white">{stats.total}</p>
+          <p className="text-[clamp(1.125rem,4vw,1.5rem)] font-extrabold text-white tracking-tight"><AnimatedNumber value={String(stats.total)} /></p>
         </div>
-        <div className="surface-sm rounded-xl p-4">
+        <div className="surface-sm rounded-xl p-3 md:p-4">
           <div className="flex items-center gap-2 mb-2"><AlertTriangle className="w-4 h-4 text-amber-400" /><span className="text-[11px] text-zinc-300">פתוחות</span></div>
-          <p className="text-[24px] font-extrabold text-white">{stats.openErrors}</p>
+          <p className="text-[clamp(1.125rem,4vw,1.5rem)] font-extrabold text-white tracking-tight"><AnimatedNumber value={String(stats.openErrors)} /></p>
         </div>
-        <div className="surface-sm rounded-xl p-4">
+        <div className="surface-sm rounded-xl p-3 md:p-4">
           <div className="flex items-center gap-2 mb-2"><AlertTriangle className="w-4 h-4 text-red-400" /><span className="text-[11px] text-zinc-300">קריטיות</span></div>
-          <p className="text-[24px] font-extrabold text-white">{stats.critical}</p>
+          <p className="text-[clamp(1.125rem,4vw,1.5rem)] font-extrabold text-white tracking-tight"><AnimatedNumber value={String(stats.critical)} /></p>
         </div>
-        <div className="surface-sm rounded-xl p-4">
+        <div className="surface-sm rounded-xl p-3 md:p-4">
           <div className="flex items-center gap-2 mb-2"><Bug className="w-4 h-4 text-violet-400" /><span className="text-[11px] text-zinc-300">פרויקטים עם שגיאות</span></div>
-          <p className="text-[24px] font-extrabold text-white">{stats.projectsWithErrors}</p>
+          <p className="text-[clamp(1.125rem,4vw,1.5rem)] font-extrabold text-white tracking-tight"><AnimatedNumber value={String(stats.projectsWithErrors)} /></p>
         </div>
       </div>
 
       {/* Filters */}
       <div className="flex flex-wrap gap-2">
         <select value={currentProject ?? ""} onChange={(e) => navigate({ project: e.target.value || undefined, severity: currentSeverity, status: currentStatus })}
-          className="px-3 py-1.5 bg-white/[0.04] border border-white/[0.1] rounded-lg text-[12px] text-zinc-200 cursor-pointer">
+          className="filter-select px-3 py-2.5 bg-white/[0.04] border border-white/[0.1] rounded-xl text-[12px] text-zinc-200 cursor-pointer focus:outline-none focus:ring-1 focus:ring-sky-500/30 transition-all">
           <option value="">כל הפרויקטים</option>
           {projects.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
         </select>
         <select value={currentSeverity ?? ""} onChange={(e) => navigate({ project: currentProject, severity: e.target.value || undefined, status: currentStatus })}
-          className="px-3 py-1.5 bg-white/[0.04] border border-white/[0.1] rounded-lg text-[12px] text-zinc-200 cursor-pointer">
+          className="filter-select px-3 py-2.5 bg-white/[0.04] border border-white/[0.1] rounded-xl text-[12px] text-zinc-200 cursor-pointer focus:outline-none focus:ring-1 focus:ring-sky-500/30 transition-all">
           <option value="">כל החומרות</option>
           <option value="critical">קריטית</option>
           <option value="high">גבוהה</option>
@@ -134,7 +138,7 @@ export function ErrorsClient({ errors, stats, projects, currentProject, currentS
           <option value="low">נמוכה</option>
         </select>
         <select value={currentStatus ?? ""} onChange={(e) => navigate({ project: currentProject, severity: currentSeverity, status: e.target.value || undefined })}
-          className="px-3 py-1.5 bg-white/[0.04] border border-white/[0.1] rounded-lg text-[12px] text-zinc-200 cursor-pointer">
+          className="filter-select px-3 py-2.5 bg-white/[0.04] border border-white/[0.1] rounded-xl text-[12px] text-zinc-200 cursor-pointer focus:outline-none focus:ring-1 focus:ring-sky-500/30 transition-all">
           <option value="">פתוחות + בטיפול</option>
           <option value="all">הכל</option>
           <option value="open">פתוחות</option>
@@ -151,8 +155,8 @@ export function ErrorsClient({ errors, stats, projects, currentProject, currentS
             const sev = SEVERITY_MAP[err.severity] ?? SEVERITY_MAP.low;
             const st = STATUS_MAP[err.status] ?? STATUS_MAP.new;
             return (
-              <div key={err.id} className="surface rounded-2xl p-4 cursor-pointer hover:bg-white/[0.02] transition-all" onClick={() => setDetail(err)}>
-                <div className="flex items-start gap-3">
+              <div key={err.id} className="surface rounded-2xl p-3.5 md:p-4 cursor-pointer hover:bg-white/[0.02] transition-all card-press" onClick={() => setDetail(err)}>
+                <div className="flex items-start gap-2.5 md:gap-3">
                   <div className={cn("w-2.5 h-2.5 rounded-full mt-1.5 flex-shrink-0 animate-[pulse_2.5s_ease-in-out_infinite]", sev.dot)} />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
@@ -161,10 +165,11 @@ export function ErrorsClient({ errors, stats, projects, currentProject, currentS
                       <span className={cn("text-[10px]", sev.color)}>{sev.label}</span>
                       {err.count > 1 && <span className="text-[10px] text-zinc-300 bg-white/[0.06] px-2 py-0.5 rounded-full">×{err.count}</span>}
                     </div>
-                    <p className="text-[13px] text-zinc-200 truncate font-mono" dir="ltr">{err.message}</p>
+                    <p className="text-[12px] md:text-[13px] text-zinc-200 font-mono break-all" dir="ltr">{truncateError(err.message, 40)}</p>
+                    <p className="text-[11px] text-amber-300/80 mt-0.5">{explainError(err.message).title}</p>
                     <div className="flex items-center gap-3 mt-1.5 text-[11px] text-zinc-300">
                       {err.page && <span>{getPageLabel(err.page)}</span>}
-                      {err.deviceType && <span>{err.deviceType} · {err.browser}</span>}
+                      {err.deviceType && <span className="inline-flex items-center gap-1">{err.deviceType === "טלפון" ? <Smartphone className="w-3 h-3 inline-btn" /> : err.deviceType === "טאבלט" ? <Tablet className="w-3 h-3 inline-btn" /> : <Monitor className="w-3 h-3 inline-btn" />}{err.deviceType} · {err.browser}</span>}
                       <span>{timeAgo(err.createdAt)}</span>
                     </div>
                   </div>
@@ -201,7 +206,7 @@ export function ErrorsClient({ errors, stats, projects, currentProject, currentS
       {detail && (
         <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4" onClick={() => setDetail(null)}>
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" />
-          <div className="relative z-[100000] w-full max-w-[600px] max-h-[80vh] overflow-y-auto glass-strong rounded-2xl p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+          <div className="relative z-[100000] w-full max-w-[600px] max-h-[85vh] overflow-y-auto glass-strong rounded-2xl p-4 md:p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-[16px] font-bold text-white">פרטי שגיאה</h2>
               <button onClick={() => setDetail(null)} className="p-1.5 rounded-lg hover:bg-white/[0.08] text-zinc-300"><X className="w-5 h-5" /></button>
@@ -215,12 +220,33 @@ export function ErrorsClient({ errors, stats, projects, currentProject, currentS
 
               {detail.stack && (
                 <div>
-                  <p className="text-[11px] text-zinc-300 mb-1">Stack Trace</p>
-                  <pre className="text-[10px] text-zinc-300 font-mono bg-white/[0.04] p-3 rounded-xl overflow-x-auto max-h-[200px]" dir="ltr">{detail.stack}</pre>
+                  <p className="text-[11px] text-zinc-300 mb-1">מעקב שגיאה (Stack Trace)</p>
+                  <pre className="text-[9px] md:text-[10px] text-zinc-400 font-mono bg-white/[0.04] p-3 rounded-xl overflow-auto max-h-[160px] md:max-h-[200px] whitespace-pre-wrap break-words" dir="ltr">{detail.stack}</pre>
                 </div>
               )}
 
-              <div className="grid grid-cols-2 gap-3 text-[12px]">
+              {(() => {
+                const info = explainError(detail.message);
+                const whoColor = info.whoFixes === "developer" ? "text-red-400 bg-red-500/10 border-red-500/20"
+                  : info.whoFixes === "user" ? "text-amber-400 bg-amber-500/10 border-amber-500/20"
+                  : info.whoFixes === "network" ? "text-sky-400 bg-sky-500/10 border-sky-500/20"
+                  : "text-zinc-300 bg-zinc-500/10 border-zinc-500/20";
+                return (
+                  <div className="bg-white/[0.03] border border-white/[0.08] rounded-xl p-4 space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <p className="text-[13px] font-bold text-amber-400">{info.title}</p>
+                      <span className={cn("text-[11px] px-2.5 py-1 rounded-full border font-medium", whoColor)}>{info.whoLabel}</span>
+                    </div>
+                    <p className="text-[12px] text-zinc-200 leading-relaxed">{info.explanation}</p>
+                    <div className="flex items-start gap-2 pt-1">
+                      <span className="text-[11px] text-zinc-300 font-semibold shrink-0 mt-px">💡 המלצה:</span>
+                      <p className="text-[12px] text-zinc-300 leading-relaxed">{info.suggestion}</p>
+                    </div>
+                  </div>
+                );
+              })()}
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-3 text-[11px] md:text-[12px]">
                 <div><span className="text-zinc-300">פרויקט:</span> <span className="text-zinc-200">{detail.project.name}</span></div>
                 <div><span className="text-zinc-300">עמוד:</span> <span className="text-zinc-200">{getPageLabel(detail.page)}</span></div>
                 <div><span className="text-zinc-300">מכשיר:</span> <span className="text-zinc-200">{detail.deviceType} · {detail.deviceName}</span></div>

@@ -21,7 +21,7 @@ export function ProjectCard({
 }: ProjectCardProps) {
   return (
     <Link href={`/projects/${slug}`} className="group block">
-      <div className="surface rounded-2xl p-6 h-full flex flex-col hover:bg-white/[0.05] hover:-translate-y-0.5 transition-all duration-300 overflow-hidden relative">
+      <div className="surface rounded-2xl p-4 md:p-6 h-full flex flex-col hover:bg-white/[0.05] hover:-translate-y-0.5 transition-all duration-300 overflow-hidden relative card-press">
 
         <div className="flex items-center gap-2 mb-4">
           <span className={cn("inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold border", PROJECT_TYPE_COLORS[type])}>

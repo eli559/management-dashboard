@@ -54,11 +54,16 @@ export async function createError(data: {
       updatedAt: now,
     };
 
-    // If was resolved/ignored and error comes back → reopen
-    if (existing.status === "resolved" || existing.status === "ignored") {
-      updateData.status = "open";
-      updateData.metadata = JSON.stringify({ reopened: true, previousStatus: existing.status, reopenedAt: now.toISOString() });
+    // "ignored" stays ignored permanently — never reopen
+    // "resolved" only reopens if it's been quiet for 24+ hours (genuinely new occurrence)
+    if (existing.status === "resolved") {
+      const hoursSinceLastUpdate = (now.getTime() - new Date(existing.updatedAt).getTime()) / (1000 * 60 * 60);
+      if (hoursSinceLastUpdate > 24) {
+        updateData.status = "open";
+        updateData.metadata = JSON.stringify({ reopened: true, previousStatus: existing.status, reopenedAt: now.toISOString() });
+      }
     }
+    // "ignored" — never reopen, just bump count silently
 
     await prisma.projectError.update({
       where: { id: existing.id },

@@ -35,13 +35,13 @@ export default async function ReportsPage({ searchParams }: PageProps) {
     : null;
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4 md:space-y-5">
       <LiveRefresh interval={30} />
       {/* ── כותרת + פילטר ── */}
-      <div className="animate-slide-up stagger-1 flex items-start justify-between gap-4">
+      <div className="animate-slide-up stagger-1 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 md:gap-4">
         <div>
-          <h1 className="text-[22px] font-bold text-white">דוחות</h1>
-          <p className="text-zinc-300 mt-0.5 text-[14px]">
+          <h1 className="text-[clamp(1.2rem,3vw,1.375rem)] font-bold text-white tracking-tight">דוחות</h1>
+          <p className="text-zinc-300 mt-0.5 text-[clamp(0.75rem,2vw,0.875rem)]">
             ניתוח מעמיק — {data.periodLabel}
             {currentProject ? ` · ${currentProject.name}` : ""}
           </p>
@@ -60,7 +60,7 @@ export default async function ReportsPage({ searchParams }: PageProps) {
           סקירה כללית — 10 KPI קומפקטיים
          ══════════════════════════════════════════ */}
       <div className="animate-slide-up stagger-2">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-3">
           <MiniKpi
             label="סה״כ אירועים"
             value={formatNumber(data.totalEvents)}
@@ -133,13 +133,13 @@ export default async function ReportsPage({ searchParams }: PageProps) {
         <p className="text-[10px] text-zinc-300 uppercase tracking-widest font-semibold mb-3 px-0.5">
           מגמות
         </p>
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           <LineChart
             title="מגמת אירועים"
             subtitle="30 ימים אחרונים"
             data={data.dailyCounts.map((d) => ({ label: d.date, value: d.count }))}
             color="blue"
-            className="xl:col-span-2"
+            className="lg:col-span-2"
           />
           <ComparisonChart
             comparison={data.comparison}
@@ -183,11 +183,11 @@ export default async function ReportsPage({ searchParams }: PageProps) {
         <p className="text-[10px] text-zinc-300 uppercase tracking-widest font-semibold mb-3 px-0.5">
           דפוסי פעילות
         </p>
-        <div className="grid grid-cols-1 xl:grid-cols-5 gap-4">
-          <div className="xl:col-span-3">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+          <div className="lg:col-span-3">
             <HeatmapGrid hourly={data.hourlyCounts} weekday={data.weekdayCounts} />
           </div>
-          <div className="xl:col-span-2">
+          <div className="lg:col-span-2">
             <ReportChart
               title="פעילות שעתית"
               subtitle="התפלגות לפי שעה ביממה"

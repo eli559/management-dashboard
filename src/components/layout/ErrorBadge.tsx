@@ -1,21 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 export function ErrorBadge() {
   const [count, setCount] = useState(0);
 
+  const check = useCallback(async () => {
+    try {
+      const res = await fetch("/api/errors/count");
+      if (res.ok) { const d = await res.json(); setCount(d.count); }
+    } catch {}
+  }, []);
+
   useEffect(() => {
-    async function check() {
-      try {
-        const res = await fetch("/api/errors/count");
-        if (res.ok) { const d = await res.json(); setCount(d.count); }
-      } catch {}
-    }
     check();
     const t = setInterval(check, 20000);
-    return () => clearInterval(t);
-  }, []);
+
+    // Listen for error status changes — update immediately
+    const onUpdate = () => check();
+    window.addEventListener("error-status-changed", onUpdate);
+
+    return () => { clearInterval(t); window.removeEventListener("error-status-changed", onUpdate); };
+  }, [check]);
 
   if (count === 0) return null;
 

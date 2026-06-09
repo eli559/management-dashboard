@@ -29,12 +29,12 @@ export default async function ErrorsPage({ searchParams }: PageProps) {
   }));
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       <LiveRefresh interval={15} />
 
       <div className="animate-slide-up stagger-1">
-        <h1 className="text-[22px] font-bold text-white">שגיאות</h1>
-        <p className="text-zinc-300 mt-0.5 text-[14px]">מעקב שגיאות JavaScript מכל הפרויקטים</p>
+        <h1 className="text-[clamp(1.2rem,3vw,1.375rem)] font-bold text-white tracking-tight">שגיאות</h1>
+        <p className="text-zinc-300 mt-0.5 text-[clamp(0.75rem,2vw,0.875rem)]">מעקב שגיאות JavaScript מכל הפרויקטים</p>
       </div>
 
       <div className="animate-slide-up stagger-2">

@@ -11,10 +11,10 @@ export default async function VaultPage() {
   ]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       <div className="animate-slide-up stagger-1">
-        <h1 className="text-[22px] font-bold text-white">כספת גישות</h1>
-        <p className="text-zinc-300 mt-0.5 text-[14px]">ניהול מאובטח של פרטי גישה לפרויקטים</p>
+        <h1 className="text-[clamp(1.2rem,3vw,1.375rem)] font-bold text-white tracking-tight">כספת גישות</h1>
+        <p className="text-zinc-300 mt-0.5 text-[clamp(0.75rem,2vw,0.875rem)]">ניהול מאובטח של פרטי גישה לפרויקטים</p>
       </div>
 
       <div className="animate-slide-up stagger-2">

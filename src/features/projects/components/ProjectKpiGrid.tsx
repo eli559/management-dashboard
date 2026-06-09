@@ -15,7 +15,7 @@ export function ProjectKpiGrid({ totalEvents, todayEvents, uniqueUsers, uniqueSe
   const visitors = uniqueSessions > 0 ? uniqueSessions : uniqueUsers;
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5">
       <KpiCard title="סה״כ אירועים" value={formatNumber(totalEvents)} change={0} changeLabel="מתחילת הפרויקט" icon={BarChart3} glow="blue" stagger={1} />
       <KpiCard title="אירועי היום" value={formatNumber(todayEvents)} change={0} changeLabel="אירועים שהתקבלו היום" icon={Calendar} glow="emerald" stagger={2} />
       <KpiCard title="מבקרים ייחודיים" value={formatNumber(visitors)} change={0} changeLabel="מבקרים שונים שזוהו" icon={Users} glow="amber" stagger={3} />

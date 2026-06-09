@@ -20,6 +20,21 @@ export const EVENT_LABELS: Record<string, string> = {
   booking_submit: "הזמנת תור",
   test_neon: "בדיקת חיבור",
   js_error: "שגיאת JavaScript",
+  // אפליקציית אימונים
+  water_update: "עדכון שתייה",
+  sleep_update: "עדכון שינה",
+  meal_add: "הוספת ארוחה",
+  meal_delete: "מחיקת ארוחה",
+  quick_add: "הוספה מהירה",
+  workout_view: "צפייה באימון",
+  weight_update: "עדכון משקל",
+  period_toggle: "סימון מחזור",
+  nutrition_view: "צפייה בערכים תזונתיים",
+  trainee_login: "כניסת מתאמן",
+  trainer_login: "כניסת מאמן",
+  chat_message: "הודעת צ׳אט",
+  favorite_add: "הוספה למועדפים",
+  favorite_remove: "הסרה ממועדפים",
 };
 
 export function getEventLabel(eventName: string): string {

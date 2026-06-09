@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import {
   LayoutDashboard,
   FolderKanban,
@@ -13,6 +14,7 @@ import {
   UserCog,
   Puzzle,
   Settings,
+  Inbox,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { APP_NAME, ROUTES } from "@/lib/constants";
@@ -31,10 +33,12 @@ const iconMap: Record<string, LucideIcon> = {
   Shield,
   UserCog,
   Puzzle,
+  Inbox,
 };
 
 const navigationItems: NavItem[] = [
   { label: "דשבורד", href: ROUTES.DASHBOARD, icon: "LayoutDashboard" },
+  { label: "פניות", href: ROUTES.LEADS, icon: "Inbox" },
   { label: "פרויקטים", href: ROUTES.PROJECTS, icon: "FolderKanban" },
   { label: "דוחות", href: ROUTES.REPORTS, icon: "BarChart3" },
   { label: "מבקרים", href: ROUTES.VISITORS, icon: "Eye" },
@@ -51,17 +55,16 @@ export function Sidebar() {
   return (
     <aside className="fixed inset-y-0 start-0 z-40 w-[272px] bg-[#08080a]/70 backdrop-blur-md flex flex-col border-e border-white/[0.05]">
       {/* ── לוגו ── */}
-      <div className="h-[72px] flex items-center px-6 border-b border-white/[0.04]">
+      <div className="h-[64px] flex items-center px-5 border-b border-white/[0.04]">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-amber-400/10 flex items-center justify-center shadow-[0_0_20px_-4px_rgba(245,158,11,0.15)]">
-            <LayoutDashboard className="w-5 h-5 text-amber-400" />
-          </div>
+          <Image src="/logo.png" alt="לוגו" width={38} height={38} className="rounded-xl shadow-[0_0_20px_-4px_rgba(14,165,233,0.15)]" />
           <div>
-            <span className="text-[15px] font-bold text-white tracking-tight">
-              מערכת ניהול וניטור
+            <span className="text-[14px] font-bold text-white tracking-tight leading-tight block">
+              ניהול וניטור
             </span>
-            <p className="text-[10px] text-zinc-300 font-medium mt-0.5">
-              ניהול פרויקטים מתקדם
+            <p className="text-[10px] font-bold mt-0.5 tracking-widest" dir="ltr"
+              style={{ background: "linear-gradient(90deg, #0ea5e9, #8b5cf6)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              DIGITALCRAFT
             </p>
           </div>
         </div>
@@ -86,19 +89,19 @@ export function Sidebar() {
               className={cn(
                 "relative flex items-center gap-3 px-3 py-[10px] rounded-xl text-[13px] font-medium transition-all duration-300 group/nav",
                 isActive
-                  ? "bg-gradient-to-l from-amber-400/[0.15] via-amber-400/[0.06] to-transparent text-white border border-white/[0.06]"
+                  ? "bg-gradient-to-l from-sky-500/[0.12] via-violet-500/[0.06] to-transparent text-white border border-white/[0.06]"
                   : "text-zinc-400 hover:bg-white/[0.06] hover:text-zinc-200 hover:border hover:border-white/[0.04]"
               )}
             >
               {isActive && (
-                <div className="absolute inset-y-2 start-0 w-[3px] rounded-full bg-amber-400 shadow-[0_0_12px_rgba(245,158,11,0.6)]" />
+                <div className="absolute inset-y-2 start-0 w-[3px] rounded-full bg-gradient-to-b from-sky-400 to-violet-500 shadow-[0_0_12px_rgba(14,165,233,0.5)]" />
               )}
               {/* Hover glow */}
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-l from-white/[0.04] to-transparent opacity-0 group-hover/nav:opacity-100 transition-opacity duration-300 pointer-events-none" />
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-l from-sky-500/[0.04] to-transparent opacity-0 group-hover/nav:opacity-100 transition-opacity duration-300 pointer-events-none" />
               <Icon
                 className={cn(
                   "w-[17px] h-[17px] flex-shrink-0 transition-colors duration-200",
-                  isActive ? "text-amber-400" : "group-hover/nav:text-zinc-300"
+                  isActive ? "text-sky-400" : "group-hover/nav:text-zinc-300"
                 )}
               />
               <span className="flex-1">{item.label}</span>
@@ -115,14 +118,14 @@ export function Sidebar() {
           className={cn(
             "relative flex items-center gap-3 px-3 py-[10px] rounded-xl text-[13px] font-medium transition-all duration-300",
             pathname === ROUTES.SETTINGS
-              ? "bg-gradient-to-l from-amber-400/[0.15] via-amber-400/[0.06] to-transparent text-white border border-white/[0.06]"
+              ? "bg-gradient-to-l from-sky-500/[0.12] via-violet-500/[0.06] to-transparent text-white border border-white/[0.06]"
               : "text-zinc-300 hover:bg-white/[0.04] hover:text-zinc-200"
           )}
         >
           {pathname === ROUTES.SETTINGS && (
-            <div className="absolute inset-y-2 start-0 w-[3px] rounded-full bg-amber-400 shadow-[0_0_12px_rgba(245,158,11,0.6)]" />
+            <div className="absolute inset-y-2 start-0 w-[3px] rounded-full bg-gradient-to-b from-sky-400 to-violet-500 shadow-[0_0_12px_rgba(14,165,233,0.5)]" />
           )}
-          <Settings className={cn("w-[17px] h-[17px] flex-shrink-0", pathname === ROUTES.SETTINGS ? "text-amber-400" : "")} />
+          <Settings className={cn("w-[17px] h-[17px] flex-shrink-0", pathname === ROUTES.SETTINGS ? "text-sky-400" : "")} />
           <span>הגדרות</span>
         </Link>
         <LogoutButton />

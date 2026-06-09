@@ -7,6 +7,7 @@ import {
   ChevronLeft, ChevronRight, Lightbulb,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
+import { AnimatedNumber } from "@/components/ui/AnimatedNumber";
 import type { Insight, InsightSeverity, InsightType } from "@/lib/insights/insights-engine";
 
 interface Props {
@@ -73,47 +74,47 @@ export function InsightsClient({ insights, projects, currentProjectId }: Props) 
   const projectsWithIssues = new Set(insights.filter((i) => i.severity === "critical" || i.severity === "warning").map((i) => i.projectId)).size;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* KPI */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4">
         <div className="surface-sm rounded-xl p-4">
           <div className="flex items-center gap-2 mb-2">
             <Lightbulb className="w-4 h-4 text-amber-400" />
             <span className="text-[11px] text-zinc-300">סה״כ תובנות</span>
           </div>
-          <p className="text-[24px] font-extrabold text-white">{insights.length}</p>
+          <p className="text-[clamp(1.125rem,4vw,1.5rem)] font-extrabold text-white tracking-tight"><AnimatedNumber value={String(insights.length)} /></p>
         </div>
         <div className="surface-sm rounded-xl p-4">
           <div className="flex items-center gap-2 mb-2">
             <AlertTriangle className="w-4 h-4 text-red-400" />
             <span className="text-[11px] text-zinc-300">קריטיות</span>
           </div>
-          <p className="text-[24px] font-extrabold text-white">{criticalCount}</p>
+          <p className="text-[clamp(1.125rem,4vw,1.5rem)] font-extrabold text-white tracking-tight"><AnimatedNumber value={String(criticalCount)} /></p>
         </div>
         <div className="surface-sm rounded-xl p-4">
           <div className="flex items-center gap-2 mb-2">
             <TrendingUp className="w-4 h-4 text-emerald-400" />
             <span className="text-[11px] text-zinc-300">חיוביות</span>
           </div>
-          <p className="text-[24px] font-extrabold text-white">{successCount}</p>
+          <p className="text-[clamp(1.125rem,4vw,1.5rem)] font-extrabold text-white tracking-tight"><AnimatedNumber value={String(successCount)} /></p>
         </div>
         <div className="surface-sm rounded-xl p-4">
           <div className="flex items-center gap-2 mb-2">
             <FolderKanban className="w-4 h-4 text-violet-400" />
             <span className="text-[11px] text-zinc-300">פרויקטים עם בעיות</span>
           </div>
-          <p className="text-[24px] font-extrabold text-white">{projectsWithIssues}</p>
+          <p className="text-[clamp(1.125rem,4vw,1.5rem)] font-extrabold text-white tracking-tight"><AnimatedNumber value={String(projectsWithIssues)} /></p>
         </div>
       </div>
 
       {/* Filters */}
       <div className="flex flex-wrap gap-2">
         <select value={severityFilter} onChange={(e) => { setSeverityFilter(e.target.value); setPage(0); }}
-          className="px-3 py-1.5 bg-white/[0.04] border border-white/[0.1] rounded-lg text-[12px] text-zinc-200 focus:outline-none focus:ring-1 focus:ring-white/[0.15] cursor-pointer">
+          className="filter-select px-3 py-2.5 bg-white/[0.04] border border-white/[0.1] rounded-xl text-[12px] text-zinc-200 focus:outline-none focus:ring-1 focus:ring-sky-500/30 cursor-pointer transition-all">
           {SEVERITY_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
         <select value={typeFilter} onChange={(e) => { setTypeFilter(e.target.value); setPage(0); }}
-          className="px-3 py-1.5 bg-white/[0.04] border border-white/[0.1] rounded-lg text-[12px] text-zinc-200 focus:outline-none focus:ring-1 focus:ring-white/[0.15] cursor-pointer">
+          className="filter-select px-3 py-2.5 bg-white/[0.04] border border-white/[0.1] rounded-xl text-[12px] text-zinc-200 focus:outline-none focus:ring-1 focus:ring-sky-500/30 cursor-pointer transition-all">
           {TYPE_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
         {(severityFilter || typeFilter) && (
@@ -131,9 +132,9 @@ export function InsightsClient({ insights, projects, currentProjectId }: Props) 
             const s = SEVERITY_STYLES[insight.severity];
             const Icon = TYPE_ICONS[insight.type] ?? Lightbulb;
             return (
-              <div key={insight.id} className={cn("surface rounded-2xl p-5 border-s-4", s.border)}>
-                <div className="flex items-start gap-4">
-                  <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0", s.bg)}>
+              <div key={insight.id} className={cn("surface rounded-2xl p-4 md:p-5 border-s-4", s.border)}>
+                <div className="flex items-start gap-3 md:gap-4">
+                  <div className={cn("w-9 h-9 md:w-10 md:h-10 rounded-xl flex items-center justify-center flex-shrink-0", s.bg)}>
                     <Icon className="w-5 h-5 text-zinc-200" />
                   </div>
                   <div className="flex-1 min-w-0">

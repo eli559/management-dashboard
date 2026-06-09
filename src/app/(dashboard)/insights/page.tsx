@@ -22,13 +22,13 @@ export default async function InsightsPage({ searchParams }: PageProps) {
   const currentProject = projectId ? allProjects.find((p) => p.id === projectId) : null;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       <LiveRefresh interval={60} />
 
-      <div className="animate-slide-up stagger-1 flex items-start justify-between gap-4">
+      <div className="animate-slide-up stagger-1 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 md:gap-4">
         <div>
-          <h1 className="text-[22px] font-bold text-white">תובנות</h1>
-          <p className="text-zinc-300 mt-0.5 text-[14px]">
+          <h1 className="text-[clamp(1.2rem,3vw,1.375rem)] font-bold text-white tracking-tight">תובנות</h1>
+          <p className="text-zinc-300 mt-0.5 text-[clamp(0.75rem,2vw,0.875rem)]">
             ניתוח חכם של הנתונים במערכת
             {currentProject ? ` · ${currentProject.name}` : ""}
           </p>

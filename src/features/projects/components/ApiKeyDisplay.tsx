@@ -21,8 +21,8 @@ export function ApiKeyDisplay({ apiKey }: ApiKeyDisplayProps) {
   }, [apiKey]);
 
   return (
-    <div className="flex items-center gap-2 bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-2.5">
-      <code className="flex-1 text-[13px] font-mono text-zinc-300 select-all truncate" dir="ltr">
+    <div className="flex items-center gap-2 bg-white/[0.03] border border-white/[0.08] rounded-xl px-3 md:px-4 py-2.5 overflow-hidden">
+      <code className="flex-1 text-[11px] md:text-[13px] font-mono text-zinc-300 select-all truncate min-w-0" dir="ltr">
         {revealed ? apiKey : maskedKey}
       </code>
       <button

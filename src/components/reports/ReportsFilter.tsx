@@ -54,12 +54,12 @@ export function ReportsFilter({ projects, currentDays, currentProjectId, current
   return (
     <>
       <button onClick={() => setOpen(true)}
-        className={cn("flex items-center gap-2 px-3.5 py-2 rounded-lg text-[13px] font-medium transition-all duration-200",
-          hasFilter ? "bg-amber-400/10 text-amber-300 border border-amber-400/20" : "bg-white/[0.04] text-zinc-300 border border-white/[0.1] hover:bg-white/[0.06]"
+        className={cn("flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-200 tap-scale",
+          hasFilter ? "bg-sky-500/10 text-sky-300 border border-sky-500/20 shadow-[0_0_12px_-4px_rgba(14,165,233,0.2)]" : "bg-white/[0.04] text-zinc-300 border border-white/[0.1] hover:bg-white/[0.06]"
         )}>
         <SlidersHorizontal className="w-4 h-4" />
         <span>סינון</span>
-        {hasFilter && <span className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_6px_rgba(245,158,11,0.5)]" />}
+        {hasFilter && <span className="w-2 h-2 rounded-full bg-sky-400 shadow-[0_0_6px_rgba(14,165,233,0.5)]" />}
       </button>
 
       <FilterModal open={open} onClose={() => setOpen(false)} title="סינון דוחות">

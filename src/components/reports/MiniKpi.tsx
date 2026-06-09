@@ -1,6 +1,7 @@
 import { cn } from "@/utils/cn";
 import type { LucideIcon } from "lucide-react";
 import { TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { AnimatedNumber } from "@/components/ui/AnimatedNumber";
 
 interface MiniKpiProps {
   label: string;
@@ -52,17 +53,17 @@ export function MiniKpi({ label, value, icon: Icon, trend, sparkData, color = "b
   const c = colorMap[color];
 
   return (
-    <div className={cn("surface-sm rounded-xl p-3.5 overflow-hidden relative group", c.glow)}>
+    <div className={cn("surface-sm rounded-xl p-3 md:p-3.5 overflow-hidden relative group card-press", c.glow)}>
       {/* Color accent glow at top */}
-      <div className="absolute top-0 start-1/3 w-16 h-8 rounded-full blur-xl pointer-events-none" style={{ background: c.accent }} />
+      <div className="absolute top-0 start-1/3 w-16 h-8 rounded-full blur-xl pointer-events-none animate-glow-pulse" style={{ background: c.accent }} />
 
       <div className="relative z-10 flex items-start justify-between gap-2">
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-1.5 mb-2">
+          <div className="flex items-center gap-1.5 mb-1.5 md:mb-2">
             <Icon className={cn("w-3.5 h-3.5 flex-shrink-0", c.icon)} />
-            <span className="text-[10px] text-zinc-300 font-medium truncate">{label}</span>
+            <span className="text-[10px] text-zinc-400 font-semibold truncate">{label}</span>
           </div>
-          <p className="text-[22px] font-extrabold text-white leading-none tracking-tight">{value}</p>
+          <p className="text-[clamp(1.125rem,4vw,1.375rem)] font-extrabold text-white leading-none tracking-tighter"><AnimatedNumber value={value} duration={1200} /></p>
           {trend !== undefined && (
             <div className={cn(
               "flex items-center gap-0.5 mt-2 text-[9px] font-bold",

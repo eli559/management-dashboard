@@ -1,4 +1,3 @@
-import { cn } from "@/utils/cn";
 import type { HourlyCount, WeekdayCount } from "@/lib/dal/reports";
 
 interface HeatmapGridProps {
@@ -11,15 +10,15 @@ export function HeatmapGrid({ hourly, weekday }: HeatmapGridProps) {
   const maxWeekday = Math.max(...weekday.map((w) => w.count), 1);
 
   return (
-    <div className="surface rounded-2xl p-6 overflow-hidden relative">
-      <h3 className="text-[15px] font-bold text-zinc-200 mb-0.5">פעילות לפי זמן</h3>
-      <p className="text-[12px] text-zinc-300 mb-5">שעות ביום ● ימים בשבוע</p>
+    <div className="surface rounded-2xl p-4 md:p-6 overflow-hidden relative">
+      <h3 className="text-[14px] md:text-[15px] font-bold text-zinc-200 mb-0.5">פעילות לפי זמן</h3>
+      <p className="text-[11px] md:text-[12px] text-zinc-400 mb-4 md:mb-5">שעות ביום ● ימים בשבוע</p>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
         {/* Hourly */}
         <div>
           <p className="text-[11px] text-zinc-300 mb-3 font-medium">שעות היממה</p>
-          <div className="grid grid-cols-12 gap-[3px]">
+          <div className="grid grid-cols-12 gap-[2px] md:gap-[3px]">
             {hourly.map((h) => {
               const intensity = h.count / maxHourly;
               return (
@@ -42,8 +41,8 @@ export function HeatmapGrid({ hourly, weekday }: HeatmapGridProps) {
             })}
           </div>
           <div className="flex justify-between mt-1.5">
-            <span className="text-[10px] text-zinc-400">00:00</span>
-            <span className="text-[10px] text-zinc-400">23:00</span>
+            <span className="text-[9px] md:text-[10px] text-zinc-400">00:00</span>
+            <span className="text-[9px] md:text-[10px] text-zinc-400">23:00</span>
           </div>
         </div>
 
@@ -55,8 +54,8 @@ export function HeatmapGrid({ hourly, weekday }: HeatmapGridProps) {
               const intensity = w.count / maxWeekday;
               return (
                 <div key={w.day} className="flex items-center gap-2">
-                  <span className="text-[10px] text-zinc-300 w-10 text-start">{w.day}</span>
-                  <div className="flex-1 h-[18px] bg-white/[0.02] rounded-[3px] overflow-hidden">
+                  <span className="text-[10px] text-zinc-300 w-9 md:w-10 text-start flex-shrink-0">{w.day}</span>
+                  <div className="flex-1 h-[16px] md:h-[18px] bg-white/[0.02] rounded-[3px] overflow-hidden">
                     <div
                       className="h-full rounded-[3px] transition-all duration-500"
                       style={{
@@ -65,7 +64,7 @@ export function HeatmapGrid({ hourly, weekday }: HeatmapGridProps) {
                       }}
                     />
                   </div>
-                  <span className="text-[10px] text-zinc-300 tabular-nums w-8 text-start">
+                  <span className="text-[10px] text-zinc-300 tabular-nums w-7 md:w-8 text-start flex-shrink-0">
                     {w.count}
                   </span>
                 </div>
